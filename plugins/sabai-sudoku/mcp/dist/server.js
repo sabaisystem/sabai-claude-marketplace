@@ -336,7 +336,7 @@ export function createServer() {
             content: [
                 {
                     type: "text",
-                    text: `Game started! Difficulty: ${game.difficulty}. Good luck!`
+                    text: `${game.difficulty.charAt(0).toUpperCase() + game.difficulty.slice(1)} Sudoku ready! Good luck! The interactive board is displayed above - do not render the board as text.`
                 },
                 {
                     type: "text",
