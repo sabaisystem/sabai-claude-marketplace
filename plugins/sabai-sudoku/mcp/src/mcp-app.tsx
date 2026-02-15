@@ -62,13 +62,16 @@ interface HintResult {
 
 
 function extractResult<T>(result: CallToolResult): T | null {
-  try {
-    const content = result.content?.find((c) => c.type === "text");
-    if (content && "text" in content) {
-      return JSON.parse(content.text) as T;
+  // Find the first text content that parses as valid JSON
+  const textContents = result.content?.filter((c) => c.type === "text") || [];
+  for (const content of textContents) {
+    if ("text" in content) {
+      try {
+        return JSON.parse(content.text) as T;
+      } catch {
+        // Not valid JSON, try next content
+      }
     }
-  } catch (e) {
-    console.error("Failed to parse result:", e);
   }
   return null;
 }
