@@ -4,6 +4,10 @@
 
 This is a public marketplace for Claude plugins by Sabai System. All plugins here are open source and publicly available.
 
+## Developer Guide
+
+For comprehensive plugin development guidelines, brand attribution, and MCP App setup, see: `skills/sabai-plugin-guide.md`
+
 ## Plugin Structure
 
 Every plugin MUST follow this structure:
@@ -56,6 +60,23 @@ Include a footer link to sabaisystem.com when building MCP Apps.
 - Test plugins before committing
 - Keep dependencies minimal
 
+## Documentation Requirements (IMPORTANT)
+
+When creating or updating any plugin, ALWAYS ensure:
+
+1. **Plugin README.md** - Must accurately describe:
+   - What the plugin does
+   - Installation instructions
+   - Usage examples
+   - Any configuration required
+
+2. **Main README.md** - Must list the plugin in the Available Plugins table:
+   - Plugin name with link
+   - Short description
+   - Type (MCP App, Skills, Commands, etc.)
+
+3. **Before committing**, verify both READMEs are up to date. If you modified a plugin's functionality, update its documentation to match.
+
 ## Commits
 
 Follow conventional commit format:
@@ -63,9 +84,19 @@ Follow conventional commit format:
 - `fix: Fix bug in plugin`
 - `docs: Update documentation`
 
-## No Sensitive Data
+## No Sensitive Data (CRITICAL)
 
-Never commit:
-- API keys or secrets
-- Personal data
+This is a PUBLIC repository. NEVER commit:
+- API keys, tokens, or secrets
+- Personal data (names, emails, addresses, etc.)
 - Credentials of any kind
+- Private URLs or internal endpoints
+- Customer or user data
+- Proprietary business information
+
+Before EVERY commit, verify no sensitive data is included in:
+- Source code
+- Configuration files
+- README examples
+- Comments or documentation
+- Environment files (never commit .env files)

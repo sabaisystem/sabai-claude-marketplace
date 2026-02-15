@@ -3,108 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light dark">
   <title>Sabai Sabai</title>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: linear-gradient(135deg, #013b2d 0%, #025a44 100%);
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-      color: #fef2ec;
-    }
-
-    .container {
-      max-width: 800px;
-      width: 100%;
-      text-align: center;
-    }
-
-    h1 {
-      font-size: 2.5rem;
-      margin-bottom: 0.5rem;
-      color: #f26a2c;
-      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-    }
-
-    .subtitle {
-      font-size: 1.2rem;
-      margin-bottom: 2rem;
-      opacity: 0.9;
-    }
-
-    .video-wrapper {
-      position: relative;
-      padding-bottom: 56.25%; /* 16:9 aspect ratio */
-      height: 0;
-      overflow: hidden;
-      border-radius: 12px;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
-      background: #000;
-    }
-
-    .video-wrapper iframe {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      border: none;
-    }
-
-    .footer {
-      margin-top: 2rem;
-      font-size: 0.9rem;
-      opacity: 0.7;
-    }
-
-    .footer a {
-      color: #f26a2c;
-      text-decoration: none;
-    }
-
-    .footer a:hover {
-      text-decoration: underline;
-    }
-
-    @media (prefers-color-scheme: light) {
-      body {
-        background: linear-gradient(135deg, #fef2ec 0%, #fde8dc 100%);
-        color: #013b2d;
-      }
-
-      .video-wrapper {
-        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
-      }
-    }
-  </style>
 </head>
 <body>
-  <div class="container">
-    <h1>Sabai Sabai</h1>
-    <p class="subtitle">Take a break, relax, and enjoy the vibes</p>
-
-    <div class="video-wrapper">
-      <iframe
-        src="https://www.youtube.com/embed/3nlwg6Bku7I?autoplay=1&list=RD3nlwg6Bku7I"
-        title="Sabai Sabai Video"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-        allowfullscreen>
-      </iframe>
-    </div>
-
-    <p class="footer">
-      Made with chill vibes by <a href="https://sabaisystem.com" target="_blank">Sabai System</a>
-    </p>
-  </div>
+  <div id="root"></div>
+  <script type="module" src="./App.tsx"></script>
 </body>
 </html>
