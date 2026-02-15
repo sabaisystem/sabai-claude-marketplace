@@ -1,130 +1,73 @@
 {
-  "$schema": "https://claude.ai/schemas/marketplace.json",
-  "name": "Sabai Claude Marketplace",
-  "description": "Open source plugins for Claude by Sabai System",
-  "version": "1.0.0",
-  "publisher": {
-    "name": "Sabai System",
-    "url": "https://sabaisystem.com"
+  "name": "sabai-claude-marketplace",
+  "owner": {
+    "name": "Sabai System"
   },
-  "repository": "https://github.com/sabaisystem/sabai-claude-marketplace",
   "plugins": [
     {
-      "id": "sabai-calendar",
-      "path": "plugins/sabai-calendar",
-      "name": "Calendar",
-      "description": "Calendar assistant with Google Calendar integration. Manage events, schedule meetings, get daily briefings, and optimize your time.",
-      "version": "1.0.0",
-      "category": "productivity",
-      "tags": ["calendar", "google", "scheduling", "meetings"]
+      "name": "sabai-calendar",
+      "source": "./plugins/sabai-calendar",
+      "description": "Calendar assistant with Google Calendar integration. Manage events, schedule meetings, get daily briefings, and optimize your time."
     },
     {
-      "id": "sabai-conversion",
-      "path": "plugins/sabai-conversion",
-      "name": "Currency & Timezone Converter",
-      "description": "Smart currency and timezone converter that learns your preferences",
-      "version": "1.0.0",
-      "category": "utilities",
-      "tags": ["currency", "timezone", "conversion", "utilities"]
+      "name": "sabai-conversion",
+      "source": "./plugins/sabai-conversion",
+      "description": "Smart currency and timezone converter that learns your preferences."
     },
     {
-      "id": "sabai-crm-attio",
-      "path": "plugins/sabai-crm-attio",
-      "name": "CRM (Attio)",
-      "description": "CRM assistant with Attio integration. Manage leads, prepare for meetings, track deals, and log activities in your Attio workspace.",
-      "version": "1.0.0",
-      "category": "sales",
-      "tags": ["crm", "attio", "sales", "leads", "deals"]
+      "name": "sabai-crm-attio",
+      "source": "./plugins/sabai-crm-attio",
+      "description": "CRM assistant with Attio integration. Manage leads, prepare for meetings, track deals, and log activities."
     },
     {
-      "id": "sabai-discord",
-      "path": "plugins/sabai-discord",
-      "name": "Discord",
-      "description": "Discord assistant for server management, messaging, channel organization, and community engagement.",
-      "version": "1.0.0",
-      "category": "communication",
-      "tags": ["discord", "messaging", "community", "servers"]
+      "name": "sabai-discord",
+      "source": "./plugins/sabai-discord",
+      "description": "Discord assistant for server management, messaging, channel organization, and community engagement."
     },
     {
-      "id": "sabai-doc-notion",
-      "path": "plugins/sabai-doc-notion",
-      "name": "Documentation (Notion)",
-      "description": "Documentation workflow with Notion integration. Create, update, and sync documentation between your codebase and Notion pages.",
-      "version": "1.0.0",
-      "category": "documentation",
-      "tags": ["notion", "documentation", "docs", "sync"]
+      "name": "sabai-doc-notion",
+      "source": "./plugins/sabai-doc-notion",
+      "description": "Documentation workflow with Notion integration. Create, update, and sync documentation between your codebase and Notion pages."
     },
     {
-      "id": "sabai-gmail",
-      "path": "plugins/sabai-gmail",
-      "name": "Gmail",
-      "description": "Gmail assistant for email composition, inbox management, templates, and follow-up tracking.",
-      "version": "1.0.0",
-      "category": "communication",
-      "tags": ["gmail", "email", "inbox", "templates"]
+      "name": "sabai-gmail",
+      "source": "./plugins/sabai-gmail",
+      "description": "Gmail assistant for email composition, inbox management, templates, and follow-up tracking."
     },
     {
-      "id": "sabai-meeting-granola",
-      "path": "plugins/sabai-meeting-granola",
-      "name": "Meeting Intelligence (Granola)",
-      "description": "Meeting intelligence plugin powered by Granola. Search meetings, get summaries, smart analysis by meeting type, and holistic coaching on work patterns and communication.",
-      "version": "1.0.0",
-      "category": "productivity",
-      "tags": ["meetings", "granola", "coaching", "sales", "communication"]
+      "name": "sabai-meeting-granola",
+      "source": "./plugins/sabai-meeting-granola",
+      "description": "Meeting intelligence powered by Granola. Search meetings, get summaries, smart analysis by meeting type, and coaching on work patterns."
     },
     {
-      "id": "sabai-pm-linear",
-      "path": "plugins/sabai-pm-linear",
-      "name": "Product Management (Linear)",
-      "description": "Product Manager assistant with Linear integration. Create tickets, manage backlog, generate PRDs, and more.",
-      "version": "1.0.0",
-      "category": "productivity",
-      "tags": ["linear", "product-management", "tickets", "backlog"]
+      "name": "sabai-pm-linear",
+      "source": "./plugins/sabai-pm-linear",
+      "description": "Product Manager assistant with Linear integration. Create tickets, manage backlog, generate PRDs, and more."
     },
     {
-      "id": "sabai-sabai",
-      "path": "plugins/sabai-sabai",
-      "name": "Sabai Sabai",
-      "description": "Relax with some Thai vibes - plays a chill video when you need a break",
-      "version": "1.0.0",
-      "category": "fun",
-      "tags": ["relaxation", "video", "break", "thai"]
+      "name": "sabai-sabai",
+      "source": "./plugins/sabai-sabai",
+      "description": "Relax with some Thai vibes - plays a chill video when you need a break."
     },
     {
-      "id": "sabai-slack",
-      "path": "plugins/sabai-slack",
-      "name": "Slack",
-      "description": "Full-featured Slack integration for messaging, channels, and search",
-      "version": "1.0.0",
-      "category": "communication",
-      "tags": ["slack", "messaging", "channels", "teams"]
+      "name": "sabai-slack",
+      "source": "./plugins/sabai-slack",
+      "description": "Full-featured Slack integration for messaging, channels, and search."
     },
     {
-      "id": "sabai-sudoku",
-      "path": "plugins/sabai-sudoku",
-      "name": "Sudoku",
-      "description": "Play Sudoku in Claude with an interactive visual game board. Generate puzzles of varying difficulty, get hints, and track your progress.",
-      "version": "1.0.0",
-      "category": "fun",
-      "tags": ["sudoku", "game", "puzzle", "mcp-app", "interactive"]
+      "name": "sabai-sudoku",
+      "source": "./plugins/sabai-sudoku",
+      "description": "Play Sudoku in Claude with an interactive visual game board. Generate puzzles of varying difficulty, get hints, and track your progress."
     },
     {
-      "id": "sabai-timesheet-harvest",
-      "path": "plugins/sabai-timesheet-harvest",
-      "name": "Timesheet (Harvest)",
-      "description": "Efficient Harvest time tracking for employees and contractors using hrvst-cli",
-      "version": "1.0.0",
-      "category": "productivity",
-      "tags": ["harvest", "timesheet", "time-tracking", "contractor"]
+      "name": "sabai-timesheet-harvest",
+      "source": "./plugins/sabai-timesheet-harvest",
+      "description": "Efficient Harvest time tracking for employees and contractors using hrvst-cli."
     },
     {
-      "id": "sabai-video-tella",
-      "path": "plugins/sabai-video-tella",
-      "name": "Video (Tella)",
-      "description": "Tella video workflow assistant with MCP integration for managing videos, playlists, and creating async video content",
-      "version": "1.0.0",
-      "category": "productivity",
-      "tags": ["tella", "video", "async", "content"]
+      "name": "sabai-video-tella",
+      "source": "./plugins/sabai-video-tella",
+      "description": "Tella video workflow assistant with MCP integration for managing videos, playlists, and creating async video content."
     }
   ]
 }
