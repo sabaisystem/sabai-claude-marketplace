@@ -7,7 +7,7 @@
     "name": "Sabai System",
     "url": "https://sabaisystem.com"
   },
-  "repository": "https://github.com/sabai-system/sabai-claude-marketplace",
+  "repository": "https://github.com/sabaisystem/sabai-claude-marketplace",
   "plugins": [
     {
       "id": "sabai-calendar",
