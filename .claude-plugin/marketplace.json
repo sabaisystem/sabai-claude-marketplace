@@ -68,6 +68,11 @@
       "name": "sabai-video-tella",
       "source": "./plugins/sabai-video-tella",
       "description": "Tella video workflow assistant with MCP integration for managing videos, playlists, and creating async video content."
+    },
+    {
+      "name": "sabai-recall",
+      "source": "./plugins/sabai-recall",
+      "description": "Meeting bot automation with Recall.ai. Create bots to join and record meetings, access recordings, transcripts, and participant data."
     }
   ]
 }

@@ -19,6 +19,7 @@ Public marketplace for Claude plugins by [Sabai System](https://sabaisystem.com)
 | [sabai-timesheet-harvest](plugins/sabai-timesheet-harvest) | Efficient Harvest time tracking for employees/contractors | Skills + Commands | 1.0.0 | Active | 2026-02-16 |
 | [sabai-discord](plugins/sabai-discord) | Discord assistant for server management and messaging | Skills + Commands | 1.0.0 | Active | 2026-02-16 |
 | [sabai-slack](plugins/sabai-slack) | Full-featured Slack integration for messaging and search | MCP + Skills + Commands | 1.0.0 | Active | 2026-02-16 |
+| [sabai-recall](plugins/sabai-recall) | Meeting bot automation with Recall.ai for recording and transcription | MCP App + Commands | 1.3.0 | Active | 2026-02-16 |
 
 **Status:** Active = Stable and maintained | Beta = In development | Deprecated = No longer maintained
 
