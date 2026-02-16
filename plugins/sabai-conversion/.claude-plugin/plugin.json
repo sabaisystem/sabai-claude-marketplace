@@ -7,6 +7,7 @@
   },
   "keywords": ["currency", "timezone", "conversion", "calculator"],
   "skills": "./skills/",
+  "commands": "./commands/",
   "preferences": {
     "base_currency": {
       "type": "string",
