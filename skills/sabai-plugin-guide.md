@@ -287,6 +287,115 @@ exec npx tsx server.ts
 
 Make it executable: `chmod +x startup.sh`
 
+## OAuth Auto-Connect for Remote MCP Servers
+
+For plugins that use remote MCP servers with OAuth (like Granola, Google APIs), implement auto-authentication on first load. This provides a seamless user experience where the browser opens automatically for sign-in.
+
+### Using mcp-remote with Auto-Auth
+
+For HTTP-based MCP servers that require OAuth, use `mcp-remote` with a startup script that checks for existing authentication:
+
+```bash
+#!/bin/bash
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+cd "$SCRIPT_DIR"
+
+# mcp-remote stores auth in ~/.mcp-auth
+MCP_AUTH_DIR="$HOME/.mcp-auth"
+REMOTE_URL="https://api.example.com/mcp"
+
+# Check if authenticated (look for cached tokens)
+check_auth() {
+  if [ -d "$MCP_AUTH_DIR" ]; then
+    # Check for service-specific tokens
+    if ls "$MCP_AUTH_DIR"/*example* 2>/dev/null | grep -q .; then
+      return 0
+    fi
+  fi
+  return 1
+}
+
+# If not authenticated, run OAuth flow first
+if ! check_auth; then
+  echo "🔐 No authentication found. Starting OAuth flow..." >&2
+  echo "A browser window will open for you to sign in." >&2
+
+  # mcp-remote-client triggers the OAuth flow
+  npx -y mcp-remote@latest mcp-remote-client "$REMOTE_URL" --auth-timeout 300 2>&1 | head -20 >&2
+
+  echo "✅ Authentication complete!" >&2
+fi
+
+# Start the MCP server
+exec npx -y mcp-remote@latest "$REMOTE_URL"
+```
+
+### Custom OAuth Flow (Google APIs)
+
+For Google APIs, implement the OAuth flow directly in your MCP server. Check for existing token on startup, and if missing, open browser for OAuth:
+
+```javascript
+async function initAuth() {
+  const credentials = JSON.parse(fs.readFileSync(credentialsPath, "utf8"));
+  const { client_id, client_secret } = credentials.installed || credentials.web;
+
+  auth = new google.auth.OAuth2(client_id, client_secret, "http://localhost:3000/oauth2callback");
+
+  // Check for existing token
+  if (!fs.existsSync(tokenPath)) {
+    // No token - run OAuth flow
+    await runAuthFlow();
+  }
+
+  const token = JSON.parse(fs.readFileSync(tokenPath, "utf8"));
+  auth.setCredentials(token);
+}
+
+async function runAuthFlow() {
+  console.error("🔐 No token found. Starting OAuth flow...");
+
+  const authUrl = auth.generateAuthUrl({
+    access_type: "offline",
+    scope: SCOPES,
+    prompt: "consent",
+  });
+
+  // Open browser
+  const { exec } = await import("child_process");
+  exec(`open "${authUrl}"`);
+
+  // Start local server for callback
+  return new Promise((resolve, reject) => {
+    const server = http.createServer(async (req, res) => {
+      const url = new URL(req.url, "http://localhost:3000");
+      if (url.pathname === "/oauth2callback") {
+        const code = url.searchParams.get("code");
+        const { tokens } = await auth.getToken(code);
+        fs.writeFileSync(tokenPath, JSON.stringify(tokens, null, 2));
+
+        res.writeHead(200, { "Content-Type": "text/html" });
+        res.end("<h1>✅ Authentication Successful!</h1><p>You can close this window.</p>");
+
+        server.close();
+        resolve(tokens);
+      }
+    });
+
+    server.listen(3000);
+    setTimeout(() => { server.close(); reject(new Error("Timeout")); }, 300000);
+  });
+}
+```
+
+### Key Points
+
+1. **Check for existing auth** before starting the MCP server
+2. **Open browser automatically** - don't require manual steps
+3. **Log to stderr** (not stdout) so MCP protocol isn't corrupted
+4. **Set reasonable timeout** (5 minutes) for OAuth completion
+5. **Save tokens** for subsequent sessions
+
 ## Security: No Sensitive Data (CRITICAL)
 
 This is a PUBLIC repository. NEVER include:
