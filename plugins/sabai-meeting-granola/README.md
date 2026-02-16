@@ -16,6 +16,7 @@ You'll need a [Granola](https://granola.ai) account with MCP enabled.
 
 | Command | Description |
 |---------|-------------|
+| `/sabai-meeting-granola:connect` | Connect and authenticate with Granola |
 | `/sabai-meeting-granola:search` | Search across your meeting history |
 | `/sabai-meeting-granola:summary` | Summarize one or multiple meetings |
 | `/sabai-meeting-granola:ask` | Ask questions about your meetings |

@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.1.0] - 2026-02-17
 
+### Added
+- `/connect` command to trigger OAuth authentication flow
+
 ### Fixed
 - Use mcp-remote to properly connect to Granola's HTTP MCP endpoint
 - Granola requires OAuth authentication via browser on first use
