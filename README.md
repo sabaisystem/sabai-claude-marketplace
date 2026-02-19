@@ -106,6 +106,14 @@ plugins/
     README.md           # Plugin documentation
 ```
 
+## Project Management
+
+This repository is tracked in [Linear](https://linear.app/sabaisystem) under the **Sabai Claude Marketplace** team. Each plugin has a corresponding project for issue tracking.
+
+- **Report bugs or request features**: Create an issue in the appropriate plugin project
+- **General issues**: Use the "Sabai Plugins" project for cross-plugin concerns
+- **Workflow**: Triage → Backlog → Todo → In Progress → In Review → Done
+
 ## Contributing
 
 We welcome contributions! To add a plugin:
