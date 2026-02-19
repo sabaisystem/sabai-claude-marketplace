@@ -1,38 +1,11 @@
 {
   "name": "sabai-conversion",
   "description": "Smart currency and timezone converter that learns your preferences",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": {
     "name": "Sabai Team"
   },
   "keywords": ["currency", "timezone", "conversion", "calculator"],
   "skills": "./skills/",
-  "commands": "./commands/",
-  "preferences": {
-    "base_currency": {
-      "type": "string",
-      "description": "Your primary currency code (e.g., EUR, USD, GBP)",
-      "default": "EUR"
-    },
-    "home_timezone": {
-      "type": "string",
-      "description": "Your timezone (e.g., Europe/Paris, America/New_York)",
-      "default": "Europe/Paris"
-    },
-    "customer_timezones": {
-      "type": "array",
-      "description": "List of customer/partner timezones to display",
-      "default": ["America/New_York", "Asia/Bangkok", "Asia/Tokyo"]
-    },
-    "common_currencies": {
-      "type": "array",
-      "description": "Additional currencies to show in conversions",
-      "default": ["USD", "THB", "GBP"]
-    },
-    "customer_currency": {
-      "type": "string",
-      "description": "Your main customer's currency code",
-      "default": "THB"
-    }
-  }
+  "commands": "./commands/"
 }

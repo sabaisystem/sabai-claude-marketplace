@@ -23,19 +23,19 @@ Add to your Claude Code settings:
 
 ## Configuration
 
-Customize your preferences in the plugin settings:
+Tell Claude your preferences or add them to your project's `CLAUDE.md` file:
 
-```json
-{
-  "preferences": {
-    "base_currency": "EUR",
-    "home_timezone": "Europe/Paris",
-    "customer_timezones": ["America/New_York", "Asia/Bangkok", "Asia/Tokyo"],
-    "common_currencies": ["USD", "THB", "GBP"],
-    "customer_currency": "THB"
-  }
-}
+```markdown
+## Conversion Preferences
+
+- My base currency: EUR
+- My timezone: Europe/Paris
+- Customer timezones: America/New_York, Asia/Bangkok, Asia/Tokyo
+- Common currencies: USD, THB, GBP
+- Main customer currency: THB
 ```
+
+You can also just tell Claude: "My base currency is EUR and I'm in Paris timezone."
 
 ### Preference Options
 
