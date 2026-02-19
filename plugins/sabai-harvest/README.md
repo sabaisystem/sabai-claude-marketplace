@@ -5,7 +5,7 @@
 | Field | Value |
 |-------|-------|
 | Type | Skills + Commands |
-| Version | 1.0.0 |
+| Version | 1.3.0 |
 | Status | Active |
 | Command | `/setup-harvest`, `/duplicate-week`, `/log`, `/timesheet` |
 | Repo | `plugins/sabai-harvest` |
@@ -23,6 +23,7 @@ An efficient Harvest time tracking plugin using the [hrvst-cli](https://github.c
 - Weekly timesheet review and gap detection
 - Auto-install of Harvest CLI
 - Natural language time entry
+- Inline editing for timesheet cells with keyboard navigation
 
 ## Use Cases
 
