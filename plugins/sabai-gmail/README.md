@@ -5,9 +5,9 @@
 | Field | Value |
 |-------|-------|
 | Type | Skills + Commands |
-| Version | 1.0.0 |
+| Version | 1.2.0 |
 | Status | Active |
-| Command | `/email`, `/reply`, `/inbox`, `/template` |
+| Command | `/email`, `/reply`, `/inbox`, `/template`, `/invoices` |
 | Repo | `plugins/sabai-gmail` |
 
 ---
@@ -20,6 +20,7 @@ A Gmail assistant plugin for email composition, inbox management, templates, and
 
 - Smart email drafts with appropriate tone
 - Contextual reply assistance based on email threads
+- **Invoice/receipt detection** - Find, tag, and download financial documents
 - 8 built-in email templates (intro, follow-up, thank-you, meeting-request, update, decline, referral, feedback)
 - Inbox triage and prioritization
 - Thread summarization
@@ -32,6 +33,8 @@ A Gmail assistant plugin for email composition, inbox management, templates, and
 - "Reply to this email with a professional tone accepting their proposal"
 - "Summarize the marketing campaign email thread"
 - "Use the meeting-request template"
+- "Find all invoices from last month"
+- "Download receipts from Amazon for tax filing"
 
 ## Commands
 
@@ -42,6 +45,7 @@ A Gmail assistant plugin for email composition, inbox management, templates, and
 - `/search [query]` - Search emails with advanced filters
 - `/template [name]` - Use an email template
 - `/summarize [thread]` - Summarize an email thread
+- `/invoices [action]` - Find, download, and tag invoice/receipt emails
 
 ## Configuration
 
