@@ -133,20 +133,113 @@ When fixing a bug in sabai-sudoku:
 
 ## Documentation Requirements (IMPORTANT)
 
-When creating or updating any plugin, ALWAYS ensure:
+Plugin README.md and Linear project descriptions MUST stay in sync using the same template.
 
-1. **Plugin README.md** - Must accurately describe:
-   - What the plugin does
-   - Installation instructions
-   - Usage examples
-   - Any configuration required
+### Plugin Description Template
 
-2. **Main README.md** - Must list the plugin in the Available Plugins table:
-   - Plugin name with link
-   - Short description
-   - Type (MCP App, Skills, Commands, etc.)
+Use this template for both `plugins/plugin-name/README.md` and the Linear project description:
 
-3. **Before committing**, verify both READMEs are up to date. If you modified a plugin's functionality, update its documentation to match.
+```markdown
+# [Plugin Name]
+
+**[One-line description]**
+
+| Field | Value |
+|-------|-------|
+| Type | MCP App / Skills / Commands |
+| Version | 1.0.0 |
+| Status | Backlog / In Progress / Active |
+| Command | `/command-name` |
+| Repo | `plugins/plugin-name` |
+
+---
+
+## Overview
+
+[2-3 sentences describing what the plugin does and its main use case]
+
+## Key Features
+
+- Feature 1
+- Feature 2
+- Feature 3
+
+## Use Cases
+
+- "Help me log 2 hours on Project X"
+- "Show my calendar for tomorrow"
+
+## MCP Tools
+
+- `tool_name` - Description
+
+## Commands
+
+- `/command` - What it does
+
+## Hooks
+
+| Event | Matcher | Command | Description |
+|-------|---------|---------|-------------|
+| PostToolCall | `mcp__x__tool` | `command` | Why it's needed |
+
+## Configuration
+
+### Environment Variables
+- `API_KEY` - Description
+
+### Settings
+- `~/.config/plugin/settings.json` - What it stores
+
+## Authentication
+
+- OAuth / API Key / None
+- Setup steps if needed
+
+## Permissions
+
+Required Claude Code permissions:
+- `Bash(command:*)` - Why needed
+- `WebFetch(domain:api.example.com)` - Why needed
+
+## Dependencies
+
+- **Required**: What must be installed/configured
+- **Optional**: Nice-to-have integrations
+
+## Limitations
+
+- Known issue 1
+- Not yet supported: feature X
+
+## Links
+
+- [README](https://github.com/sabaisystem/sabai-claude-marketplace/tree/main/plugins/plugin-name)
+- [CHANGELOG](https://github.com/sabaisystem/sabai-claude-marketplace/tree/main/plugins/plugin-name/CHANGELOG.md)
+```
+
+**Notes:**
+- Omit sections that don't apply (e.g., no Hooks section if plugin has no hooks)
+- README is the source of truth - update it first, then sync to Linear
+
+### Keeping README and Linear in Sync
+
+**Command:** Use `/sync-linear [plugin-name]` to push README content to Linear project description.
+
+**Git Hook:** A pre-commit hook (via Husky) reminds you to sync when plugin READMEs change.
+
+Setup (one-time):
+```bash
+npm install
+```
+
+The hook automatically runs on commit and shows a reminder if any `plugins/*/README.md` files were modified.
+
+### Checklist
+
+1. **Plugin README.md** - Uses template above
+2. **Linear Project** - Synced with `/sync-linear`
+3. **Main README.md** - Plugin listed in Available Plugins table
 
 ## Commits
 
@@ -154,6 +247,137 @@ Follow conventional commit format:
 - `feat: Add new plugin`
 - `fix: Fix bug in plugin`
 - `docs: Update documentation`
+
+## Ticket-First Workflow (CRITICAL)
+
+**NEVER start working on a plugin without a Linear ticket.**
+
+When asked to implement, fix, or change anything in a plugin:
+
+### Step 1: Check for Existing Ticket
+
+1. Search Linear for an existing ticket matching the request
+2. If found, confirm with user: "I found ticket SCM-XX for this. Should I work on it?"
+
+### Step 2: Create Ticket if None Exists
+
+If no ticket exists:
+1. **Create the ticket first** using `mcp__linear__create_issue`
+2. Include: title, overview, requirements, acceptance criteria
+3. **Show the ticket to the user** with the Linear link
+4. **Ask for confirmation**: "Is this ticket clear? Would you like to edit it or should I start working?"
+
+### Step 3: Wait for Approval
+
+- If user wants edits → update the ticket, ask again
+- If user approves → change status to "In Progress" and start working
+- If user says "later" → leave ticket in backlog, don't start
+
+### Step 4: Work on the Ticket
+
+Only after user approval:
+1. Update ticket status to "In Progress"
+2. Implement the changes following the acceptance criteria
+3. Reference the ticket ID in commits (e.g., `feat: Add feature [SCM-28]`)
+4. When done, add a comment to the ticket summarizing what was done
+
+### Example Flow
+
+```
+User: I want the calendar plugin to find meeting slots
+
+Claude: Let me create a ticket for this feature.
+
+[Creates ticket SCM-29: "Smart Meeting Slot Finder" in Sabai Calendar project]
+
+Created: SCM-29 - Smart Meeting Slot Finder
+[Open in app](linear://sabaisystem/issue/SCM-29) | [Open in browser](https://linear.app/sabaisystem/issue/SCM-29)
+
+## Overview
+Implement a meeting slot finder that analyzes calendar availability...
+
+## Requirements
+- [ ] Analyze calendar for free slots
+- [ ] Respect working hours
+- [ ] Suggest ranked options
+
+Is this ticket clear? Would you like to:
+1. Edit the ticket
+2. Start working on it
+3. Leave it for later
+
+User: 2
+
+Claude: Starting work on SCM-29...
+[Updates status to In Progress]
+[Begins implementation]
+```
+
+### Ticket Links
+
+Always show both app and browser links when displaying tickets:
+```
+[Open in app](linear://sabaisystem/issue/SCM-XX) | [Open in browser](https://linear.app/sabaisystem/issue/SCM-XX)
+```
+
+### Commands
+
+- `/todo <plugin> <description>` - Create a ticket and optionally start working
+- `/work-on <ticket-id>` - Work on an existing ticket
+- `/work-on <plugin>` - List and work on tickets for a plugin
+
+## Linear Project Management
+
+This repository is tracked in Linear under the **Sabai Claude Marketplace** team. Each plugin has a corresponding Linear project for issue tracking.
+
+### Setup
+
+Linear MCP is configured in `.mcp.json` using the hosted endpoint with OAuth:
+
+```json
+{
+  "mcpServers": {
+    "linear": {
+      "command": "npx",
+      "args": ["-y", "mcp-remote", "https://mcp.linear.app/mcp"]
+    }
+  }
+}
+```
+
+On first use, a browser window will open for Linear OAuth authentication.
+
+### Team Structure
+
+- **Team**: Sabai Claude Marketplace
+- **Projects**: One per plugin (e.g., "Sabai sudoku", "Sabai calendar")
+- **Meta Project**: "Sabai Plugins" for cross-plugin or general issues
+
+### Workflow Statuses
+
+`Triage` → `Backlog` → `Todo` → `In Progress` → `In Review` → `Done`
+
+### Issue Labels
+
+Bug, Feature, Improvement, Documentation, Design, Infrastructure, Security, Marketing, Investigate
+
+### Creating Issues
+
+When creating issues for this repo:
+
+1. **Select the correct project** matching the plugin being worked on
+2. **Use appropriate labels** (Bug, Feature, etc.)
+3. **Link to relevant code** using file paths or commit references
+
+### Linking Commits to Issues
+
+Reference Linear issues in commit messages:
+```
+feat: Add new game mode [SCM-123]
+fix: Resolve timer bug
+
+Fixes SCM-456
+```
 
 ## No Sensitive Data (CRITICAL)
 

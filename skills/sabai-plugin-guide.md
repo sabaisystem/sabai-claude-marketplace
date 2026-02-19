@@ -445,6 +445,97 @@ When modifying plugin code, you MUST automatically update:
 - **Minor** (1.x.0): New features, non-breaking changes
 - **Major** (x.0.0): Breaking changes
 
+## Plugin README Template
+
+Plugin README.md and Linear project descriptions must stay in sync. Use this template for both:
+
+```markdown
+# [Plugin Name]
+
+**[One-line description]**
+
+| Field | Value |
+|-------|-------|
+| Type | MCP App / Skills / Commands |
+| Version | 1.0.0 |
+| Status | Backlog / In Progress / Active |
+| Command | `/command-name` |
+| Repo | `plugins/plugin-name` |
+
+---
+
+## Overview
+
+[2-3 sentences describing what the plugin does and its main use case]
+
+## Key Features
+
+- Feature 1
+- Feature 2
+- Feature 3
+
+## Use Cases
+
+- "Help me log 2 hours on Project X"
+- "Show my calendar for tomorrow"
+
+## MCP Tools
+
+- `tool_name` - Description
+
+## Commands
+
+- `/command` - What it does
+
+## Hooks
+
+| Event | Matcher | Command | Description |
+|-------|---------|---------|-------------|
+| PostToolCall | `mcp__x__tool` | `command` | Why it's needed |
+
+## Configuration
+
+### Environment Variables
+- `API_KEY` - Description
+
+### Settings
+- `~/.config/plugin/settings.json` - What it stores
+
+## Authentication
+
+- OAuth / API Key / None
+- Setup steps if needed
+
+## Permissions
+
+Required Claude Code permissions:
+- `Bash(command:*)` - Why needed
+- `WebFetch(domain:api.example.com)` - Why needed
+
+## Dependencies
+
+- **Required**: What must be installed/configured
+- **Optional**: Nice-to-have integrations
+
+## Limitations
+
+- Known issue 1
+- Not yet supported: feature X
+
+## Links
+
+- [README](https://github.com/sabaisystem/sabai-claude-marketplace/tree/main/plugins/plugin-name)
+- [CHANGELOG](https://github.com/sabaisystem/sabai-claude-marketplace/tree/main/plugins/plugin-name/CHANGELOG.md)
+```
+
+Omit sections that don't apply to the plugin.
+
+### Syncing to Linear
+
+Use `/sync-linear <plugin-name>` to push README content to the matching Linear project.
+
+A git pre-commit hook (via Husky) will remind you when plugin READMEs are modified.
+
 ## Checklist Before Committing
 
 - [ ] **NO SENSITIVE DATA** in any file (code, config, docs, comments)
@@ -452,7 +543,8 @@ When modifying plugin code, you MUST automatically update:
 - [ ] `plugin.json` manifest is complete (version bumped if code changed)
 - [ ] `CHANGELOG.md` updated with new version entry
 - [ ] Plugin added to `.claude-plugin/marketplace.json`
-- [ ] Plugin `README.md` documents usage accurately
+- [ ] Plugin `README.md` uses the standard template
+- [ ] Linear project description synced (`/sync-linear`)
 - [ ] Main `README.md` table updated (version + date)
 - [ ] MCP server has `startup.sh`
 - [ ] Built `dist/` folder is committed (for MCP Apps)
