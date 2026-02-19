@@ -1,163 +1,95 @@
 # Sabai Recall
 
-Meeting bot automation with [Recall.ai](https://recall.ai). Create bots to join and record meetings on Zoom, Google Meet, Microsoft Teams, and other platforms. Access recordings, transcripts, and participant data - with embedded video playback directly in Claude.
+**Meeting bot automation with Recall.ai for recording, transcription, and embedded video playback.**
 
-## Features
+| Field | Value |
+|-------|-------|
+| Type | MCP App + Commands |
+| Version | 1.4.0 |
+| Status | Active |
+| Command | `/join`, `/recording`, `/transcript` |
+| Repo | `plugins/sabai-recall` |
 
-- **Create Meeting Bots**: Send a bot to any meeting URL to record
-- **Calendar Integration**: Auto-join current or next meeting from connected calendars
-- **Schedule Bots**: Schedule bots to join meetings in advance
-- **Embedded Video Player**: Watch recordings directly in Claude
-- **Get Recordings**: Access video, audio, and mixed recordings
-- **Transcription**: Get timestamped transcripts from meetings
-- **Participant Tracking**: See who joined and when
-- **Bot Management**: List, delete, and control bots
+---
 
-## Installation
+## Overview
 
-### Prerequisites
+Meeting bot automation with Recall.ai. Create bots to join and record meetings on Zoom, Google Meet, Microsoft Teams, and other platforms. Access recordings, transcripts, and participant data - with embedded video playback directly in Claude.
 
-1. Sign up for a [Recall.ai account](https://recall.ai)
-2. Get your API key from the Recall dashboard
-3. Note your region (us-west-2, us-east-1, eu-central-1, or ap-northeast-1)
+## Key Features
 
-### Claude for Work
+- Create bots to join and record any meeting
+- Calendar integration for auto-joining meetings
+- Schedule bots for future meetings
+- Embedded video player in Claude
+- Access video, audio, and mixed recordings
+- Timestamped transcripts
+- Participant tracking
 
-1. Install the plugin from the Sabai marketplace
-2. Configure environment variables:
-   - `RECALL_API_KEY`: Your Recall.ai API key
-   - `RECALL_REGION`: Your Recall region (default: us-west-2)
+## Use Cases
 
-### Manual Installation
+- "Join my current meeting"
+- "Send a bot to record my Zoom meeting"
+- "Show me the recording from my last standup"
+- "Get the transcript from my interview"
 
-```bash
-cd plugins/sabai-recall/mcp
-npm install
-npm run build
-```
+## Commands
 
-Add to Claude Desktop config:
+- `/join` - Join current or next calendar meeting
+- `/join <meeting_url>` - Send bot to specific meeting
+- `/recording <bot_id>` - Watch recording in embedded player
+- `/transcript <bot_id>` - Get meeting transcript
+
+## MCP Tools
+
+- `recall_create_bot` - Create bot to join/record meeting
+- `recall_watch_recording` - Watch in embedded video player
+- `recall_get_bot` - Get bot status and recording URLs
+- `recall_get_transcript` - Get meeting transcript
+- `recall_list_bots` - List all bots
+- `recall_get_participants` - Get participant list
+- `recall_list_calendar_events` - List upcoming events
+- `recall_schedule_bot_for_event` - Schedule bot for event
+
+## Configuration
+
+### Environment Variables
+
+- `RECALL_API_KEY` - Your Recall.ai API key
+- `RECALL_REGION` - Your region (default: us-west-2)
+
+### MCP Server Setup
 
 ```json
 {
   "mcpServers": {
     "sabai-recall": {
       "command": "bash",
-      "args": ["/path/to/sabai-recall/mcp/startup.sh"],
+      "args": ["${CLAUDE_PLUGIN_ROOT}/mcp/startup.sh"],
       "env": {
-        "RECALL_API_KEY": "your-api-key",
-        "RECALL_REGION": "us-west-2"
+        "RECALL_API_KEY": "${RECALL_API_KEY}",
+        "RECALL_REGION": "${RECALL_REGION:-us-west-2}"
       }
     }
   }
 }
 ```
 
-## Commands
+## Authentication
 
-| Command | Description |
-|---------|-------------|
-| `/join` | Join the current or next calendar meeting |
-| `/join <meeting_url>` | Send a bot to join and record a specific meeting |
-| `/recording <bot_id or meeting_url>` | Watch the recording in an embedded video player |
-| `/transcript <bot_id>` | Get the transcript from a recorded meeting |
+Recall.ai API key required. Sign up at [recall.ai](https://recall.ai).
 
-## Usage
+## Dependencies
 
-### Quick Join (Command)
+- **Required**: Recall.ai account and API key
 
-Join the current or next meeting from your calendar:
-```
-/join
-```
+## Limitations
 
-Or specify a meeting URL:
-```
-/join https://zoom.us/j/123456789
-```
+- Recall.ai subscription required
+- Bot must be admitted to meetings by host
+- Some platforms may have recording restrictions
 
-### Watch Recording (Command)
+## Links
 
-```
-/recording ABC123
-```
-
-Or use the meeting URL directly:
-
-```
-/recording https://zoom.us/j/123456789
-```
-
-This will display the meeting recording in an embedded video player directly in Claude.
-
-### Get Transcript (Command)
-
-```
-/transcript ABC123
-```
-
-### Record a Meeting
-
-```
-Send a bot to record my Zoom meeting: https://zoom.us/j/123456789
-```
-
-### Schedule a Bot
-
-```
-Schedule a recording bot for tomorrow's standup at 9am:
-https://meet.google.com/abc-defg-hij
-```
-
-### Get Recording Status
-
-```
-What's the status of bot ABC123?
-```
-
-### Get Transcript
-
-```
-Get the transcript from bot ABC123
-```
-
-### List Recent Bots
-
-```
-Show me all my recent recording bots
-```
-
-## Available Tools
-
-| Tool | Description |
-|------|-------------|
-| `recall_create_bot` | Create a bot to join and record a meeting |
-| `recall_watch_recording` | Watch recording in embedded video player (MCP App) |
-| `recall_find_bot_by_meeting` | Find a bot by meeting URL |
-| `recall_get_bot` | Get bot status, details, and recording URLs |
-| `recall_list_bots` | List all bots with optional status filtering |
-| `recall_delete_bot` | Remove/cancel a bot |
-| `recall_get_recording` | Get recording download URLs |
-| `recall_get_transcript` | Get the meeting transcript |
-| `recall_get_participants` | Get participant list |
-| `recall_leave_meeting` | Make the bot leave immediately |
-| `recall_list_calendars` | List connected calendars |
-| `recall_list_calendar_events` | List upcoming calendar events |
-| `recall_get_current_meeting` | Get current or next meeting |
-| `recall_schedule_bot_for_event` | Schedule bot for a calendar event |
-
-## Supported Platforms
-
-- Zoom
-- Google Meet
-- Microsoft Teams
-- Webex
-- And more...
-
-## API Reference
-
-This plugin uses the [Recall.ai API](https://docs.recall.ai/reference/authentication). See their documentation for detailed information about rate limits, response formats, and advanced features.
-
-## License
-
-MIT
+- [README](https://github.com/sabaisystem/sabai-claude-marketplace/tree/main/plugins/sabai-recall)
+- [CHANGELOG](https://github.com/sabaisystem/sabai-claude-marketplace/tree/main/plugins/sabai-recall/CHANGELOG.md)

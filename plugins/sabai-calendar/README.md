@@ -1,138 +1,86 @@
 # Sabai Calendar
 
-Calendar assistant with Google Calendar integration. Manage events, schedule meetings, get daily briefings, and optimize your time with smart time blocking.
+**Calendar assistant with Google Calendar integration for event management, meeting scheduling, and time optimization.**
 
-## Features
+| Field | Value |
+|-------|-------|
+| Type | Skills + Commands |
+| Version | 1.3.0 |
+| Status | Active |
+| Command | `/today`, `/event`, `/schedule`, `/briefing` |
+| Repo | `plugins/sabai-calendar` |
 
-### Event Management
-- **Create Events** - Quick event creation with natural language
-- **View Schedule** - See today's or this week's events at a glance
-- **Recurring Events** - Set up daily, weekly, or monthly repeats
-- **Event Updates** - Modify or cancel existing events
+---
 
-### Meeting Scheduling
-- **Find Availability** - Check your free time or shared availability
-- **Schedule Meetings** - Find optimal times for all attendees
-- **Timezone Support** - Handle meetings across timezones
-- **Video Integration** - Auto-add Google Meet or Zoom links
+## Overview
 
-### Daily Briefing
-- **Morning Briefing** - Start your day with a schedule overview
-- **Prep Reminders** - Know which meetings need preparation
-- **Focus Time** - Identify available deep work blocks
-- **Tomorrow Preview** - Plan ahead with next-day preview
+A calendar management assistant plugin that integrates Google Calendar with Claude. Supports natural language event creation, daily/weekly schedule viewing, recurring events, availability checking, timezone handling, and video conferencing integration (Google Meet/Zoom). Includes smart time blocking features like focus time protection and calendar health analysis.
 
-### Time Blocking
-- **Focus Blocks** - Protect time for deep work
-- **Calendar Health** - Analyze meeting load and patterns
-- **Recommendations** - Get suggestions to optimize your schedule
-- **Buffer Time** - Prevent back-to-back meeting fatigue
+## Key Features
 
-## Prerequisites
+- Natural language event creation
+- Daily and weekly schedule views
+- Meeting scheduling with availability checking
+- Multi-participant availability checking across calendars
+- Timezone support for global teams
+- Video conferencing integration (Google Meet/Zoom)
+- Focus time blocking
+- Calendar health analysis and recommendations
 
-- Google Calendar MCP server configured and connected
-- Google Calendar API access
+## Use Cases
 
-### Setting up Google Calendar MCP
+- "What's on my calendar today?"
+- "Schedule a team meeting tomorrow at 2pm for 1 hour"
+- "Block 2 hours of focus time tomorrow morning"
+- "Check my availability this week"
+- "Give me my morning briefing"
 
-Add to your Claude configuration:
+## Commands
+
+- `/today` - Show today's schedule
+- `/week [start]` - Show weekly overview
+- `/briefing [date]` - Get comprehensive daily briefing
+- `/availability [range] [attendees]` - Check free time
+- `/event [title] [time] [duration]` - Create a calendar event
+- `/schedule [desc] [duration] [attendees]` - Schedule a meeting
+- `/focus [duration] [when]` - Block protected focus time
+- `/health [period]` - Calendar health check and recommendations
+
+## Configuration
+
+### MCP Server Setup
 
 ```json
 {
   "mcpServers": {
     "google-calendar": {
       "command": "npx",
-      "args": ["-y", "@anthropic/mcp-google-calendar"],
-      "env": {
-        "GOOGLE_CREDENTIALS": "/path/to/credentials.json"
-      }
+      "args": ["-y", "@anthropic/google-calendar-mcp@latest"]
     }
   }
 }
 ```
 
-See [Google Calendar MCP](https://github.com/anthropics/mcp-google-calendar) for setup instructions.
+## Authentication
 
-## Commands
+OAuth via Google. Browser opens for sign-in on first use.
 
-### Viewing Schedule
-| Command | Description |
-|---------|-------------|
-| `/today` | Show today's schedule |
-| `/week [start]` | Show weekly overview |
-| `/briefing [date]` | Get comprehensive daily briefing |
-| `/availability [range] [attendees]` | Check free time |
+## Permissions
 
-### Creating Events
-| Command | Description |
-|---------|-------------|
-| `/event [title] [time] [duration]` | Create a calendar event |
-| `/schedule [desc] [duration] [attendees]` | Schedule a meeting with others |
-| `/focus [duration] [when]` | Block protected focus time |
+Required Claude Code permissions:
+- Google Calendar MCP tools for calendar operations
 
-### Analysis
-| Command | Description |
-|---------|-------------|
-| `/health [period]` | Calendar health check and recommendations |
+## Dependencies
 
-## Usage Examples
+- **Required**: Google Calendar MCP server (`@anthropic/google-calendar-mcp`)
+- **Optional**: Google Meet or Zoom for video conferencing
 
-### View Today's Schedule
-```
-/today
-```
+## Limitations
 
-### Get Morning Briefing
-```
-/briefing
-```
-
-### Create an Event
-```
-/event Team lunch tomorrow 12pm 1h
-```
-
-### Schedule a Meeting
-```
-/schedule Project kickoff 1h alice@example.com, bob@example.com
-```
-
-### Block Focus Time
-```
-/focus 2h tomorrow morning
-```
-
-### Check Availability
-```
-/availability this week
-```
-
-### Calendar Health Check
-```
-/health this week
-```
-
-## Skills
-
-This plugin includes skills for:
-
-| Skill | Description |
-|-------|-------------|
-| `event-management.md` | Event CRUD operations and templates |
-| `meeting-scheduling.md` | Finding availability and scheduling |
-| `daily-briefing.md` | Morning briefing generation |
-| `time-blocking.md` | Focus time and calendar optimization |
-
-## Tips
-
-- Run `/briefing` every morning to start your day prepared
-- Use `/focus` to protect your deep work time
-- Check `/health` weekly to maintain calendar hygiene
-- Use natural language with `/event` for quick event creation
-- Schedule meetings for 25 or 50 minutes to build in buffer time
-- Block recurring focus time to establish a routine
+- Requires Google account with Calendar access
+- OAuth consent required on first use
 
 ## Links
 
-- [Google Calendar](https://calendar.google.com)
-- [Sabai System](https://sabaisystem.com)
+- [README](https://github.com/sabaisystem/sabai-claude-marketplace/tree/main/plugins/sabai-calendar)
+- [CHANGELOG](https://github.com/sabaisystem/sabai-claude-marketplace/tree/main/plugins/sabai-calendar/CHANGELOG.md)

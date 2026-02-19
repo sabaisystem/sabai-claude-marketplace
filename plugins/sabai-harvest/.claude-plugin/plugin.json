@@ -1,5 +1,5 @@
 {
-  "name": "sabai-timesheet-harvest",
+  "name": "sabai-harvest",
   "description": "Efficient Harvest time tracking for employees and contractors using hrvst-cli",
   "version": "1.0.0",
   "author": {
