@@ -1,0 +1,18 @@
+{
+  "name": "sabai-claude-marketplace",
+  "version": "1.0.0",
+  "description": "Public marketplace for Claude plugins by Sabai System",
+  "private": true,
+  "scripts": {
+    "prepare": "husky"
+  },
+  "devDependencies": {
+    "husky": "^9.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sabaisystem/sabai-claude-marketplace.git"
+  },
+  "author": "Sabai System",
+  "license": "MIT"
+}

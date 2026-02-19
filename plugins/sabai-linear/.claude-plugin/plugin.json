@@ -1,0 +1,15 @@
+{
+  "name": "sabai-linear",
+  "description": "Product Manager assistant with Linear integration. Create tickets, manage backlog, generate PRDs, and more.",
+  "version": "1.0.0",
+  "author": {
+    "name": "Sabai Team"
+  },
+  "keywords": ["linear", "project-management", "tickets", "backlog", "prd"],
+  "mcpServers": {
+    "linear": {
+      "command": "npx",
+      "args": ["-y", "mcp-remote", "https://mcp.linear.app/mcp"]
+    }
+  }
+}
