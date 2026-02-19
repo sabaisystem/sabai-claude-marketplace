@@ -15,8 +15,8 @@
       "description": "Smart currency and timezone converter that learns your preferences."
     },
     {
-      "name": "sabai-crm-attio",
-      "source": "./plugins/sabai-crm-attio",
+      "name": "sabai-attio",
+      "source": "./plugins/sabai-attio",
       "description": "CRM assistant with Attio integration. Manage leads, prepare for meetings, track deals, and log activities."
     },
     {
@@ -25,8 +25,8 @@
       "description": "Discord assistant for server management, messaging, channel organization, and community engagement."
     },
     {
-      "name": "sabai-doc-notion",
-      "source": "./plugins/sabai-doc-notion",
+      "name": "sabai-notion",
+      "source": "./plugins/sabai-notion",
       "description": "Documentation workflow with Notion integration. Create, update, and sync documentation between your codebase and Notion pages."
     },
     {
@@ -40,8 +40,8 @@
       "description": "Meeting intelligence powered by Granola. Search meetings, get summaries, smart analysis by meeting type, and coaching on work patterns."
     },
     {
-      "name": "sabai-pm-linear",
-      "source": "./plugins/sabai-pm-linear",
+      "name": "sabai-linear",
+      "source": "./plugins/sabai-linear",
       "description": "Product Manager assistant with Linear integration. Create tickets, manage backlog, generate PRDs, and more."
     },
     {
@@ -60,13 +60,13 @@
       "description": "Play Sudoku in Claude with an interactive visual game board. Generate puzzles of varying difficulty, get hints, and track your progress."
     },
     {
-      "name": "sabai-timesheet-harvest",
-      "source": "./plugins/sabai-timesheet-harvest",
+      "name": "sabai-harvest",
+      "source": "./plugins/sabai-harvest",
       "description": "Efficient Harvest time tracking for employees and contractors using hrvst-cli."
     },
     {
-      "name": "sabai-video-tella",
-      "source": "./plugins/sabai-video-tella",
+      "name": "sabai-tella",
+      "source": "./plugins/sabai-tella",
       "description": "Tella video workflow assistant with MCP integration for managing videos, playlists, and creating async video content."
     },
     {

@@ -7,16 +7,16 @@ Public marketplace for Claude plugins by [Sabai System](https://sabaisystem.com)
 | Plugin | Description | Type | Version | Status | Updated |
 |--------|-------------|------|---------|--------|---------|
 | [sabai-sudoku](plugins/sabai-sudoku) | Interactive Sudoku game with smart hints | MCP App | 1.0.0 | Active | 2026-02-16 |
-| [sabai-pm-linear](plugins/sabai-pm-linear) | Product Manager assistant with Linear integration | Skills + Commands | 1.0.0 | Active | 2026-02-16 |
-| [sabai-crm-attio](plugins/sabai-crm-attio) | CRM assistant with Attio integration | Skills + Commands | 1.0.0 | Active | 2026-02-16 |
+| [sabai-linear](plugins/sabai-linear) | Product Manager assistant with Linear integration | Skills + Commands | 1.0.0 | Active | 2026-02-16 |
+| [sabai-attio](plugins/sabai-attio) | CRM assistant with Attio integration | Skills + Commands | 1.0.0 | Active | 2026-02-16 |
 | [sabai-conversion](plugins/sabai-conversion) | Smart currency and timezone converter with preferences | Skills | 1.0.0 | Active | 2026-02-16 |
-| [sabai-doc-notion](plugins/sabai-doc-notion) | Documentation workflow with Notion integration | MCP + Skills + Commands | 1.0.0 | Active | 2026-02-16 |
+| [sabai-notion](plugins/sabai-notion) | Documentation workflow with Notion integration | MCP + Skills + Commands | 1.0.0 | Active | 2026-02-16 |
 | [sabai-gmail](plugins/sabai-gmail) | Gmail assistant for email composition and inbox management | Skills + Commands | 1.0.0 | Active | 2026-02-16 |
-| [sabai-calendar](plugins/sabai-calendar) | Calendar assistant with Google Calendar integration | Skills + Commands | 1.0.0 | Active | 2026-02-16 |
+| [sabai-calendar](plugins/sabai-calendar) | Calendar assistant with Google Calendar integration | Skills + Commands | 1.3.0 | Active | 2026-02-20 |
 | [sabai-granola](plugins/sabai-granola) | Meeting intelligence with Granola for summaries and coaching | MCP + Commands | 1.2.0 | Active | 2026-02-17 |
 | [sabai-sabai](plugins/sabai-sabai) | Relax with chill Thai vibes when you need a break | MCP App + Command | 1.0.0 | Active | 2026-02-16 |
-| [sabai-video-tella](plugins/sabai-video-tella) | Tella video management and content planning | MCP + Commands | 1.0.0 | Active | 2026-02-16 |
-| [sabai-timesheet-harvest](plugins/sabai-timesheet-harvest) | Efficient Harvest time tracking for employees/contractors | Skills + Commands | 1.0.0 | Active | 2026-02-16 |
+| [sabai-tella](plugins/sabai-tella) | Tella video management and content planning | MCP + Commands | 1.0.0 | Active | 2026-02-16 |
+| [sabai-harvest](plugins/sabai-harvest) | Efficient Harvest time tracking for employees/contractors | Skills + Commands | 1.0.0 | Active | 2026-02-16 |
 | [sabai-discord](plugins/sabai-discord) | Discord assistant for server management and messaging | Skills + Commands | 1.0.0 | Active | 2026-02-16 |
 | [sabai-slack](plugins/sabai-slack) | Full-featured Slack integration for messaging and search | MCP + Skills + Commands | 1.0.0 | Active | 2026-02-16 |
 | [sabai-recall](plugins/sabai-recall) | Meeting bot automation with Recall.ai for recording and transcription | MCP App + Commands | 1.4.0 | Active | 2026-02-16 |
@@ -105,6 +105,22 @@ plugins/
     commands/           # Slash commands (optional)
     README.md           # Plugin documentation
 ```
+
+## Project Management
+
+This repository is tracked in [Linear](https://linear.app/sabaisystem) under the **Sabai Claude Marketplace** team. Each plugin has a corresponding project for issue tracking.
+
+- **Report bugs or request features**: Create an issue in the appropriate plugin project
+- **General issues**: Use the "Sabai Plugins" project for cross-plugin concerns
+- **Workflow**: Triage → Backlog → Todo → In Progress → In Review → Done
+
+### Developer Commands
+
+When working on this repo with Claude Code:
+
+- `/todo <plugin> <description>` - Create a ticket for a plugin
+- `/work-on <ticket-id>` - Work on a specific ticket (e.g., `/work-on SCM-27`)
+- `/work-on <plugin>` - List and work on all tickets for a plugin
 
 ## Contributing
 
