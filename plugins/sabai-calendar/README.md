@@ -5,7 +5,7 @@
 | Field | Value |
 |-------|-------|
 | Type | Skills + Commands |
-| Version | 1.0.0 |
+| Version | 1.3.0 |
 | Status | Active |
 | Command | `/today`, `/event`, `/schedule`, `/briefing` |
 | Repo | `plugins/sabai-calendar` |
@@ -25,6 +25,7 @@ A calendar management assistant plugin that integrates Google Calendar with Clau
 - Video conferencing integration (Google Meet/Zoom)
 - Focus time blocking
 - Calendar health analysis and recommendations
+- Smart slot preference ranking for optimal meeting suggestions
 
 ## Use Cases
 
@@ -33,6 +34,7 @@ A calendar management assistant plugin that integrates Google Calendar with Clau
 - "Block 2 hours of focus time tomorrow morning"
 - "Check my availability this week"
 - "Give me my morning briefing"
+- "Find the best time for a meeting this week"
 
 ## Commands
 
