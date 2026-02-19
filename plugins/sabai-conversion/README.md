@@ -1,29 +1,41 @@
 # Sabai Conversion
 
-Smart currency and timezone converter that learns your preferences. No more specifying target currencies or timezones - it just knows what you need.
+**Smart currency and timezone converter that learns your preferences.**
 
-## Features
+| Field | Value |
+|-------|-------|
+| Type | Skills |
+| Version | 1.0.0 |
+| Status | Active |
+| Repo | `plugins/sabai-conversion` |
 
-- **Smart Currency Conversion**: Say "convert 30 baht" and it converts to your preferred currency (EUR by default)
-- **Intelligent Timezone Conversion**: Give a time and see it in your timezone plus your customers' timezones
-- **Meeting Time Finder**: Find overlapping business hours with your international contacts
-- **Context Aware**: Understands your work context and customer relationships
+---
 
-## Installation
+## Overview
 
-Add to your Claude Code settings:
+An intelligent currency and timezone converter plugin that automatically learns user preferences, eliminating the need to repeatedly specify target currencies or timezones. Supports context-aware currency conversion (e.g., "convert 30 baht" auto-converts to preferred currency), timezone conversion with business hours indicators, and a meeting time finder for overlapping business hours across global teams.
 
-```json
-{
-  "plugins": [
-    "sabai-system/sabai-claude-marketplace/plugins/sabai-conversion"
-  ]
-}
-```
+## Key Features
+
+- Smart currency conversion with learned preferences
+- Timezone conversion with business hours indicators
+- Meeting time finder for international teams
+- Context-aware - understands your work relationships
+- No need to specify target currencies repeatedly
+
+## Use Cases
+
+- "Convert 1000 baht"
+- "How much is $50?"
+- "Meeting at 3pm - what time is it elsewhere?"
+- "When can we meet with Bangkok?"
+- "Call at 10am Bangkok time"
 
 ## Configuration
 
-Customize your preferences in the plugin settings:
+### Settings
+
+Customize preferences in plugin settings:
 
 ```json
 {
@@ -37,105 +49,28 @@ Customize your preferences in the plugin settings:
 }
 ```
 
-### Preference Options
-
 | Preference | Description | Default |
 |------------|-------------|---------|
 | `base_currency` | Your primary currency | EUR |
 | `home_timezone` | Your timezone | Europe/Paris |
-| `customer_timezones` | Timezones to show for customers | NYC, Bangkok, Tokyo |
-| `common_currencies` | Additional currencies to display | USD, THB, GBP |
-| `customer_currency` | Your main customer's currency | THB |
+| `customer_timezones` | Timezones to show | NYC, Bangkok, Tokyo |
+| `common_currencies` | Additional currencies | USD, THB, GBP |
+| `customer_currency` | Main customer's currency | THB |
 
-## Usage
+## Authentication
 
-### Currency Conversion
+None required.
 
-```
-You: convert 1000 baht
+## Dependencies
 
-💱 Currency Conversion
+- **Required**: None (uses built-in conversion logic)
 
-1,000 THB =
-• 26.50 EUR ← Your currency
-• 28.75 USD
+## Limitations
 
-Rate: 1 EUR = 37.74 THB
-```
+- Exchange rates may not be real-time
+- Limited to major world currencies and timezones
 
-```
-You: how much is $50?
+## Links
 
-💱 Currency Conversion
-
-50 USD =
-• 46.20 EUR ← Your currency
-• 1,745 THB
-
-Rate: 1 USD = 0.92 EUR
-```
-
-### Time Conversion
-
-```
-You: meeting at 3pm
-
-🕐 Time Conversion
-
-3:00 PM Paris (your time)
-
-• 3:00 PM Paris ← You
-• 9:00 AM New York ✓
-• 9:00 PM Bangkok ✓
-• 11:00 PM Tokyo
-
-✓ = business hours
-```
-
-```
-You: call at 10am Bangkok time
-
-🕐 Time Conversion
-
-10:00 AM Bangkok
-
-• 4:00 AM Paris ← You (early!)
-• 10:00 PM (prev day) New York
-• 12:00 PM Tokyo ✓
-
-✓ = business hours
-```
-
-### Finding Meeting Times
-
-```
-You: when can we meet with Bangkok?
-
-🕐 Overlapping Business Hours
-
-Paris (You) ↔ Bangkok
-
-Good meeting times:
-• 8:00 AM Paris = 2:00 PM Bangkok ✓
-• 9:00 AM Paris = 3:00 PM Bangkok ✓
-• 10:00 AM Paris = 4:00 PM Bangkok ✓
-• 11:00 AM Paris = 5:00 PM Bangkok ✓
-
-Recommended: 9:00-11:00 AM Paris
-```
-
-## Supported Currencies
-
-THB, EUR, USD, GBP, JPY, CNY, SGD, AUD, CHF, and more.
-
-## Supported Timezones
-
-All major world timezones including:
-- Europe: Paris, London, Berlin, Amsterdam
-- Americas: New York, Los Angeles, Toronto, São Paulo
-- Asia: Bangkok, Tokyo, Singapore, Hong Kong, Shanghai
-- Oceania: Sydney, Melbourne, Auckland
-
-## Author
-
-[Sabai System](https://sabaisystem.com)
+- [README](https://github.com/sabaisystem/sabai-claude-marketplace/tree/main/plugins/sabai-conversion)
+- [CHANGELOG](https://github.com/sabaisystem/sabai-claude-marketplace/tree/main/plugins/sabai-conversion/CHANGELOG.md)
