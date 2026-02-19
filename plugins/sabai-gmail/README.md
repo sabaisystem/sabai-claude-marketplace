@@ -1,143 +1,87 @@
 # Sabai Gmail
 
-Gmail assistant for email composition, inbox management, templates, and follow-up tracking.
+**Gmail assistant for email composition, inbox management, templates, and follow-up tracking.**
 
-## Features
+| Field | Value |
+|-------|-------|
+| Type | Skills + Commands |
+| Version | 1.2.0 |
+| Status | Active |
+| Command | `/email`, `/reply`, `/inbox`, `/template`, `/invoices` |
+| Repo | `plugins/sabai-gmail` |
 
-### Email Composition
-- **Smart Drafts** - Generate professional emails with appropriate tone
-- **Reply Assistance** - Draft contextual replies based on email threads
-- **Email Templates** - Use and customize templates for common scenarios
+---
 
-### Inbox Management
-- **Email Triage** - Prioritize and categorize emails efficiently
-- **Label Suggestions** - Organize emails with smart labeling
-- **Search Assistance** - Find emails with advanced search queries
+## Overview
 
-### Follow-up & Tracking
-- **Follow-up Reminders** - Track emails needing responses
-- **Meeting Requests** - Draft meeting invitations and calendar events
-- **Action Items** - Extract and track action items from emails
+A Gmail assistant plugin for email composition, inbox management, templates, and follow-up tracking. Features smart drafts with tone adjustment, contextual reply assistance, built-in email templates, email triage and prioritization, thread summarization, and multi-language support.
 
-### Communication
-- **Tone Adjustment** - Rewrite emails for different contexts (formal, casual, etc.)
-- **Summarization** - Summarize long email threads
-- **Translation** - Draft emails in different languages
+## Key Features
 
-## Prerequisites
+- Smart email drafts with appropriate tone
+- Contextual reply assistance based on email threads
+- **Invoice/receipt detection** - Find, tag, and download financial documents
+- 8 built-in email templates (intro, follow-up, thank-you, meeting-request, update, decline, referral, feedback)
+- Inbox triage and prioritization
+- Thread summarization
+- Action item extraction
+- Multi-language support
 
-- Gmail MCP server configured and connected
-- Google Calendar MCP (optional, for meeting scheduling)
+## Use Cases
 
-### Setting up Gmail MCP
+- "Draft an email to john@example.com about the project update"
+- "Reply to this email with a professional tone accepting their proposal"
+- "Summarize the marketing campaign email thread"
+- "Use the meeting-request template"
+- "Find all invoices from last month"
+- "Download receipts from Amazon for tax filing"
 
-Add to your Claude configuration:
+## Commands
+
+- `/email [recipient] [subject]` - Compose a new email
+- `/reply [context]` - Draft a reply to an email
+- `/followup [email-ref]` - Create a follow-up email
+- `/inbox [filter]` - View and triage inbox
+- `/search [query]` - Search emails with advanced filters
+- `/template [name]` - Use an email template
+- `/summarize [thread]` - Summarize an email thread
+- `/invoices [action]` - Find, download, and tag invoice/receipt emails
+
+## Configuration
+
+### MCP Server Setup
 
 ```json
 {
   "mcpServers": {
     "gmail": {
       "command": "npx",
-      "args": ["-y", "@anthropic/gmail-mcp-server"],
-      "env": {
-        "GOOGLE_OAUTH_CREDENTIALS": "/path/to/credentials.json"
-      }
+      "args": ["-y", "@anthropic/gmail-mcp@latest"]
     }
   }
 }
 ```
 
-See [Gmail MCP documentation](https://github.com/anthropics/gmail-mcp-server) for OAuth setup.
+## Authentication
 
-## Commands
+OAuth via Google. Browser opens for sign-in on first use.
 
-### Composing Emails
-| Command | Description |
-|---------|-------------|
-| `/email [recipient] [subject]` | Compose a new email |
-| `/reply [context]` | Draft a reply to an email |
-| `/followup [email-ref]` | Create a follow-up email |
+## Permissions
 
-### Inbox Management
-| Command | Description |
-|---------|-------------|
-| `/inbox [filter]` | View and triage inbox |
-| `/search [query]` | Search emails with advanced filters |
-| `/labels [action]` | Manage email labels |
+Required Claude Code permissions:
+- Gmail MCP tools for email operations
 
-### Templates & Productivity
-| Command | Description |
-|---------|-------------|
-| `/template [name]` | Use an email template |
-| `/meeting [attendees] [topic]` | Schedule a meeting via email |
-| `/summarize [thread]` | Summarize an email thread |
+## Dependencies
 
-## Email Templates
+- **Required**: Gmail MCP server (`@anthropic/gmail-mcp`)
+- **Optional**: Google Calendar MCP (for meeting scheduling)
 
-Built-in templates for common scenarios:
+## Limitations
 
-- `intro` - Professional introduction
-- `follow-up` - Follow-up on previous conversation
-- `thank-you` - Thank you email
-- `meeting-request` - Request a meeting
-- `update` - Status update
-- `decline` - Politely decline a request
-- `referral` - Request or give a referral
-- `feedback` - Request or provide feedback
-
-## Usage Examples
-
-### Compose a New Email
-```
-/email john@example.com Project Update
-```
-
-### Reply to an Email
-```
-/reply with a professional tone accepting their proposal
-```
-
-### Search Your Inbox
-```
-/search from:jane has:attachment after:2024-01-01
-```
-
-### Schedule a Meeting
-```
-/meeting team@company.com Q1 Planning Session
-```
-
-### Use a Template
-```
-/template meeting-request
-```
-
-### Summarize a Thread
-```
-/summarize the marketing campaign discussion
-```
-
-## Skills
-
-This plugin includes skills for:
-
-| Skill | Description |
-|-------|-------------|
-| `email-composition.md` | Writing effective emails |
-| `email-templates.md` | Template library and customization |
-| `inbox-management.md` | Organization and triage strategies |
-| `tone-adjustment.md` | Adapting communication style |
-| `follow-up-tracking.md` | Managing follow-ups and reminders |
-
-## Tips
-
-- Use `/inbox` at the start of each day to prioritize
-- Draft important emails with `/email` and review before sending
-- Use `/summarize` for long threads before responding
-- Set up templates for emails you send frequently
-- Use `/followup` to ensure important conversations don't slip
+- Requires Google account with Gmail
+- OAuth consent required on first use
 
 ## Links
 
-- [Gmail](https://mail.google.com)
-- [Sabai System](https://sabaisystem.com)
+- [README](https://github.com/sabaisystem/sabai-claude-marketplace/tree/main/plugins/sabai-gmail)
+- [CHANGELOG](https://github.com/sabaisystem/sabai-claude-marketplace/tree/main/plugins/sabai-gmail/CHANGELOG.md)
