@@ -1,7 +1,7 @@
 {
   "name": "sabai-calendar",
   "description": "Calendar assistant with Google Calendar integration. Manage events, schedule meetings, get daily briefings, and optimize your time.",
-  "version": "1.0.0",
+  "version": "1.2.0",
   "author": {
     "name": "Sabai Team"
   },

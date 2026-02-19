@@ -1,33 +1,30 @@
 # Sabai Sudoku
 
-Play interactive Sudoku puzzles directly in Claude with a visual game board.
+**Play interactive Sudoku puzzles directly in Claude with a visual game board.**
 
-## Features
+| Field | Value |
+|-------|-------|
+| Type | MCP App |
+| Version | 1.0.0 |
+| Status | Active |
+| Repo | `plugins/sabai-sudoku` |
 
-- **Interactive UI**: Visual 9x9 Sudoku grid rendered as an MCP App
-- **Multiple difficulties**: Easy, Medium, Hard, Expert
-- **Game tools**:
-  - Number input via keyboard or clickable number pad
-  - Get hints for the next move
-  - Check board for errors
-  - Track moves and remaining cells
-- **Keyboard support**: Type 1-9 to enter numbers, Backspace/Delete to clear
+---
 
-## Installation
+## Overview
 
-The plugin is automatically available when installed in Cowork.
+An interactive Sudoku puzzle game running directly within Claude as an MCP App. Features a visual 9x9 game board with real-time gameplay, multiple difficulty levels, and game assistance tools.
 
-### Manual Setup
+## Key Features
 
-```bash
-cd plugins/sabai-sudoku/mcp
-npm install
-npm run build
-```
+- Visual 9x9 Sudoku grid rendered as an MCP App
+- Four difficulty levels: Easy, Medium, Hard, Expert
+- Keyboard input (1-9) or clickable number pad
+- Hint system for next moves
+- Error checking
+- Move tracking and remaining cells counter
 
-## Usage
-
-Simply ask Claude to play Sudoku:
+## Use Cases
 
 - "Let's play Sudoku"
 - "Start a new Sudoku game on hard difficulty"
@@ -35,55 +32,29 @@ Simply ask Claude to play Sudoku:
 
 ## MCP Tools
 
-| Tool | Description |
-|------|-------------|
-| `play_sudoku` | Start a new game or resume an existing one |
-| `sudoku_move` | Place a number on the board (UI-only) |
-| `sudoku_hint` | Get a hint for the next move (UI-only) |
-| `sudoku_check` | Check board for errors (UI-only) |
+- `play_sudoku` - Start a new game or resume an existing one
+- `sudoku_move` - Place a number on the board (UI-only)
+- `sudoku_hint` - Get a hint for the next move (UI-only)
+- `sudoku_check` - Check board for errors (UI-only)
 
-## How It Works
+## Configuration
 
-This plugin uses the MCP Apps SDK to create an interactive UI that renders inside Claude:
+No configuration required. The plugin works out of the box.
 
-1. **Server** (`mcp/server.ts`): Handles Sudoku logic, puzzle generation, and game state
-2. **UI** (`mcp/src/mcp-app.tsx`): React-based interactive Sudoku board
-3. **Bundled**: Uses Vite with `vite-plugin-singlefile` to bundle everything into a single HTML file
+## Authentication
 
-## Development
+None required.
 
-```bash
-cd plugins/sabai-sudoku/mcp
+## Dependencies
 
-# Install dependencies
-npm install
+- **Required**: None (self-contained MCP App)
 
-# Development mode (watch + serve)
-npm run dev
+## Limitations
 
-# Build for production
-npm run build
+- Game state resets when Claude session ends
+- Single player only
 
-# Run server
-npm run serve
-```
+## Links
 
-## Architecture
-
-```
-sabai-sudoku/
-├── .claude-plugin/
-│   └── plugin.json       # Plugin manifest
-├── mcp/
-│   ├── server.ts         # MCP server with sudoku tools
-│   ├── main.ts           # Server entry point
-│   ├── mcp-app.html      # HTML entry for the UI
-│   ├── src/
-│   │   ├── mcp-app.tsx   # React Sudoku app
-│   │   ├── mcp-app.module.css
-│   │   └── global.css
-│   ├── vite.config.ts
-│   ├── tsconfig.json
-│   └── package.json
-└── README.md
-```
+- [README](https://github.com/sabaisystem/sabai-claude-marketplace/tree/main/plugins/sabai-sudoku)
+- [CHANGELOG](https://github.com/sabaisystem/sabai-claude-marketplace/tree/main/plugins/sabai-sudoku/CHANGELOG.md)

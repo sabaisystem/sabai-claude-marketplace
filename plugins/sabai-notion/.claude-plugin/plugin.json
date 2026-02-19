@@ -1,5 +1,5 @@
 {
-  "name": "sabai-doc-notion",
+  "name": "sabai-notion",
   "description": "Documentation workflow with Notion integration. Create, update, and sync documentation between your codebase and Notion pages.",
   "version": "1.0.0",
   "author": {
@@ -9,7 +9,7 @@
   "skills": "./skills/",
   "commands": "./commands/",
   "mcpServers": {
-    "sabai-doc-notion": {
+    "sabai-notion": {
       "command": "bash",
       "args": ["${CLAUDE_PLUGIN_ROOT}/mcp/startup.sh"]
     }
