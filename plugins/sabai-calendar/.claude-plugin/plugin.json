@@ -7,7 +7,7 @@
   },
   "keywords": ["calendar", "google", "meetings", "events", "scheduling"],
   "mcpServers": {
-    "google-calendar": {
+    "sabai-calendar": {
       "command": "bash",
       "args": ["${CLAUDE_PLUGIN_ROOT}/mcp/startup.sh"],
       "env": {
