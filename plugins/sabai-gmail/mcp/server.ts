@@ -4,17 +4,40 @@ import type { CallToolResult, ReadResourceResult } from "@modelcontextprotocol/s
 import fs from "node:fs/promises";
 import fsSync from "node:fs";
 import path from "node:path";
+import { fileURLToPath } from "node:url";
 import { z } from "zod";
 import { google, gmail_v1 } from "googleapis";
 
-// Works both from source (server.ts) and compiled (dist/server.js)
-const DIST_DIR = import.meta.filename.endsWith(".ts")
-  ? path.join(import.meta.dirname, "dist")
-  : import.meta.dirname;
+// Get directory paths - works in both ESM (tsx) and CJS (bundled) modes
+function getScriptDir(): string {
+  // When bundled as CJS, process.argv[1] is the script path
+  // When running with tsx, we use import.meta.url
+  try {
+    // Try ESM approach first
+    if (typeof import.meta !== 'undefined' && import.meta.url) {
+      return path.dirname(fileURLToPath(import.meta.url));
+    }
+  } catch {
+    // Fall back to CJS approach
+  }
 
-const MCP_DIR = import.meta.filename.endsWith(".ts")
-  ? import.meta.dirname
-  : path.dirname(import.meta.dirname);
+  // CJS fallback - use process.argv[1] or __dirname equivalent
+  const scriptPath = process.argv[1];
+  if (scriptPath) {
+    return path.dirname(scriptPath);
+  }
+
+  // Last resort - use cwd
+  return process.cwd();
+}
+
+const SCRIPT_DIR = getScriptDir();
+
+// When running from source (server.ts), dist is a subdirectory
+// When running bundled (dist/server.cjs), we're already in dist
+const isInDist = SCRIPT_DIR.endsWith('/dist') || SCRIPT_DIR.endsWith('\\dist');
+const DIST_DIR = isInDist ? SCRIPT_DIR : path.join(SCRIPT_DIR, "dist");
+const MCP_DIR = isInDist ? path.dirname(SCRIPT_DIR) : SCRIPT_DIR;
 
 // Configuration from environment
 const CREDENTIALS_PATH = process.env.GOOGLE_CREDENTIALS || path.join(MCP_DIR, "config", "credentials.json");
