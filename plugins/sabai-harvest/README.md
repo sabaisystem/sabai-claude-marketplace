@@ -4,8 +4,8 @@
 
 | Field | Value |
 |-------|-------|
-| Type | Skills + Commands |
-| Version | 1.0.0 |
+| Type | MCP App + Skills + Commands |
+| Version | 1.1.0 |
 | Status | Active |
 | Command | `/setup-harvest`, `/duplicate-week`, `/log`, `/timesheet` |
 | Repo | `plugins/sabai-harvest` |
@@ -18,6 +18,7 @@ An efficient Harvest time tracking plugin using the [hrvst-cli](https://github.c
 
 ## Key Features
 
+- **Visual week view** - Interactive grid showing Mon-Fri with editable cells
 - Duplicate last week's timesheet with review before submitting
 - Quick time logging with aliases
 - Weekly timesheet review and gap detection
@@ -26,9 +27,9 @@ An efficient Harvest time tracking plugin using the [hrvst-cli](https://github.c
 
 ## Use Cases
 
+- "Show my timesheet for this week" (opens visual week grid)
 - "Duplicate last week's timesheet"
 - "Log 2 hours to client-dev project"
-- "Show me my timesheet for this week"
 - "Review my time entries for gaps"
 
 ## Commands
@@ -36,7 +37,17 @@ An efficient Harvest time tracking plugin using the [hrvst-cli](https://github.c
 - `/setup-harvest` - Install CLI, authenticate, and create aliases
 - `/duplicate-week` - Copy last week's entries with review before submitting
 - `/log [hours] [project]` - Quick time entry
-- `/timesheet [day|week]` - View your timesheet
+- `/timesheet [day|week]` - View your timesheet (week view opens the MCP App grid)
+
+## MCP App
+
+The **Timesheet Week View** displays an interactive grid for viewing and editing your weekly timesheet:
+
+- **Mon-Fri columns** with project rows
+- **Click to edit** hours in any cell
+- **Visual states**: empty (gray), filled (white), draft (yellow), submitted (green)
+- **Automatic totals** for daily and weekly hours
+- **Gap detection** highlighting days under 8 hours
 
 ## Configuration
 
