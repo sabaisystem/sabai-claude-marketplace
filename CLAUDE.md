@@ -120,11 +120,43 @@ When testing plugins by importing a zip file into Claude for Work, **bundling is
    exec node index.js
    ```
 
-4. **Create zip without node_modules**:
+4. **Create zip with correct structure** (CRITICAL):
    ```bash
+   # CORRECT: cd INTO the plugin folder first
    cd plugins/plugin-name
-   zip -r ~/Desktop/plugin-name.zip . -x "mcp/node_modules/*"
+   zip -r ~/Desktop/plugin-name.zip . -x "mcp/node_modules/*" -x "mcp/package-lock.json"
+
+   # WRONG: Don't zip from the repo root
+   # zip -r plugin.zip plugins/plugin-name  ← This creates wrong structure!
    ```
+
+### Zip Structure Requirements
+
+Claude for Work expects the `.claude-plugin/` folder at the **root** of the zip:
+
+```
+✅ CORRECT structure:
+plugin-name.zip
+├── .claude-plugin/
+│   └── plugin.json
+├── mcp/
+│   ├── dist/
+│   │   └── server.cjs
+│   └── startup.sh
+├── commands/
+├── skills/
+└── README.md
+
+❌ WRONG structure:
+plugin-name.zip
+└── plugins/
+    └── plugin-name/
+        ├── .claude-plugin/
+        │   └── plugin.json
+        └── ...
+```
+
+**Key:** Always `cd` into the plugin folder before creating the zip.
 
 ### When to Bundle
 

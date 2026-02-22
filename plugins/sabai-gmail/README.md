@@ -4,20 +4,21 @@
 
 | Field | Value |
 |-------|-------|
-| Type | MCP Server + Skills + Commands |
-| Version | 1.2.0 |
+| Type | MCP App + Skills + Commands |
+| Version | 1.3.0 |
 | Status | Active |
-| Command | `/email`, `/reply`, `/inbox`, `/search` |
+| Command | `/email`, `/reply`, `/inbox`, `/template`, `/followup` |
 | Repo | `plugins/sabai-gmail` |
 
 ---
 
 ## Overview
 
-A Gmail assistant plugin with a custom MCP server for full email operations. Features smart drafts with tone adjustment, contextual reply assistance, built-in email templates, email triage and prioritization, thread summarization, and multi-language support.
+A Gmail assistant plugin with a custom MCP server for full email operations and an embedded email editor UI. Features smart drafts with tone adjustment, contextual reply assistance, built-in email templates, email triage and prioritization, thread summarization, follow-up detection with urgency scoring, and multi-language support.
 
 ## Key Features
 
+- **MCP App Email Editor** - Embedded UI for composing and editing emails directly in Claude
 - **Follow-up detection** - Automatically find emails needing a response with urgency scoring
 - **Smart selection interface** - Numbered cards with sorting, filtering, and natural language selection
 - Smart email drafts with appropriate tone
@@ -90,8 +91,11 @@ A browser window will open. Sign in with your Google account and authorize.
 - "Show my unread emails"
 - "Search for emails from jane with attachments"
 - "Archive this email"
+- "Find emails that need follow-up"
 
 ## MCP Tools
+
+### Gmail API Tools
 
 | Tool | Description |
 |------|-------------|
@@ -111,11 +115,31 @@ A browser window will open. Sign in with your Google account and authorize.
 | `gmail_star` | Star a message |
 | `gmail_unstar` | Remove star |
 
+### MCP App Email Editor Tools
+
+| Tool | Description |
+|------|-------------|
+| `compose_email` | Open the email editor with optional pre-filled content |
+| `update_draft` | Update draft content (UI-only) |
+| `editor_send_email` | Send email from editor (UI-only) |
+| `save_draft` | Save to Gmail drafts (UI-only) |
+| `discard_draft` | Discard draft (UI-only) |
+
+## MCP App Email Editor
+
+The email editor provides an embedded UI in Claude for composing emails:
+
+- **To/CC/BCC fields** - Email chips for easy recipient management
+- **Subject field** - Editable subject line
+- **Body editor** - Full text editor for email content
+- **Signature** - Displays configured signature
+- **Actions** - Send, Save Draft, or Discard
+
 ## Commands
 
 - `/email [recipient] [subject]` - Compose a new email
-- `/reply [context]` - Draft a reply
-- `/followup [email-ref]` - Create a follow-up
+- `/reply [context]` - Draft a reply to an email
+- `/followup [email-ref]` - Detect and manage follow-up emails
 - `/inbox [filter]` - View and triage inbox
 - `/search [query]` - Search emails
 - `/template [name]` - Use an email template
@@ -133,6 +157,25 @@ Ensure `credentials.json` is in `mcp/config/`.
 
 ### "Access blocked" error
 Add your email as a test user in OAuth consent screen.
+
+## Authentication
+
+OAuth via Google. Browser opens for sign-in on first use.
+
+## Permissions
+
+Required Claude Code permissions:
+- Gmail MCP tools for email operations
+
+## Dependencies
+
+- **Required**: Google OAuth credentials
+- **Required for MCP App**: Node.js with tsx
+
+## Limitations
+
+- Requires Google account with Gmail
+- OAuth consent required on first use
 
 ## Links
 
