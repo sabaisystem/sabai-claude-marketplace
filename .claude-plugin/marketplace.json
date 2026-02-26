@@ -73,6 +73,11 @@
       "name": "sabai-recall",
       "source": "./plugins/sabai-recall",
       "description": "Meeting bot automation with Recall.ai. Create bots to join and record meetings, access recordings, transcripts, and participant data."
+    },
+    {
+      "name": "sabai-remotion",
+      "source": "./plugins/sabai-remotion",
+      "description": "Create videos programmatically with Remotion. Preview compositions, render to MP4/WebM/GIF, and use templates for social media, tutorials, and data visualizations."
     }
   ]
 }

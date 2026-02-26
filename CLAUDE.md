@@ -339,6 +339,7 @@ Only after user approval:
 2. Implement the changes following the acceptance criteria
 3. Reference the ticket ID in commits (e.g., `feat: Add feature [SCM-28]`)
 4. When done, add a comment to the ticket summarizing what was done
+5. **When creating a PR, automatically update ticket status to "In Review"**
 
 ### Example Flow
 

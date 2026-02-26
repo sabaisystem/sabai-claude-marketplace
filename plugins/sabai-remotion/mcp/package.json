@@ -1,0 +1,42 @@
+{
+  "name": "sabai-remotion",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Programmatic video creation MCP App using Remotion",
+  "license": "MIT",
+  "main": "dist/server.js",
+  "scripts": {
+    "build": "npm run build:remotion && npm run build:ui && npm run build:server",
+    "build:remotion": "remotion bundle remotion/index.ts --out-dir dist/remotion-bundle",
+    "build:ui": "cross-env INPUT=mcp-app.html vite build",
+    "build:server": "tsc -p tsconfig.server.json",
+    "watch": "cross-env INPUT=mcp-app.html vite build --watch",
+    "serve": "tsx main.ts",
+    "start": "npm run build && npm run serve",
+    "dev": "cross-env NODE_ENV=development concurrently 'npm run watch' 'npm run serve'",
+    "remotion:preview": "remotion preview remotion/index.ts"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/ext-apps": "^1.0.0",
+    "@modelcontextprotocol/sdk": "^1.24.0",
+    "@remotion/bundler": "^4.0.0",
+    "@remotion/renderer": "^4.0.0",
+    "react": "^18.3.0",
+    "react-dom": "^18.3.0",
+    "remotion": "^4.0.0",
+    "zod": "^3.24.0"
+  },
+  "devDependencies": {
+    "@remotion/cli": "^4.0.0",
+    "@types/node": "^22.10.0",
+    "@types/react": "^18.3.0",
+    "@types/react-dom": "^18.3.0",
+    "@vitejs/plugin-react": "^4.3.4",
+    "concurrently": "^9.2.1",
+    "cross-env": "^7.0.3",
+    "tsx": "^4.19.0",
+    "typescript": "^5.9.3",
+    "vite": "^6.0.0",
+    "vite-plugin-singlefile": "^2.3.0"
+  }
+}

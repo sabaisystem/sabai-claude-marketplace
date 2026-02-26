@@ -1,0 +1,17 @@
+{
+  "name": "sabai-remotion",
+  "description": "Create videos programmatically with Remotion. Preview compositions, render to MP4/WebM/GIF, and use templates for social media, tutorials, and data visualizations.",
+  "version": "0.1.0",
+  "author": {
+    "name": "Sabai Team"
+  },
+  "keywords": ["remotion", "video", "render", "mcp-app", "animation"],
+  "skills": "./skills/",
+  "commands": "./commands/",
+  "mcpServers": {
+    "sabai-remotion": {
+      "command": "bash",
+      "args": ["${CLAUDE_PLUGIN_ROOT}/mcp/startup.sh"]
+    }
+  }
+}
