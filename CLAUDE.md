@@ -27,12 +27,14 @@ plugins/
 
 When creating a new plugin:
 
-1. **Create the folder structure** under `plugins/`
-2. **Add plugin.json** with name, description, and configuration
-3. **Add README.md** documenting what the plugin does and how to use it
-4. **Build and test** before committing
-5. **Update the main README.md** to list the new plugin
-6. **Add to marketplace.json** (see below)
+1. **Create a Linear project** using `mcp__linear__create_project` with name "Sabai [Plugin Name]" and team "Sabai Claude Marketplace"
+2. **Create a ticket** in that project for the initial implementation
+3. **Create the folder structure** under `plugins/`
+4. **Add plugin.json** with name, description, and configuration
+5. **Add README.md** documenting what the plugin does and how to use it
+6. **Build and test** before committing
+7. **Update the main README.md** to list the new plugin
+8. **Add to marketplace.json** (see below)
 
 ## Marketplace Configuration
 
@@ -313,26 +315,37 @@ Follow conventional commit format:
 
 When asked to implement, fix, or change anything in a plugin:
 
-### Step 1: Check for Existing Ticket
+### Step 1: Check for Existing Project (New Plugins Only)
+
+If creating a **new plugin**, first check if a Linear project exists:
+1. Search for the project using `mcp__linear__list_projects`
+2. If no project exists, **create one first** using `mcp__linear__create_project`:
+   ```
+   mcp__linear__create_project(name="Sabai [Plugin Name]", team="Sabai Claude Marketplace")
+   ```
+3. Each plugin MUST have its own Linear project for issue tracking
+
+### Step 2: Check for Existing Ticket
 
 1. Search Linear for an existing ticket matching the request
 2. If found, confirm with user: "I found ticket SCM-XX for this. Should I work on it?"
 
-### Step 2: Create Ticket if None Exists
+### Step 3: Create Ticket if None Exists
 
 If no ticket exists:
 1. **Create the ticket first** using `mcp__linear__create_issue`
 2. Include: title, overview, requirements, acceptance criteria
-3. **Show the ticket to the user** with the Linear link
-4. **Ask for confirmation**: "Is this ticket clear? Would you like to edit it or should I start working?"
+3. **Assign to the correct project** (the plugin's project)
+4. **Show the ticket to the user** with the Linear link
+5. **Ask for confirmation**: "Is this ticket clear? Would you like to edit it or should I start working?"
 
-### Step 3: Wait for Approval
+### Step 4: Wait for Approval
 
 - If user wants edits → update the ticket, ask again
 - If user approves → change status to "In Progress" and start working
 - If user says "later" → leave ticket in backlog, don't start
 
-### Step 4: Work on the Ticket
+### Step 5: Work on the Ticket
 
 Only after user approval:
 1. Update ticket status to "In Progress"
