@@ -1,0 +1,15 @@
+{
+  "name": "sabai-mermaid",
+  "description": "Interactive Mermaid diagram editor with conversational updates. Create, visualize, and iterate on diagrams through chat.",
+  "version": "1.0.0",
+  "author": {
+    "name": "Sabai Team"
+  },
+  "keywords": ["mermaid", "diagram", "flowchart", "visualization", "mcp-app", "interactive"],
+  "mcpServers": {
+    "sabai-mermaid": {
+      "command": "bash",
+      "args": ["${CLAUDE_PLUGIN_ROOT}/mcp/startup.sh"]
+    }
+  }
+}

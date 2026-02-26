@@ -73,6 +73,11 @@
       "name": "sabai-recall",
       "source": "./plugins/sabai-recall",
       "description": "Meeting bot automation with Recall.ai. Create bots to join and record meetings, access recordings, transcripts, and participant data."
+    },
+    {
+      "name": "sabai-mermaid",
+      "source": "./plugins/sabai-mermaid",
+      "description": "Interactive Mermaid diagram editor with conversational updates. Create, visualize, and iterate on diagrams through chat."
     }
   ]
 }

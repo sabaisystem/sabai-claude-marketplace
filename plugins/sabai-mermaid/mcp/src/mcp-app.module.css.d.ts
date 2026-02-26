@@ -1,0 +1,33 @@
+declare const styles: {
+  readonly main: string;
+  readonly header: string;
+  readonly title: string;
+  readonly diagramTitle: string;
+  readonly content: string;
+  readonly diagramPanel: string;
+  readonly diagramContainer: string;
+  readonly codePanel: string;
+  readonly codePanelHeader: string;
+  readonly codePanelTitle: string;
+  readonly codeArea: string;
+  readonly actions: string;
+  readonly actionButton: string;
+  readonly primaryButton: string;
+  readonly undoButton: string;
+  readonly emptyState: string;
+  readonly emptyIcon: string;
+  readonly emptyText: string;
+  readonly emptyHint: string;
+  readonly errorState: string;
+  readonly loading: string;
+  readonly error: string;
+  readonly footer: string;
+  readonly footerLink: string;
+  readonly footerLogo: string;
+  readonly typeSelector: string;
+  readonly typeButton: string;
+  readonly copyButton: string;
+  readonly copySuccess: string;
+};
+
+export default styles;

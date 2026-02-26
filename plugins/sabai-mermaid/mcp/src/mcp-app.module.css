@@ -1,0 +1,329 @@
+.main {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  gap: 1rem;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 0;
+  color: var(--color-text-primary, #111);
+}
+
+@media (prefers-color-scheme: dark) {
+  .title {
+    color: #f3f4f6;
+  }
+}
+
+.diagramTitle {
+  font-size: 0.875rem;
+  color: var(--color-text-secondary, #666);
+  margin: 0;
+}
+
+/* Container for diagram and code */
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  flex: 1;
+}
+
+@media (min-width: 900px) {
+  .content {
+    flex-direction: row;
+  }
+}
+
+/* Diagram viewer panel */
+.diagramPanel {
+  flex: 1;
+  min-height: 300px;
+  background: var(--color-background-secondary, #f9fafb);
+  border-radius: 8px;
+  border: 1px solid var(--color-border, #e5e7eb);
+  padding: 1rem;
+  overflow: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@media (prefers-color-scheme: dark) {
+  .diagramPanel {
+    background: #1f2937;
+    border-color: #374151;
+  }
+}
+
+.diagramContainer {
+  max-width: 100%;
+  overflow: auto;
+}
+
+.diagramContainer svg {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Code panel */
+.codePanel {
+  flex: 0.4;
+  min-width: 280px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.codePanelHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 0;
+}
+
+.codePanelTitle {
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin: 0;
+  color: var(--color-text-secondary, #666);
+}
+
+.codeArea {
+  flex: 1;
+  min-height: 200px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.8125rem;
+  padding: 0.75rem;
+  border: 1px solid var(--color-border, #e5e7eb);
+  border-radius: 8px;
+  background: var(--color-background-secondary, #f9fafb);
+  color: var(--color-text-primary, #111);
+  resize: none;
+  line-height: 1.5;
+}
+
+.codeArea:focus {
+  outline: none;
+  border-color: #f26a2c;
+  box-shadow: 0 0 0 2px rgba(242, 106, 44, 0.2);
+}
+
+@media (prefers-color-scheme: dark) {
+  .codeArea {
+    background: #1f2937;
+    border-color: #374151;
+    color: #f3f4f6;
+  }
+}
+
+/* Actions */
+.actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.actionButton {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  background: var(--color-background-secondary, #f3f4f6);
+  color: var(--color-text-primary, #374151);
+}
+
+.actionButton:hover:not(:disabled) {
+  background: var(--color-background-tertiary, #e5e7eb);
+}
+
+.actionButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+@media (prefers-color-scheme: dark) {
+  .actionButton {
+    background: #374151;
+    color: #f3f4f6;
+  }
+
+  .actionButton:hover:not(:disabled) {
+    background: #4b5563;
+  }
+}
+
+.primaryButton {
+  background: #f26a2c;
+  color: white;
+}
+
+.primaryButton:hover:not(:disabled) {
+  background: #e55310;
+}
+
+.undoButton {
+  background: #6b7280;
+  color: white;
+}
+
+.undoButton:hover:not(:disabled) {
+  background: #4b5563;
+}
+
+/* Empty state */
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem;
+  text-align: center;
+  gap: 1rem;
+  color: var(--color-text-secondary, #6b7280);
+}
+
+.emptyIcon {
+  width: 64px;
+  height: 64px;
+  opacity: 0.5;
+}
+
+.emptyText {
+  font-size: 1rem;
+  margin: 0;
+}
+
+.emptyHint {
+  font-size: 0.875rem;
+  margin: 0;
+  max-width: 400px;
+}
+
+/* Error state */
+.errorState {
+  padding: 1rem;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+  color: #dc2626;
+}
+
+@media (prefers-color-scheme: dark) {
+  .errorState {
+    background: rgba(220, 38, 38, 0.1);
+    border-color: rgba(220, 38, 38, 0.3);
+    color: #f87171;
+  }
+}
+
+/* Loading state */
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+  color: var(--color-text-secondary, #6b7280);
+}
+
+.error {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+  color: #dc2626;
+}
+
+/* Footer */
+.footer {
+  padding-top: 1rem;
+  border-top: 1px solid var(--color-border, #e5e7eb);
+  display: flex;
+  justify-content: center;
+}
+
+@media (prefers-color-scheme: dark) {
+  .footer {
+    border-color: #374151;
+  }
+}
+
+.footerLink {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--color-text-secondary, #6b7280);
+  text-decoration: none;
+  font-size: 0.75rem;
+  transition: color 0.15s ease;
+}
+
+.footerLink:hover {
+  color: #f26a2c;
+}
+
+.footerLogo {
+  width: 20px;
+  height: 20px;
+}
+
+/* Diagram type selector */
+.typeSelector {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  padding: 0.5rem 0;
+}
+
+.typeButton {
+  padding: 0.375rem 0.75rem;
+  border: 1px solid var(--color-border, #e5e7eb);
+  border-radius: 6px;
+  font-size: 0.75rem;
+  cursor: pointer;
+  background: transparent;
+  color: var(--color-text-secondary, #6b7280);
+  transition: all 0.15s ease;
+}
+
+.typeButton:hover {
+  border-color: #f26a2c;
+  color: #f26a2c;
+}
+
+@media (prefers-color-scheme: dark) {
+  .typeButton {
+    border-color: #374151;
+    color: #9ca3af;
+  }
+
+  .typeButton:hover {
+    border-color: #f26a2c;
+    color: #f26a2c;
+  }
+}
+
+/* Copy button */
+.copyButton {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+}
+
+.copySuccess {
+  color: #059669;
+}
