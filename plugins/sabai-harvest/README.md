@@ -5,9 +5,10 @@
 | Field | Value |
 |-------|-------|
 | Type | Skills + Commands |
-| Version | 1.0.0 |
+| Version | 1.5.0 |
 | Status | Active |
-| Command | `/setup-harvest`, `/duplicate-week`, `/log`, `/timesheet` |
+| Updated | 2026-02-20 |
+| Command | `/setup-harvest`, `/duplicate-week`, `/log`, `/timesheet`, `/team-timesheet`, `/approve`, `/project-budget`, `/team-report`, `/remind` |
 | Repo | `plugins/sabai-harvest` |
 
 ---
@@ -23,20 +24,40 @@ An efficient Harvest time tracking plugin using the [hrvst-cli](https://github.c
 - Weekly timesheet review and gap detection
 - Auto-install of Harvest CLI
 - Natural language time entry
+- **User roles support** (Employee vs Manager) with automatic detection
+- **Manager dashboard** for team timesheets, approvals, and project budgets
+- **Approval workflow** for timesheet review and feedback
+- **Team reporting** with utilization and project distribution
 
 ## Use Cases
 
+### For Employees
 - "Duplicate last week's timesheet"
 - "Log 2 hours to client-dev project"
 - "Show me my timesheet for this week"
 - "Review my time entries for gaps"
 
+### For Managers
+- "Show me the team's timesheets for last week"
+- "Approve Alice's timesheet"
+- "What's the budget status for Project X?"
+- "Send a reminder to Bob about his incomplete timesheet"
+- "Generate a team report for February"
+
 ## Commands
 
+### Employee Commands
 - `/setup-harvest` - Install CLI, authenticate, and create aliases
 - `/duplicate-week` - Copy last week's entries with review before submitting
 - `/log [hours] [project]` - Quick time entry
 - `/timesheet [day|week]` - View your timesheet
+
+### Manager Commands
+- `/team-timesheet [week] [member]` - View team member timesheets
+- `/approve [member] [week]` - Approve or reject timesheets
+- `/project-budget [project]` - View project financial data
+- `/team-report [period]` - Generate comprehensive team reports
+- `/remind [member]` - Send reminders for incomplete timesheets
 
 ## Configuration
 
