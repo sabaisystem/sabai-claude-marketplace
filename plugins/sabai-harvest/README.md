@@ -5,8 +5,9 @@
 | Field | Value |
 |-------|-------|
 | Type | Skills + Commands |
-| Version | 1.0.0 |
+| Version | 1.4.0 |
 | Status | Active |
+| Updated | 2026-02-20 |
 | Command | `/setup-harvest`, `/duplicate-week`, `/log`, `/timesheet` |
 | Repo | `plugins/sabai-harvest` |
 
@@ -18,6 +19,7 @@ An efficient Harvest time tracking plugin using the [hrvst-cli](https://github.c
 
 ## Key Features
 
+- **Submit with diff preview** - Review changes before committing with visual markers for NEW, MODIFIED, REMOVED entries
 - Duplicate last week's timesheet with review before submitting
 - Quick time logging with aliases
 - Weekly timesheet review and gap detection
