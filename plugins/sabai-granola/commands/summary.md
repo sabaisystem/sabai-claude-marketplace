@@ -93,3 +93,17 @@ Provide an aggregated view:
 - Highlight decisions clearly - these are often the most valuable
 - Note any tensions or disagreements diplomatically
 - If follow-up is needed, make it explicit
+
+## Follow-up Actions
+
+After delivering the summary, use `AskUserQuestion` to offer contextual next steps based on the meeting content. Adapt options to what was actually found. For example:
+
+After a single meeting summary with action items:
+> "What would you like to do next?"
+> Options: "Draft a follow-up email for this meeting", "See all action items in detail", "Analyze this meeting with a framework", "Get coached on my communication in this meeting"
+
+After a multi-meeting summary with patterns:
+> "What would you like to explore further?"
+> Options: "Analyze a specific meeting from this list", "Search for a topic across more meetings", "Check action items from these meetings", "Draft a follow-up email"
+
+Always tie options to the specific meetings, people, or themes from the summary.
