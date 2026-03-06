@@ -97,3 +97,17 @@ If the meeting doesn't fit a specific type, analyze:
 ## Output tone
 
 Be analytical but practical. The user wants insights they can act on, not an academic paper. Use evidence from the transcript to support every observation.
+
+## Follow-up Actions
+
+After delivering the analysis, use `AskUserQuestion` to offer contextual next steps based on the meeting type and findings. For example:
+
+For a sales call:
+> "What would you like to do next?"
+> Options: "Draft a follow-up email to the prospect", "See all action items from this call", "Get coaching on your sales technique", "Search for related meetings with this company"
+
+For a standup with repeated blockers:
+> "What would you like to do next?"
+> Options: "See action items across this week's standups", "Summarize this week's standup patterns", "Get coached on facilitation"
+
+Always tailor options to the specific findings — if the analysis surfaced an issue, offer a follow-up that addresses it.
