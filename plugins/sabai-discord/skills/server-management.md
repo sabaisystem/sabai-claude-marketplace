@@ -21,33 +21,8 @@ Group related channels into categories:
 ### Channel Types
 - **Text Channels** - Standard discussion
 - **Voice Channels** - Audio/video communication
-- **Forum Channels** - Organized Q&A and discussions
 - **Stage Channels** - Broadcasts and presentations
 - **Announcement Channels** - Server updates
-
-## Role Structure
-
-### Hierarchy
-Roles should be ordered logically:
-1. Admin/Owner (top)
-2. Moderators
-3. Special roles (Verified, Contributor)
-4. Member roles
-5. Bot roles
-6. @everyone (bottom)
-
-### Role Naming
-- Clear and descriptive
-- Indicate permission level
-- Use consistent formatting
-- Consider adding emoji
-
-### Permissions
-Common permission sets:
-- **Admin** - Full server control
-- **Moderator** - Manage messages, kick/ban
-- **Member** - Basic access
-- **Muted** - Restricted posting
 
 ## Server Settings
 
@@ -63,20 +38,6 @@ Common permission sets:
 - Set appropriate verification level
 - Configure auto-mod rules
 - Set up audit logging
-
-## Webhooks
-
-### Use Cases
-- Bot integrations
-- External notifications
-- Automated posting
-- Cross-platform connections
-
-### Best Practices
-- Name webhooks descriptively
-- Use appropriate avatars
-- Limit webhook access
-- Monitor webhook activity
 
 ## How to Use
 

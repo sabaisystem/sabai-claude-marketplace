@@ -1,15 +1,15 @@
 {
   "name": "sabai-discord",
   "description": "Discord assistant for server management, messaging, channel organization, and community engagement.",
-  "version": "1.0.0",
+  "version": "1.5.0",
   "author": {
     "name": "Sabai Team"
   },
   "keywords": ["discord", "messaging", "community", "server", "channels"],
   "mcpServers": {
     "discord-mcp": {
-      "command": "npx",
-      "args": ["-y", "discord-mcp@latest"],
+      "command": "bash",
+      "args": ["${CLAUDE_PLUGIN_ROOT}/mcp/startup.sh"],
       "env": {
         "DISCORD_TOKEN": "${DISCORD_TOKEN}"
       }
