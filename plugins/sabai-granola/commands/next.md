@@ -1,102 +1,43 @@
-# Next Meetings
+# Next — Future Commitments from Past Meetings
 
-List upcoming meetings with context from previous interactions.
+Extract mentions of upcoming meetings, follow-ups, and scheduled commitments from past meeting transcripts.
 
-## Usage
+## Why this skill exists
 
-```
-/sabai-granola:next [timeframe]
-```
+Granola records past meetings, not future ones. But people constantly make plans during meetings — "let's sync next Tuesday", "I'll schedule a follow-up for after the launch", "next quarterly review is April 15th". This skill surfaces those commitments so nothing falls through the cracks.
 
-## Examples
+## How it works
 
-- `/sabai-granola:next` (today's remaining meetings)
-- `/sabai-granola:next today`
-- `/sabai-granola:next tomorrow`
-- `/sabai-granola:next this week`
+Use `query_granola_meetings` with carefully crafted prompts that target future-looking language in transcripts.
 
----
+## Workflow
 
-## Instructions
+1. **Understand the scope.** Is the user asking broadly ("what's coming up?") or specifically ("did we schedule a follow-up with Acme?")? This determines how you craft the query.
 
-You are a meeting prep assistant. Use Granola MCP to list upcoming meetings and enrich them with context from past meetings.
+2. **Query for future commitments.** Call `query_granola_meetings` with a prompt that targets future-oriented language. Tailor the query to what the user asked.
 
-### Output Format
+   For broad requests, use something like:
+   > "What upcoming meetings, follow-ups, or scheduled commitments were mentioned in recent meetings? Look for phrases like 'next meeting', 'follow-up', 'let's schedule', 'we'll meet again', 'next call', 'sync next week', or any specific future dates mentioned."
 
-```markdown
-## Upcoming Meetings: [Timeframe]
+   For specific requests (e.g., about a company or person), narrow it:
+   > "What follow-up meetings or next steps were discussed regarding [Acme]? Look for any scheduled dates, planned calls, or commitments to meet again."
 
-### [Time] - [Meeting Title]
-**With:** [Participants]
-**Duration:** [X min]
-**Type:** [Detected type: 1:1, Discovery, Standup, etc.]
+3. **If helpful, scope by time range.** You can first call `list_meetings` with a time range to identify relevant meeting IDs, then pass those as `document_ids` to `query_granola_meetings` to narrow the search.
 
-#### Context from Previous Meetings
-- **Last met:** [Date] - [Previous meeting title]
-- **Open items:** [Action items from last meeting with these people]
-- **Key topics discussed:** [What you talked about before]
+4. **Present the results** clearly, grouped by certainty:
+   - **Confirmed** — specific date/time mentioned (e.g., "Follow-up with Acme on March 12 at 3 PM")
+   - **Planned but unscheduled** — commitment made but no date set (e.g., "Agreed to reconnect after the launch")
+   - **Vague** — loose mentions (e.g., "Let's catch up sometime next quarter")
 
-#### Suggested Prep
-- [ ] Review: [Specific thing to review]
-- [ ] Prepare: [What to prepare]
-- [ ] Follow up on: [Open commitment]
+5. **Preserve citation links.** The `query_granola_meetings` tool returns inline citations like `[[0]](url)`. Always include these in your response so the user can trace each commitment back to the source meeting.
 
-#### Quick Brief
-[2-3 sentence summary of relationship/project status based on meeting history]
+6. **Handle empty results.** If nothing is found, say so and suggest the user check their calendar directly, or try `/sabai-granola:search` with specific keywords.
 
----
+## Important caveats
 
-### [Time] - [Meeting Title]
-...
-```
+Results are best-effort. These commitments are extracted from unstructured conversation, so:
+- Dates may be relative ("next Tuesday") and could be ambiguous depending on when the meeting occurred
+- Some commitments may already have happened or been cancelled
+- Not every "let's meet" turns into an actual meeting
 
-### For Each Meeting, Provide
-
-1. **Basic info**: Time, title, participants, duration
-2. **Meeting type**: Auto-detect (1:1, standup, discovery, etc.)
-3. **Historical context**:
-   - When you last met with these participants
-   - What was discussed
-   - Any open action items or commitments
-4. **Prep suggestions**: Based on context, what should they prepare?
-5. **Quick brief**: Relationship/project status summary
-
-### Context Enrichment Rules
-
-**For recurring 1:1s:**
-- Pull last 2-3 meetings with this person
-- Surface any open topics or follow-ups
-- Note any patterns (concerns raised, wins celebrated)
-
-**For customer meetings:**
-- Pull deal/relationship history
-- Surface last discussed objections, timeline, budget
-- Note where you left off
-
-**For team meetings:**
-- Pull last occurrence
-- Surface any carryover action items
-- Note blocked items
-
-**For new meetings (no history):**
-- Note this is a first meeting
-- Suggest research/prep based on meeting title
-- If external, suggest looking up the company/person
-
-### If No Upcoming Meetings
-
-```markdown
-## Upcoming Meetings: [Timeframe]
-
-No meetings scheduled for [timeframe].
-
-### Recent Action Items Still Open
-[List any open items from recent meetings that could use attention]
-```
-
-### Guidelines
-
-- Prioritize actionable context over exhaustive history
-- Highlight anything that needs follow-up before the meeting
-- Be concise - this is a quick prep view
-- Flag any potential conflicts or tight transitions
+Frame your output accordingly — present findings as "commitments mentioned in meetings" rather than as a definitive schedule.
