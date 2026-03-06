@@ -133,66 +133,6 @@ const tools = [
     },
   },
   {
-    name: "discord_get_forum_channels",
-    description: "Lists all forum channels in a specified Discord server (guild)",
-    inputSchema: {
-      type: "object",
-      properties: {
-        guildId: { type: "string" },
-      },
-      required: ["guildId"],
-    },
-  },
-  {
-    name: "discord_create_forum_post",
-    description: "Creates a new post in a Discord forum channel with optional tags",
-    inputSchema: {
-      type: "object",
-      properties: {
-        forumChannelId: { type: "string" },
-        title: { type: "string" },
-        content: { type: "string" },
-        tags: { type: "array", items: { type: "string" } },
-      },
-      required: ["forumChannelId", "title", "content"],
-    },
-  },
-  {
-    name: "discord_get_forum_post",
-    description: "Retrieves details about a forum post including its messages",
-    inputSchema: {
-      type: "object",
-      properties: {
-        threadId: { type: "string" },
-      },
-      required: ["threadId"],
-    },
-  },
-  {
-    name: "discord_reply_to_forum",
-    description: "Adds a reply to an existing forum post or thread",
-    inputSchema: {
-      type: "object",
-      properties: {
-        threadId: { type: "string" },
-        message: { type: "string" },
-      },
-      required: ["threadId", "message"],
-    },
-  },
-  {
-    name: "discord_delete_forum_post",
-    description: "Deletes a forum post or thread with an optional reason",
-    inputSchema: {
-      type: "object",
-      properties: {
-        threadId: { type: "string" },
-        reason: { type: "string" },
-      },
-      required: ["threadId"],
-    },
-  },
-  {
     name: "discord_add_reaction",
     description: "Adds an emoji reaction to a specific Discord message",
     inputSchema: {
@@ -246,62 +186,55 @@ const tools = [
     },
   },
   {
-    name: "discord_create_webhook",
-    description: "Creates a new webhook for a Discord channel",
+    name: "discord_edit_message",
+    description: "Edits the content of an existing message. The bot can only edit its own messages. Works for both channel and DM messages.",
     inputSchema: {
       type: "object",
       properties: {
-        channelId: { type: "string" },
-        name: { type: "string" },
-        avatar: { type: "string" },
-        reason: { type: "string" },
+        channelId: { type: "string", description: "The channel or DM channel ID" },
+        messageId: { type: "string", description: "The message ID to edit" },
+        content: { type: "string", description: "The new message content" },
       },
-      required: ["channelId", "name"],
+      required: ["channelId", "messageId", "content"],
+    },
+  },
+  // --- Direct Messages ---
+
+  {
+    name: "discord_search_members",
+    description: "Searches guild members by username or display name. Use this to find a user's ID before sending a DM or assigning a role.",
+    inputSchema: {
+      type: "object",
+      properties: {
+        guildId: { type: "string", description: "The guild (server) ID to search in" },
+        query: { type: "string", description: "Search query (username or display name), minimum 1 character" },
+        limit: { type: "number", minimum: 1, maximum: 100, default: 5, description: "Max results to return (default 5)" },
+      },
+      required: ["guildId", "query"],
     },
   },
   {
-    name: "discord_send_webhook_message",
-    description: "Sends a message to a Discord channel using a webhook",
+    name: "discord_send_dm",
+    description: "Sends a direct message to a Discord user by their user ID. The bot must share a server with the user.",
     inputSchema: {
       type: "object",
       properties: {
-        webhookId: { type: "string" },
-        webhookToken: { type: "string" },
-        content: { type: "string" },
-        username: { type: "string" },
-        avatarURL: { type: "string" },
-        threadId: { type: "string" },
+        userId: { type: "string", description: "The user ID to send a DM to" },
+        message: { type: "string", description: "The message content to send" },
       },
-      required: ["webhookId", "webhookToken", "content"],
+      required: ["userId", "message"],
     },
   },
   {
-    name: "discord_edit_webhook",
-    description: "Edits an existing webhook for a Discord channel",
+    name: "discord_read_dm",
+    description: "Reads DM conversation history with a Discord user by their user ID.",
     inputSchema: {
       type: "object",
       properties: {
-        webhookId: { type: "string" },
-        webhookToken: { type: "string" },
-        name: { type: "string" },
-        avatar: { type: "string" },
-        channelId: { type: "string" },
-        reason: { type: "string" },
+        userId: { type: "string", description: "The user ID to read DM history with" },
+        limit: { type: "number", minimum: 1, maximum: 100, default: 50, description: "Number of messages to retrieve (default 50)" },
       },
-      required: ["webhookId"],
-    },
-  },
-  {
-    name: "discord_delete_webhook",
-    description: "Deletes an existing webhook for a Discord channel",
-    inputSchema: {
-      type: "object",
-      properties: {
-        webhookId: { type: "string" },
-        webhookToken: { type: "string" },
-        reason: { type: "string" },
-      },
-      required: ["webhookId"],
+      required: ["userId"],
     },
   },
 ];
@@ -421,80 +354,6 @@ async function handleTool(name, args) {
       return { success: true, deletedCategoryId: categoryId };
     }
 
-    // --- Forum ---
-
-    case "discord_get_forum_channels": {
-      const { guildId } = args;
-      const channels = await rest.get(Routes.guildChannels(guildId));
-      const forums = channels.filter((c) => c.type === ChannelType.GuildForum);
-      return forums.map((f) => ({
-        id: f.id,
-        name: f.name,
-        topic: f.topic,
-        availableTags: f.available_tags,
-      }));
-    }
-
-    case "discord_create_forum_post": {
-      const { forumChannelId, title, content, tags } = args;
-      const body = {
-        name: title,
-        message: { content },
-      };
-      // Resolve tag names to IDs
-      if (tags && tags.length > 0) {
-        const channel = await rest.get(Routes.channel(forumChannelId));
-        const availableTags = channel.available_tags || [];
-        const tagIds = tags
-          .map((tagName) => {
-            const found = availableTags.find(
-              (t) => t.name.toLowerCase() === tagName.toLowerCase()
-            );
-            return found?.id;
-          })
-          .filter(Boolean);
-        if (tagIds.length > 0) body.applied_tags = tagIds;
-      }
-      const result = await rest.post(Routes.threads(forumChannelId), { body });
-      return { threadId: result.id, name: result.name };
-    }
-
-    case "discord_get_forum_post": {
-      const { threadId } = args;
-      const [thread, messages] = await Promise.all([
-        rest.get(Routes.channel(threadId)),
-        rest.get(Routes.channelMessages(threadId), {
-          query: new URLSearchParams({ limit: "100" }),
-        }),
-      ]);
-      return {
-        id: thread.id,
-        name: thread.name,
-        archived: thread.thread_metadata?.archived,
-        messageCount: thread.message_count,
-        messages: messages.reverse().map((m) => ({
-          id: m.id,
-          author: m.author?.username || "Unknown",
-          content: m.content,
-          timestamp: m.timestamp,
-        })),
-      };
-    }
-
-    case "discord_reply_to_forum": {
-      const { threadId, message } = args;
-      const result = await rest.post(Routes.channelMessages(threadId), {
-        body: { content: message },
-      });
-      return { id: result.id, threadId, content: result.content };
-    }
-
-    case "discord_delete_forum_post": {
-      const { threadId, reason } = args;
-      await rest.delete(Routes.channel(threadId), { reason });
-      return { success: true, deletedThreadId: threadId };
-    }
-
     // --- Reactions ---
 
     case "discord_add_reaction": {
@@ -534,66 +393,75 @@ async function handleTool(name, args) {
       return { success: true, emoji };
     }
 
-    // --- Webhooks ---
-
-    case "discord_create_webhook": {
-      const { channelId, name, avatar, reason } = args;
-      const body = { name };
-      if (avatar) body.avatar = avatar;
-      const result = await rest.post(Routes.channelWebhooks(channelId), {
-        body,
-        reason,
+    case "discord_edit_message": {
+      const { channelId, messageId, content } = args;
+      const result = await rest.patch(Routes.channelMessage(channelId, messageId), {
+        body: { content },
       });
       return {
         id: result.id,
-        name: result.name,
-        token: result.token,
         channelId: result.channel_id,
+        content: result.content,
+        editedTimestamp: result.edited_timestamp,
       };
     }
 
-    case "discord_send_webhook_message": {
-      const { webhookId, webhookToken, content, username, avatarURL, threadId } = args;
-      const body = { content };
-      if (username) body.username = username;
-      if (avatarURL) body.avatar_url = avatarURL;
-      const query = threadId
-        ? new URLSearchParams({ thread_id: threadId })
-        : undefined;
-      const result = await rest.post(
-        Routes.webhook(webhookId, webhookToken),
-        { body, query, auth: false }
-      );
-      return { id: result?.id, content };
+    // --- Direct Messages ---
+
+    case "discord_search_members": {
+      const { guildId, query, limit = 5 } = args;
+      const members = await rest.get(Routes.guildMembersSearch(guildId), {
+        query: new URLSearchParams({
+          query,
+          limit: String(Math.min(limit, 100)),
+        }),
+      });
+      if (!members || members.length === 0) {
+        return { message: `No members found matching "${query}"`, results: [] };
+      }
+      return members.map((m) => ({
+        userId: m.user.id,
+        username: m.user.username,
+        displayName: m.nick || m.user.global_name || m.user.username,
+        avatar: m.user.avatar,
+        joinedAt: m.joined_at,
+        roles: m.roles,
+      }));
     }
 
-    case "discord_edit_webhook": {
-      const { webhookId, webhookToken, name, avatar, channelId, reason } = args;
-      const body = {};
-      if (name !== undefined) body.name = name;
-      if (avatar !== undefined) body.avatar = avatar;
-      if (channelId !== undefined) body.channel_id = channelId;
-      const route = webhookToken
-        ? Routes.webhook(webhookId, webhookToken)
-        : Routes.webhook(webhookId);
-      const result = await rest.patch(route, {
-        body,
-        reason: webhookToken ? undefined : reason,
-        auth: !webhookToken,
+    case "discord_send_dm": {
+      const { userId, message } = args;
+      // Create (or get existing) DM channel — this is idempotent
+      const dmChannel = await rest.post(Routes.userChannels(), {
+        body: { recipient_id: userId },
       });
-      return { id: result.id, name: result.name, channelId: result.channel_id };
+      const result = await rest.post(Routes.channelMessages(dmChannel.id), {
+        body: { content: message },
+      });
+      return {
+        id: result.id,
+        dmChannelId: dmChannel.id,
+        recipientId: userId,
+        content: result.content,
+      };
     }
 
-    case "discord_delete_webhook": {
-      const { webhookId, webhookToken, reason } = args;
-      const route = webhookToken
-        ? Routes.webhook(webhookId, webhookToken)
-        : Routes.webhook(webhookId);
-      await rest.delete(route, {
-        reason: webhookToken ? undefined : reason,
-        auth: !webhookToken,
+    case "discord_read_dm": {
+      const { userId, limit = 50 } = args;
+      // Create (or get existing) DM channel
+      const dmChannel = await rest.post(Routes.userChannels(), {
+        body: { recipient_id: userId },
       });
-      return { success: true, deletedWebhookId: webhookId };
+      const messages = await rest.get(Routes.channelMessages(dmChannel.id), {
+        query: new URLSearchParams({ limit: String(Math.min(limit, 100)) }),
+      });
+      return messages.reverse().map((m) => ({
+        id: m.id,
+        author: m.author?.username || "Unknown",
+        content: m.content,
+        timestamp: m.timestamp,
+        attachments: m.attachments?.length || 0,
+      }));
     }
 
     default:
@@ -603,7 +471,7 @@ async function handleTool(name, args) {
 
 // Create MCP server
 const server = new Server(
-  { name: "sabai-discord", version: "1.2.0" },
+  { name: "sabai-discord", version: "1.5.0" },
   { capabilities: { tools: {} } }
 );
 

@@ -5,7 +5,7 @@
 | Field | Value |
 |-------|-------|
 | Type | MCP + Skills + Commands |
-| Version | 1.1.0 |
+| Version | 1.5.0 |
 | Status | Active |
 | Command | `/discord-send`, `/discord-read`, `/discord-dm` |
 | Repo | `plugins/sabai-discord` |
@@ -14,24 +14,23 @@
 
 ## Overview
 
-A Discord assistant plugin for server management, messaging, channel organization, and community engagement. Supports sending, reading, editing, and deleting messages, emoji reactions, direct messaging, server administration (user lookup, channel management, role creation), and webhook setup.
+A Discord assistant plugin for server management, messaging, channel organization, and community engagement. Supports sending, reading, editing, and deleting messages, emoji reactions, direct messaging, server administration (user lookup, channel management), and category management.
 
 ## Key Features
 
 - Send and read messages in any channel
 - Direct messaging to users
 - Emoji reactions
-- Channel creation and management
-- Role creation and assignment
-- Webhook integration
+- Channel and category management
 - Server information lookup
+- Edit and delete messages
 
 ## Use Cases
 
 - "Send a message to the general channel"
 - "Read the last 10 messages from announcements"
 - "Create a new channel called project-updates"
-- "Assign the moderator role to @sarah"
+- "DM @sarah about the meeting"
 
 ## Commands
 
@@ -42,8 +41,7 @@ A Discord assistant plugin for server management, messaging, channel organizatio
 - `/discord-server` - Get server information
 - `/discord-channels` - List all channels
 - `/discord-channel-create [name]` - Create a new channel
-- `/discord-role-create [name]` - Create a new role
-- `/discord-role-assign [user] [role]` - Assign a role to a user
+- `/discord-user [username]` - Look up a user
 
 ## Configuration
 
@@ -76,8 +74,6 @@ Bot permissions required:
 - Manage Messages
 - Add Reactions
 - Manage Channels
-- Manage Roles
-- Manage Webhooks
 
 ## Dependencies
 
