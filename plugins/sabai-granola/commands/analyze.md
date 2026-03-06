@@ -1,294 +1,99 @@
-# Smart Meeting Analysis
+# Meeting Analyzer
 
-Automatically detect meeting type and run appropriate analysis framework.
+Analyze meetings using specialized frameworks tailored to the meeting type.
 
-## Usage
+## Workflow
 
-```
-/sabai-granola:analyze [meeting title or search query]
-```
+1. **Identify the meeting.** Determine which meeting(s) to analyze from the user's request. If needed, use `list_meetings` to find the right one.
 
-## Examples
+2. **Detect the meeting type.** Based on the meeting title, attendees, and content, classify the meeting as one of:
+   - **Sales / Discovery call** — external prospect or customer, commercial discussion
+   - **1:1** — two people, typically manager-report or peer relationship
+   - **Standup** — short team sync, status updates
+   - **Retrospective** — team reflection on what went well / what didn't
+   - **Interview** — candidate evaluation
+   - **Steering committee** — leadership review, decision-making, governance
+   - **Other** — apply general meeting effectiveness analysis
 
-- `/sabai-granola:analyze Discovery call with Acme Corp`
-- `/sabai-granola:analyze Interview with Sarah for PM role`
-- `/sabai-granola:analyze Today's standup`
-- `/sabai-granola:analyze Steering committee Q1`
+3. **Confirm with the user.** Before diving in, tell the user what type you detected and which framework you'll apply. For example: "This looks like a sales discovery call — I'll analyze it using MEDDIC and SPIN frameworks. Sound right?" This avoids wasting effort on the wrong lens. If the user specifies the type upfront, skip this step.
 
----
+4. **Gather meeting data.** Call `get_meetings` for metadata and summary, and `get_meeting_transcript` for the full conversation.
 
-## Instructions
+5. **Apply the appropriate framework** (see below).
 
-You are a meeting analyst. Fetch the meeting using Granola MCP, detect its type, and run the appropriate analysis framework.
+6. **Present findings** with a clear structure: key insights first, then detailed analysis, then recommendations. Always end with 2–3 actionable next steps.
 
-### Step 1: Detect Meeting Type
+## Analysis Frameworks
 
-Analyze the meeting title and content to determine the type:
+### Sales / Discovery Calls
 
-| Type | Detection Signals |
-|------|-------------------|
-| **Discovery/Sales** | "demo", "discovery", "intro call", pricing, budget, timeline, prospect company names |
-| **Interview** | "interview", candidate name, role discussion, experience, culture fit |
-| **Standup** | "standup", "daily", yesterday/today/blockers pattern, short duration |
-| **Steerco** | "steering", "steerco", "executive", governance, strategic decisions |
-| **1:1** | 2 participants, recurring, manager/report relationship |
-| **Retrospective** | "retro", "retrospective", went well/improve pattern |
-| **Planning** | "planning", "sprint", "kickoff", estimates, scope |
-| **Customer Success** | "QBR", "check-in", existing customer, renewal, health |
+**MEDDIC Qualification:**
+- **Metrics** — Were quantifiable success criteria discussed?
+- **Economic Buyer** — Was the decision-maker identified or present?
+- **Decision Criteria** — What factors will drive the decision?
+- **Decision Process** — What are the steps and timeline to close?
+- **Identify Pain** — Was the core pain point clearly articulated?
+- **Champion** — Is there an internal advocate?
 
-### Step 2: Run Type-Specific Analysis
+Score each dimension (Strong / Partial / Missing) with evidence from the transcript.
 
----
+**SPIN Selling Evaluation:**
+- **Situation** questions asked (context gathering)
+- **Problem** questions asked (pain discovery)
+- **Implication** questions asked (deepening the pain)
+- **Need-payoff** questions asked (linking to value)
 
-## Discovery/Sales Call Analysis
+Note the ratio — most reps over-index on Situation and under-index on Implication.
 
-```markdown
-## Discovery Analysis: [Meeting Title]
-**Date:** [Date] | **Prospect:** [Company] | **Participants:** [Names]
+### 1:1 Meetings
 
-### Qualification Score: [X/10]
+- **Relationship health** — Is the conversation open and honest, or guarded?
+- **Radical Candor assessment** — Is feedback being given and received directly?
+- **Topics covered** — Career growth, blockers, feedback, personal check-in?
+- **Balance** — Who drives the agenda? Is it a monologue or a dialogue?
+- **Follow-through** — Were previous action items revisited?
 
-#### MEDDIC Assessment
+### Standups
 
-| Criteria | Status | Evidence |
-|----------|--------|----------|
-| **Metrics** | [Found/Missing] | [What success metrics were discussed] |
-| **Economic Buyer** | [Identified/Unknown] | [Who controls budget] |
-| **Decision Criteria** | [Clear/Unclear] | [What they're evaluating on] |
-| **Decision Process** | [Mapped/Unknown] | [Steps to close] |
-| **Identify Pain** | [Strong/Weak] | [Pain points expressed] |
-| **Champion** | [Yes/No/Potential] | [Internal advocate] |
+- **Blocker identification** — Were blockers surfaced and addressed?
+- **Signal-to-noise ratio** — Was the standup focused or did it drift into problem-solving?
+- **Duration efficiency** — How long did it take per person?
+- **Action clarity** — Did each person leave with a clear next step?
+- **Velocity indicators** — Are things moving or are the same items repeating?
 
-### Budget Discussion
-- **Mentioned:** [Yes/No]
-- **Range:** [If disclosed]
-- **Signals:** [Any budget indicators]
+### Retrospectives
 
-### Timeline
-- **Urgency:** [High/Medium/Low]
-- **Target date:** [If mentioned]
-- **Drivers:** [What's driving timeline]
+- **Psychological safety** — Did people share candidly?
+- **Sentiment analysis** — Overall tone (positive, frustrated, disengaged)
+- **Action item quality** — Are retro actions specific and assigned, or vague?
+- **Follow-through from previous retro** — Were past actions revisited?
+- **Pattern detection** — Are the same issues recurring sprint after sprint?
 
-### Objections Raised
-1. **[Objection]**: [How it was handled] | Resolved: [Yes/No]
-2. **[Objection]**: [How it was handled] | Resolved: [Yes/No]
+### Interviews
 
-### Competition
-- **Mentioned:** [Competitors discussed]
-- **Positioning:** [How we compared]
+- **Candidate assessment** — Communication clarity, depth of answers, enthusiasm
+- **Question quality** — Were the interviewer's questions effective at evaluating the candidate?
+- **Red flags and green flags** — Notable positives or concerns
+- **Culture fit signals** — Values alignment, collaboration style
+- **Recommendation** — Strong yes / Yes / Maybe / No, with reasoning
 
-### Next Steps
-- [Agreed next steps]
+### Steering Committees
 
-### Risk Assessment
-- **Deal Risk:** [High/Medium/Low]
-- **Key Risks:** [List main concerns]
+- **Decision-making velocity** — Were decisions made or deferred?
+- **Risk assessment** — Were risks identified, quantified, and mitigated?
+- **Alignment** — Did stakeholders agree or are there unresolved tensions?
+- **Information quality** — Were updates data-driven or anecdotal?
+- **Action clarity** — Are owners and deadlines assigned for decisions?
 
-### Recommendations
-1. [What to do next]
-2. [Information to gather]
-3. [Stakeholders to engage]
-```
+### Other / General
 
----
+If the meeting doesn't fit a specific type, analyze:
+- Was the meeting necessary? (Could it have been an email?)
+- Were objectives met?
+- Was time used efficiently?
+- Were action items clear?
+- What could improve next time?
 
-## Interview Analysis
+## Output tone
 
-```markdown
-## Interview Analysis: [Candidate] for [Role]
-**Date:** [Date] | **Interviewers:** [Names]
-
-### Overall Assessment: [Strong Hire / Hire / No Hire / Strong No Hire]
-
-### Candidate Strengths
-1. **[Strength]**: [Evidence from conversation]
-2. **[Strength]**: [Evidence from conversation]
-
-### Concerns / Red Flags
-1. **[Concern]**: [Evidence] | **Severity:** [High/Medium/Low]
-2. **[Concern]**: [Evidence] | **Severity:** [High/Medium/Low]
-
-### Experience Assessment
-| Area | Rating | Notes |
-|------|--------|-------|
-| Technical Skills | [1-5] | [Observations] |
-| Communication | [1-5] | [Observations] |
-| Problem Solving | [1-5] | [Observations] |
-| Culture Fit | [1-5] | [Observations] |
-| Leadership/Growth | [1-5] | [Observations] |
-
-### Key Quotes
-> "[Notable quote that reveals something important]"
-
-### Questions They Asked
-- [Question]: [What it signals about them]
-
-### Compensation Expectations
-- [If discussed]
-
-### Availability
-- [Notice period, start date if mentioned]
-
-### Recommendation
-[Detailed recommendation with reasoning]
-
-### Follow-up Questions for Next Round
-1. [Question to probe deeper on concern]
-2. [Question to validate strength]
-```
-
----
-
-## Standup Analysis
-
-```markdown
-## Standup Summary: [Date]
-**Team:** [Team name] | **Participants:** [X people] | **Duration:** [X min]
-
-### Team Status Overview
-
-| Person | Yesterday | Today | Blockers |
-|--------|-----------|-------|----------|
-| [Name] | [Work done] | [Planned] | [Blocker or None] |
-
-### Active Blockers
-1. **[Blocker]**: Owner: [Name] | Needs: [What's needed to unblock]
-
-### Key Updates
-- [Important announcement or update]
-
-### Risks & Attention Needed
-- [Anything that needs escalation or attention]
-
-### Action Items
-| Owner | Action |
-|-------|--------|
-```
-
----
-
-## Steering Committee (Steerco) Analysis
-
-```markdown
-## Steering Committee Report: [Meeting Title]
-**Date:** [Date] | **Attendees:** [Names/Roles]
-
-### Executive Summary
-[3-4 sentence summary for executives]
-
-### Agenda Items Covered
-
-#### 1. [Agenda Item]
-- **Discussion:** [Summary]
-- **Decision:** [What was decided]
-- **Owner:** [Who's responsible]
-
-### Decisions Log
-| # | Decision | Rationale | Owner | Date |
-|---|----------|-----------|-------|------|
-| 1 | [Decision] | [Why] | [Who] | [When] |
-
-### Risks Discussed
-| Risk | Impact | Probability | Mitigation | Owner |
-|------|--------|-------------|------------|-------|
-| [Risk] | [H/M/L] | [H/M/L] | [Plan] | [Who] |
-
-### Milestones & Status
-| Milestone | Target Date | Status | Notes |
-|-----------|-------------|--------|-------|
-| [Milestone] | [Date] | [On track/At risk/Delayed] | [Notes] |
-
-### Budget & Resources
-- [Any budget discussions or resource asks]
-
-### Escalations
-- [Items escalated for executive decision]
-
-### Action Items
-| # | Action | Owner | Due Date |
-|---|--------|-------|----------|
-| 1 | [Action] | [Who] | [When] |
-
-### Next Meeting
-- **Date:** [If scheduled]
-- **Agenda items for next time:** [Carryover items]
-```
-
----
-
-## 1:1 Analysis
-
-```markdown
-## 1:1 Summary: [Person] - [Date]
-**Recurring:** [Yes/No] | **Duration:** [X min]
-
-### Topics Discussed
-1. **[Topic]**: [Summary and outcome]
-
-### Career & Development
-- [Any career discussions, goals, feedback]
-
-### Wins & Recognition
-- [Accomplishments celebrated]
-
-### Concerns Raised
-- [Issues or frustrations mentioned]
-
-### Action Items
-| Owner | Action | Due |
-|-------|--------|-----|
-
-### Follow-up for Next 1:1
-- [Topics to revisit]
-
-### Relationship Health
-- **Engagement:** [High/Medium/Low]
-- **Notes:** [Any signals about satisfaction, motivation]
-```
-
----
-
-## Retrospective Analysis
-
-```markdown
-## Retrospective Summary: [Sprint/Project]
-**Date:** [Date] | **Participants:** [X people]
-
-### What Went Well
-1. [Item] - Mentioned by [X people]
-2. [Item]
-
-### What Could Improve
-1. [Item] - [Root cause if identified]
-2. [Item]
-
-### Action Items
-| Improvement | Owner | Measure of Success |
-|-------------|-------|-------------------|
-| [Action] | [Who] | [How we'll know it worked] |
-
-### Themes
-- [Recurring theme across items]
-
-### Parking Lot
-- [Items noted but not actioned]
-```
-
----
-
-### If Type is Unclear
-
-If you cannot confidently determine the meeting type, ask the user:
-
-```markdown
-I found the meeting "[Title]" but I'm not certain of its type.
-
-What kind of meeting is this?
-1. Discovery/Sales call
-2. Interview
-3. Standup
-4. Steering Committee
-5. 1:1
-6. Retrospective
-7. Other: [describe]
-```
+Be analytical but practical. The user wants insights they can act on, not an academic paper. Use evidence from the transcript to support every observation.
