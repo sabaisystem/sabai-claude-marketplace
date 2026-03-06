@@ -1,6 +1,6 @@
-# /connect
+# Connect to Granola
 
-Connect and authenticate with Granola.
+Connect and authenticate with Granola to enable all Sabai meeting intelligence features.
 
 ## When to use
 
@@ -12,7 +12,7 @@ When the user wants to:
 ## Instructions
 
 1. Inform the user that you're initiating the Granola OAuth connection
-2. Call the Granola MCP `list_meetings` tool with a limit of 1 to trigger the OAuth flow
+2. Call the Granola MCP `list_meetings` tool with `time_range: "this_week"` to trigger the OAuth flow
 3. If authentication is needed, a browser window will open for the user to sign in
 4. Once authenticated, confirm the connection is successful and show a sample meeting if available
 
@@ -20,21 +20,25 @@ When the user wants to:
 
 If connection succeeds:
 ```
-✓ Connected to Granola successfully!
+Connected to Granola successfully!
 
-Your recent meeting: "Weekly Team Standup" (Today at 10:00 AM)
-
-You can now use:
-- /search - Search your meetings
-- /summary - Summarize meetings
-- /ask - Ask questions about meetings
-- /analyze - Smart analysis by meeting type
-- /coach - Get coaching on work patterns
+Your most recent meeting: "Weekly Team Standup" (Today at 10:00 AM)
 ```
 
 If authentication is needed:
 ```
-🔐 Opening browser for Granola authentication...
+Opening browser for Granola authentication...
 
 Please sign in with your Granola account in the browser window that just opened.
 ```
+
+## Follow-up Actions
+
+After a successful connection, use `AskUserQuestion` to help the user get started right away:
+
+> "You're connected! What would you like to do first?"
+> Options: "Show my recent meetings", "Summarize my last meeting", "Check my action items", "Ask a question about a meeting"
+
+After a failed connection:
+> "The connection didn't work. What would you like to try?"
+> Options: "Try connecting again", "Check if Granola is running"
