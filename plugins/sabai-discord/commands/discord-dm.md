@@ -24,11 +24,12 @@ When this command is invoked:
    - What message do you want to send?
 
 4. Look up user ID if username provided:
-   - Use `get_user_id_by_name` tool
+   - Use `discord_search_members` tool with the guild ID and username as query
+   - If multiple results, show matches and ask user to confirm
 
-5. Use the discord-messaging skill for message composition
+5. Send the direct message using `discord_send_dm` with the resolved user ID
 
-6. Send the direct message using Discord MCP private messaging tools
+6. Optionally read conversation history with `discord_read_dm`
 
 7. Confirm the message was sent
 

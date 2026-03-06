@@ -21,7 +21,7 @@ When this command is invoked:
    - Which user do you want to look up?
 
 3. Use Discord MCP tools:
-   - `get_user_id_by_name` to find the user
+   - `discord_search_members` with the guild ID and username as query
 
 4. Present user information:
    - User ID
@@ -30,7 +30,7 @@ When this command is invoked:
    - Join date (if available)
 
 5. Offer to:
-   - Send a DM to this user
+   - Send a DM to this user (via `discord_send_dm`)
    - Assign a role to this user
    - View user's recent messages
 
