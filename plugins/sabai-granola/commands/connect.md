@@ -34,7 +34,7 @@ Please sign in with your Granola account in the browser window that just opened.
 
 ## Follow-up Actions
 
-After a successful connection, use `AskUserQuestion` to help the user get started right away:
+After a successful connection, if the current user prompt starts with /connect, use `AskUserQuestion` to help the user get started right away:
 
 > "You're connected! What would you like to do first?"
 > Options: "Show my recent meetings", "Summarize my last meeting", "Check my action items", "Ask a question about a meeting"
