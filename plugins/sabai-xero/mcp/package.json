@@ -1,0 +1,14 @@
+{
+  "name": "sabai-xero-mcp",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "MCP server for Xero accounting integration with PKCE authentication",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.4",
+    "xero-node": "^7.0.0"
+  }
+}

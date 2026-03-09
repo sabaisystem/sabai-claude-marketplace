@@ -1,0 +1,9 @@
+{
+  "name": "sabai-claude-marketplace",
+  "description": "Development tools for maintaining the Sabai Claude Marketplace repository.",
+  "version": "1.0.0",
+  "author": {
+    "name": "Sabai System"
+  },
+  "keywords": ["development", "workflow", "linear"]
+}
