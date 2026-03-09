@@ -73,6 +73,11 @@
       "name": "sabai-recall",
       "source": "./plugins/sabai-recall",
       "description": "Meeting bot automation with Recall.ai. Create bots to join and record meetings, access recordings, transcripts, and participant data."
+    },
+    {
+      "name": "sabai-xero",
+      "source": "./plugins/sabai-xero",
+      "description": "Xero accounting integration for invoice management, contacts, payments, and financial reports."
     }
   ]
 }
