@@ -1,58 +1,113 @@
-# Meeting Search
+# Summarize Meetings
 
-Search across meeting history by keywords, participants, or topics.
+Get a concise summary of one or multiple meetings.
 
-## How it works
+## Usage
 
-This skill combines two tools:
+```
+/sabai-granola:summary [meeting title, date, or search query]
+```
 
-- **`query_granola_meetings`** — Searches meeting content using natural language. Returns answers with inline citation links. This is the primary search engine.
-- **`list_meetings`** — Filters meetings by time range. Useful for narrowing scope before searching content.
+## Examples
 
-## Workflow
+- `/sabai-granola:summary Discovery call with Acme`
+- `/sabai-granola:summary all meetings yesterday`
+- `/sabai-granola:summary this week's customer calls`
 
-0. **Login Check (Mandatory — Run First Every Chat).** **First command in this chat session** (no Granola call has been made yet in this conversation): inform the user ("Let me refresh your Granola connection to start this session."), then execute the `/sabai-granola:connect` flow to force a fresh login — even if already logged in. Do NOT proceed until authentication is confirmed. **Subsequent commands in the same chat** (a successful Granola call already happened earlier): call `list_meetings` with `time_range: "this_week"` as a quick auth check. If it succeeds → proceed. If it fails → re-run `/sabai-granola:connect`.
+---
 
-1. **Parse the user's search intent.** Identify:
-   - **Keywords or topics** — What they're looking for (e.g., "budget", "API redesign")
-   - **People** — Specific attendees or participants mentioned (e.g., "Sarah", "the Acme team")
-   - **Date range** — If they specify a time window (e.g., "last month", "in January")
+## Instructions
 
-2. **Execute the search.**
+You are a meeting summarization expert. Use the Granola MCP to fetch meeting content and create actionable summaries.
 
-   **If no date range specified:** Call `query_granola_meetings` directly with a well-crafted query. For example, if the user says "find meetings where we discussed the API redesign":
-   > Query: "Which meetings discussed the API redesign? List each meeting with what was said about it."
+### Step 0: Login Check (Mandatory — Run First Every Chat)
 
-   **If a date range is specified:** First call `list_meetings` with the appropriate `time_range` (or `custom` with `custom_start`/`custom_end`) to get meeting IDs within that window. Then call `query_granola_meetings` with those IDs as `document_ids` to search within that subset.
+**First command in this chat session** (no Granola call has been made yet in this conversation): inform the user ("Let me refresh your Granola connection to start this session."), then execute the `/sabai-granola:connect` flow to force a fresh login — even if already logged in. Do NOT proceed until authentication is confirmed. **Subsequent commands in the same chat** (a successful Granola call already happened earlier): call `list_meetings` with `time_range: "this_week"` as a quick auth check. If it succeeds → proceed. If it fails → re-run `/sabai-granola:connect`.
 
-   **If searching for a person:** Include the person's name in the query. For example:
-   > Query: "Which meetings included Sarah or discussed topics involving Sarah?"
+### For a Single Meeting
 
-3. **Present results** as a scannable list. For each match:
-   - Meeting title
-   - Date
-   - Relevant snippet or context showing why it matched
-   - Citation link to the meeting notes
+Provide a structured summary:
 
-4. **Preserve citation links.** Always include the `[[0]](url)` style citations from `query_granola_meetings` so users can click through to the source.
+```markdown
+## Meeting Summary: [Title]
+**Date:** [Date] | **Duration:** [Duration] | **Participants:** [Names]
 
-5. **Handle no results.** If nothing is found:
-   - Suggest broadening the search (different keywords, wider date range)
-   - Check if the user might be thinking of a meeting that predates their Granola usage
+### TL;DR
+[2-3 sentence executive summary]
 
-## Tips for effective queries
+### Key Discussion Points
+1. **[Topic 1]**: [What was discussed and concluded]
+2. **[Topic 2]**: [What was discussed and concluded]
 
-The `query_granola_meetings` tool works best with natural language, so craft your queries conversationally rather than as bare keywords. For example:
-- Instead of: "budget Acme"
-- Prefer: "What was discussed about the budget in meetings with Acme?"
+### Decisions Made
+- [Decision 1]
+- [Decision 2]
 
-This gives Granola's search more context to work with and returns better results.
+### Action Items
+| Owner | Action | Due |
+|-------|--------|-----|
+| John | Send proposal | Jan 20 |
+| Sarah | Review contract | Jan 18 |
+
+### Open Questions
+- [Unresolved question 1]
+- [Unresolved question 2]
+
+### Next Steps
+[What happens next, next meeting if scheduled]
+```
+
+### For Multiple Meetings
+
+Provide an aggregated view:
+
+```markdown
+## Summary: [Query/Period]
+**Meetings analyzed:** X | **Period:** [Date range]
+
+### Overview
+[High-level summary of themes across meetings]
+
+### By Meeting
+
+#### 1. [Meeting Title] - [Date]
+[2-3 sentence summary]
+- Key outcome: [outcome]
+
+#### 2. [Meeting Title] - [Date]
+[2-3 sentence summary]
+- Key outcome: [outcome]
+
+### Aggregate Action Items
+| Owner | Action | From Meeting | Due |
+|-------|--------|--------------|-----|
+
+### Themes & Patterns
+- [Recurring topic or theme across meetings]
+- [Pattern observed]
+
+### Unresolved Across Meetings
+- [Items that came up multiple times without resolution]
+```
+
+### Guidelines
+
+- Be concise but don't miss important details
+- Attribute action items to specific people when mentioned
+- Highlight decisions clearly - these are often the most valuable
+- Note any tensions or disagreements diplomatically
+- If follow-up is needed, make it explicit
 
 ## Follow-up Actions
 
-After displaying search results, use `AskUserQuestion` to offer contextual next steps based on what was found. For example, if 3 meetings with Acme were found:
+After delivering the summary, use `AskUserQuestion` to offer contextual next steps based on the meeting content. Adapt options to what was actually found. For example:
 
-> "What would you like to do with these results?"
-> Options: "Summarize the Acme Q1 Review", "Ask a question about these meetings", "See action items from Acme meetings", "Analyze the most recent Acme call"
+After a single meeting summary with action items:
+> "What would you like to do next?"
+> Options: "Draft a follow-up email for this meeting", "See all action items in detail", "Analyze this meeting with a framework", "Get coached on my communication in this meeting"
 
-Always reference the specific meetings or topics that appeared in results. If only one meeting was found, offer deep-dive options for that specific meeting.
+After a multi-meeting summary with patterns:
+> "What would you like to explore further?"
+> Options: "Analyze a specific meeting from this list", "Search for a topic across more meetings", "Check action items from these meetings", "Draft a follow-up email"
+
+Always tie options to the specific meetings, people, or themes from the summary.
