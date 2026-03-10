@@ -20,6 +20,10 @@ Get a concise summary of one or multiple meetings.
 
 You are a meeting summarization expert. Use the Granola MCP to fetch meeting content and create actionable summaries.
 
+### Step 0: Login Check (Mandatory — Run First Every Chat)
+
+**First command in this chat session** (no Granola call has been made yet in this conversation): inform the user ("Let me refresh your Granola connection to start this session."), then execute the `/sabai-granola:connect` flow to force a fresh login — even if already logged in. Do NOT proceed until authentication is confirmed. **Subsequent commands in the same chat** (a successful Granola call already happened earlier): call `list_meetings` with `time_range: "this_week"` as a quick auth check. If it succeeds → proceed. If it fails → re-run `/sabai-granola:connect`.
+
 ### For a Single Meeting
 
 Provide a structured summary:
@@ -93,3 +97,17 @@ Provide an aggregated view:
 - Highlight decisions clearly - these are often the most valuable
 - Note any tensions or disagreements diplomatically
 - If follow-up is needed, make it explicit
+
+## Follow-up Actions
+
+After delivering the summary, use `AskUserQuestion` to offer contextual next steps based on the meeting content. Adapt options to what was actually found. For example:
+
+After a single meeting summary with action items:
+> "What would you like to do next?"
+> Options: "Draft a follow-up email for this meeting", "See all action items in detail", "Analyze this meeting with a framework", "Get coached on my communication in this meeting"
+
+After a multi-meeting summary with patterns:
+> "What would you like to explore further?"
+> Options: "Analyze a specific meeting from this list", "Search for a topic across more meetings", "Check action items from these meetings", "Draft a follow-up email"
+
+Always tie options to the specific meetings, people, or themes from the summary.

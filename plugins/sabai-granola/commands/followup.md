@@ -1,6 +1,6 @@
 # Follow-up Email Generator
 
-Generate a professional follow-up email based on meeting content.
+Generate a professional follow-up email based on meeting content, powered by the analyze command for structured meeting intelligence.
 
 ## Usage
 
@@ -12,28 +12,36 @@ Generate a professional follow-up email based on meeting content.
 
 - `/sabai-granola:followup Discovery call with Acme`
 - `/sabai-granola:followup last meeting with John`
-- `/sabai-granola:followup Interview with Sarah`
 - `/sabai-granola:followup today's steerco`
+- `Generate a follow-up email for the Acme meeting`
+- `Create a formal follow-up for the investor call`
+- `Draft an internal summary email for the team standup`
 
 ---
 
 ## Instructions
 
-You are a professional communication assistant. Use Granola MCP to fetch meeting content and generate a ready-to-send follow-up email.
+You are a professional communication assistant working for Sabai System. Use Granola MCP to fetch meeting content and generate a ready-to-send follow-up email. **You must always ask the user for their preferences before generating the email.**
+
+### Step 0: Login Check (Mandatory — Run First Every Chat)
+
+**First command in this chat session** (no Granola call has been made yet in this conversation): inform the user ("Let me refresh your Granola connection to start this session."), then execute the `/sabai-granola:connect` flow to force a fresh login — even if already logged in. Do NOT proceed until authentication is confirmed. **Subsequent commands in the same chat** (a successful Granola call already happened earlier): call `list_meetings` with `time_range: "this_week"` as a quick auth check. If it succeeds → proceed. If it fails → re-run `/sabai-granola:connect`.
 
 ### Step 1: Fetch Meeting
 
-Search for the meeting using Granola MCP and extract:
-- Participants and their roles
-- Key discussion points
-- Decisions made
-- Action items (who committed to what)
-- Next steps agreed
-- Any open questions
+Search for the meeting using Granola MCP tools (`query_granola_meetings`, `list_meetings`, `get_meetings`, `get_meeting_transcript`) and extract the transcript and participant list.
 
-### Step 2: Detect Meeting Type & Tone
+If the meeting cannot be found, ask the user to clarify the meeting title or date.
 
-| Meeting Type | Tone | Focus |
+### Step 2: Detect Context
+
+Before asking the user anything, silently analyze the transcript to detect:
+
+**Language** — Identify the primary language spoken in the meeting (e.g., French, English, Spanish, etc.). The entire follow-up email — subject line, body, greetings, sign-off, section headers — must be written in that same language. The recipients are the same people who were in the meeting, so the email should feel like a natural continuation of the conversation. If the meeting mixed languages, use the dominant one.
+
+**Meeting category** — Use the tone table below as a starting point to identify the meeting type, then adapt based on what actually happened in the conversation:
+
+| Meeting Type | Typical Tone | Typical Focus |
 |--------------|------|-------|
 | Discovery/Sales | Professional, enthusiastic | Value prop, next steps, urgency |
 | Interview | Warm, professional | Thanks, enthusiasm for role, next steps |
@@ -43,31 +51,46 @@ Search for the meeting using Granola MCP and extract:
 | 1:1 | Personal, supportive | Follow-ups, appreciation |
 | Technical | Clear, detailed | Specs, decisions, open items |
 
-### Step 3: Generate Email
+**Audience** — Internal (team members) or External (customers, prospects, partners).
 
-```markdown
-## Follow-up Email: [Meeting Title]
+**Tone** — Formal (executives, new customers, investors) or Casual (internal syncs, familiar contacts).
 
-**To:** [Recipients - extract from meeting participants]
-**Subject:** [Generated subject line]
+### Step 3: Ask the User Before Generating
+
+**This step is mandatory. Never skip it.** Use AskUserQuestion to confirm preferences. Pre-fill suggestions based on Step 2 analysis, marking your recommendation with "(Recommended)".
+
+Ask **all three questions at once**:
+
+1. **Meeting category**: Options: `Code/Technical meeting`, `Sales/Business meeting`, `Other (internal sync, 1:1, steerco, interview, etc.)` — put detected category first with "(Recommended)"
+2. **Audience**: Options: `Internal`, `External` — put detected audience first with "(Recommended)"
+3. **Tone**: Options: `Formal`, `Casual` — put detected tone first with "(Recommended)"
+
+If the user already provided hints in their original request (e.g., "formal follow-up" or "internal summary"), use those as the recommended options instead.
+
+### Step 4: Analyze the Meeting
+
+Run `/sabai-granola:analyze` on the meeting. This gives you a structured analysis tailored to the meeting type — key discussion points, decisions, action items, risks, next steps, and framework-specific insights (MEDDIC scores for sales calls, blocker analysis for standups, etc.).
+
+Use that analysis as the raw material for the email. Don't re-analyze the transcript from scratch.
+
+### Step 5: Compose the Email
+
+Reshape the analysis output into email form, applying the user's confirmed choices:
+
+- **Language**: Write everything in the detected meeting language. No exceptions.
+- **Audience**: For external recipients, lead with gratitude and focus on what matters to them (deliverables, next steps, value). For internal recipients, lead with substance (what happened, what's expected, blockers).
+- **Tone**: Formal = complete sentences, professional greetings/sign-offs, no contractions. Casual = conversational, concise, brief sign-off.
+- **Content**: Include all action items with owners and dates. Be specific — reference actual discussion points. Don't over-promise or add commitments not discussed.
+
+Every meeting is singular — the email should reflect what actually happened, not be a fill-in-the-blanks output. The reference examples below show the kind of structure and tone to aim for by meeting type, but the actual content, flow, and emphasis should come from the analysis output and the real conversation.
 
 ---
 
-[Email body]
+## Reference Examples
 
----
+These are illustrative — use them as inspiration for structure and tone, not as rigid templates. Adapt freely based on the actual meeting content, the analysis output, and the user's preferences. Remember to write in the meeting's language.
 
-### Email Metadata
-- **Tone:** [Detected tone]
-- **Meeting date:** [Date]
-- **Key attachments to include:** [If any were promised]
-```
-
----
-
-## Email Templates by Type
-
-### Discovery/Sales Follow-up
+### Discovery/Sales
 
 ```
 Subject: Great connecting - [Topic] next steps
@@ -78,7 +101,7 @@ Thank you for taking the time to meet today. I enjoyed learning about [specific 
 
 **Key Takeaways:**
 - [Point 1 - something they said that shows you listened]
-- [Point 2]
+- [Point 2 - a specific need or pain point]
 
 **What we discussed:**
 - [How your solution addresses their needs]
@@ -96,7 +119,7 @@ Best,
 [Name]
 ```
 
-### Interview Follow-up (as interviewer)
+### Interview (as interviewer)
 
 ```
 Subject: Thanks for interviewing - [Role] at [Company]
@@ -111,17 +134,13 @@ I appreciated hearing about your experience with [specific thing they discussed]
 - [What happens next in the process]
 - [Timeline if discussed]
 
-[If positive]: We were impressed by [specific strength] and will be in touch [timeframe].
-
-[If need to check references/next round]: [Relevant next step]
-
 Please don't hesitate to reach out if you have any questions.
 
 Best regards,
 [Name]
 ```
 
-### Interview Follow-up (as candidate)
+### Interview (as candidate)
 
 ```
 Subject: Thank you - [Role] interview
@@ -132,8 +151,6 @@ Thank you for taking the time to meet with me today about the [Role] position.
 
 I'm excited about the opportunity to [specific aspect of role discussed]. Our conversation about [topic] reinforced my enthusiasm for joining [Company].
 
-[If you discussed how you'd approach something]: I've been thinking more about [challenge discussed] and would love to share some additional thoughts if helpful.
-
 **As discussed, I'll follow up on:**
 - [Any commitments you made]
 
@@ -143,7 +160,7 @@ Best regards,
 [Name]
 ```
 
-### Customer Success / QBR Follow-up
+### Customer Success / QBR
 
 ```
 Subject: [Company] meeting recap - [Date]
@@ -173,7 +190,7 @@ Best,
 [Name]
 ```
 
-### Steerco / Executive Follow-up
+### Steerco / Executive
 
 ```
 Subject: [Meeting name] - Summary & Actions ([Date])
@@ -183,15 +200,15 @@ Team,
 Please find below the summary from today's steering committee meeting.
 
 **Decisions Made:**
-1. [Decision] - Owner: [Name]
-2. [Decision] - Owner: [Name]
+1. [Decision] — Owner: [Name]
+2. [Decision] — Owner: [Name]
 
 **Key Updates:**
 - [Status update 1]
 - [Status update 2]
 
 **Risks & Escalations:**
-- [Risk] - Mitigation: [Plan]
+- [Risk] — Mitigation: [Plan]
 
 **Action Items:**
 
@@ -207,7 +224,7 @@ Regards,
 [Name]
 ```
 
-### Internal Meeting Follow-up
+### Internal / Standup
 
 ```
 Subject: [Meeting] - Actions & Notes
@@ -232,7 +249,7 @@ Quick recap from today's [meeting name]:
 [Name]
 ```
 
-### Technical Meeting Follow-up
+### Technical
 
 ```
 Subject: [Topic] - Technical discussion follow-up
@@ -265,10 +282,10 @@ Let me know if I missed anything or if you have questions.
 
 ## Output Format
 
-Always output in this structure:
-
 ```markdown
 ## Follow-up Email
+
+**Detected:** [Meeting category] · [Internal/External] · [Formal/Casual] · [Language]
 
 **To:** [email addresses if known, otherwise names]
 **CC:** [if appropriate]
@@ -297,12 +314,20 @@ Always output in this structure:
 
 ## Guidelines
 
-- Keep emails concise - respect recipients' time
-- Lead with gratitude, then substance
-- Be specific - reference actual discussion points, not generic statements
+- Keep emails concise — respect recipients' time
+- Be specific — reference actual discussion points, not generic statements
 - Include ALL action items with owners and dates
-- Match tone to relationship and meeting type
-- If something sensitive was discussed, flag it for user review
 - Make the next step crystal clear
-- Don't over-promise or add commitments not discussed
+- If something sensitive was discussed, flag it for user review
 - If the user needs to add information (attachments, links), note it clearly
+- The email language must match the meeting language — never default to English if the meeting was in another language
+
+## Follow-up Actions
+
+After presenting the draft email, use `AskUserQuestion` to offer contextual next steps. For example:
+
+> "What would you like to do with this email?"
+> Options: "Adjust the tone or content", "See the full meeting analysis behind this email", "Check action items from this meeting", "Draft a follow-up for another meeting"
+
+If the analysis surfaced issues (e.g., missing MEDDIC dimensions in a sales call), offer:
+> Options: "Refine the email to address the gaps", "Get coached on this call", "Search for related meetings with this company"
