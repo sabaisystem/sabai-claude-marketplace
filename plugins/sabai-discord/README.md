@@ -91,6 +91,8 @@ Bot permissions required:
 
 Setting up a Discord bot requires creating an application on Discord's Developer Portal, generating a token, and inviting the bot to your server. This process takes approximately 15-30 minutes.
 
+For a detailed walkthrough with screenshots, see the [Discord Bot Setup Guide on Notion](https://www.notion.so/sabaisystem/Set-up-Discord-bot-for-Claude-co-work-31bcd22ff35f8037b86ada1407bc37c3).
+
 ### Step 1: Create a Discord Application
 
 1. Go to [Discord Developer Portal](https://discord.com/developers/applications)

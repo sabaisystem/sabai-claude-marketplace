@@ -32,7 +32,7 @@ Examples:
    - Keep markdown formatting (Linear supports it)
 
 5. **Update Linear project**
-   - Use `mcp__linear__update_project` to update the description
+   - Use `linear_update_project` to update the description
    - Report success with link to project
 
 ## Example Output
