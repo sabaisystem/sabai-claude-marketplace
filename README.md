@@ -7,7 +7,7 @@ Public marketplace for Claude plugins by [Sabai System](https://sabaisystem.com)
 | Plugin | Description | Type | Version | Status | Updated |
 |--------|-------------|------|---------|--------|---------|
 | [sabai-sudoku](plugins/sabai-sudoku) | Interactive Sudoku game with smart hints | MCP App | 1.0.0 | Active | 2026-02-16 |
-| [sabai-linear](plugins/sabai-linear) | Product Manager assistant with Linear integration | MCP + Skills + Commands | 1.2.0 | Active | 2026-03-16 |
+| [sabai-linear](plugins/sabai-linear) | Product Manager assistant with Linear integration | MCP + Skills + Commands | 1.1.1 | Active | 2026-03-16 |
 | [sabai-attio](plugins/sabai-attio) | CRM assistant with Attio integration | Skills + Commands | 1.0.0 | Active | 2026-02-16 |
 | [sabai-conversion](plugins/sabai-conversion) | Smart currency and timezone converter with preferences | Skills | 1.0.0 | Active | 2026-02-16 |
 | [sabai-notion](plugins/sabai-notion) | Documentation workflow with Notion integration | MCP + Skills + Commands | 1.0.0 | Active | 2026-02-16 |
