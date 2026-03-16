@@ -5,6 +5,27 @@ All notable changes to this plugin will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.4.0] - 2026-03-16
+
+### Changed
+- Rewrote `/decision` command with full step-by-step MCP tool instructions
+- Conversational flow guides users through context, options, decision, and consequences
+- ADRs stored as Linear issues with `Decision` label and `ADR-NNN:` title prefix
+- Sequential numbering determined by searching existing ADR issues
+- Machine-readable `<!-- adr-metadata -->` block in issue descriptions
+- Bidirectional linking between ADR issues and related tickets
+- Updated `decision-log.md` skill to align with new Linear storage approach
+
+## [1.3.0] - 2026-03-16
+
+### Changed
+- Rewrote `/risk` command with step-by-step MCP tool instructions
+- Simplified from 4 framework options to focused Impact x Likelihood analysis
+- Added real-time risk detection from Linear data (estimates, staleness, assignment, keywords)
+- Added project-level risk indicators (overdue, low progress, concentration risk)
+- Added dual mode: project-wide assessment and single-ticket deep analysis
+- Added optional tracking issue creation for Critical/High risks
+
 ## [1.2.0] - 2026-03-16
 
 ### Added

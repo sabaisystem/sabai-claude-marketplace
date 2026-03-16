@@ -1,59 +1,48 @@
 # Decision Log Skill
 
-Track and document product decisions with context for future reference.
+Track and document product decisions with context for future reference using ADR (Architecture Decision Record) format stored in Linear.
 
-## Decision Record Template (ADR Style)
+## ADR Record Template
 
 ```markdown
-# Decision: [Short Title]
+# ADR-NNN: [Decision Title]
 
-**ID:** DEC-[NUMBER]
-**Date:** [Date]
-**Status:** Proposed | Accepted | Deprecated | Superseded
-**Deciders:** [Names]
+## Status
+[Proposed | Accepted | Deprecated | Superseded]
+
+## Date
+[Date]
 
 ## Context
 What is the situation that requires a decision? What problem are we solving?
 
-## Decision Drivers
-- Driver 1: Why this matters
-- Driver 2: Constraint or requirement
-- Driver 3: Goal we're trying to achieve
+## Decision
+What was decided or proposed, and the core reasoning.
 
 ## Options Considered
 
 ### Option 1: [Name]
-**Description:** Brief explanation
 **Pros:**
 - Pro 1
 - Pro 2
+
 **Cons:**
 - Con 1
 - Con 2
-**Effort:** Low/Medium/High
-**Risk:** Low/Medium/High
 
 ### Option 2: [Name]
-**Description:** Brief explanation
 **Pros:**
 - Pro 1
-- Pro 2
+
 **Cons:**
 - Con 1
-- Con 2
-**Effort:** Low/Medium/High
-**Risk:** Low/Medium/High
 
 ### Option 3: Do Nothing
-**Description:** Maintain status quo
 **Pros:**
 - No effort required
-**Cons:**
-- Problem persists
-**Risk:** [Impact of not deciding]
 
-## Decision
-We decided on **Option X** because [reasoning].
+**Cons:**
+- Impact of inaction
 
 ## Consequences
 
@@ -62,39 +51,29 @@ We decided on **Option X** because [reasoning].
 - Benefit 2
 
 ### Negative
-- Tradeoff 1
-- Tradeoff 2
+- Trade-off 1
+- Trade-off 2
 
 ### Risks
-- Risk 1: Mitigation
-- Risk 2: Mitigation
+- Risk 1 (mitigation: X)
 
-## Action Items
-- [ ] Action 1 - Owner - Due
-- [ ] Action 2 - Owner - Due
-
-## Follow-up
-**Review Date:** [Date to revisit this decision]
-**Success Criteria:** How we'll know if this was the right call
-
----
-**Related Decisions:** DEC-X, DEC-Y
-**Related Documents:** [Links to PRDs, tickets, etc.]
+## Related
+- Links to related ADRs, tickets, or documents
 ```
 
 ## Quick Decision Template
 
-For smaller decisions:
+For smaller decisions that don't need full ADR treatment:
 
 ```markdown
-# Decision: [Title]
-**Date:** [Date] | **Deciders:** [Names]
+# ADR-NNN: [Title]
+**Date:** [Date] | **Status:** Accepted
 
 **Context:** [1-2 sentences]
 
 **Options:**
-1. Option A - [brief description]
-2. Option B - [brief description]
+1. Option A - [brief]
+2. Option B - [brief]
 
 **Decision:** Option [X] because [reason].
 
@@ -115,8 +94,8 @@ For smaller decisions:
 ## When to Document
 
 Always document when:
-- Multiple stakeholders involved
-- Decision is reversible but costly to reverse
+- Multiple stakeholders are involved
+- Decision is costly to reverse
 - Decision affects multiple teams
 - You've debated it for > 30 minutes
 - It's a recurring question
@@ -128,21 +107,27 @@ Always document when:
 Proposed → Accepted → [Active]
                    ↘
                     → Deprecated (no longer applies)
-                    → Superseded by DEC-XXX (replaced)
+                    → Superseded by ADR-XXX (replaced)
 ```
+
+## Storage in Linear
+
+ADRs are stored as Linear issues with:
+- **Title pattern**: `ADR-NNN: [Decision Title]`
+- **Label**: `Decision`
+- **Metadata block**: `<!-- adr-metadata -->` in the description for machine-readable extraction
 
 ## Finding Past Decisions
 
-Organize decisions by:
-- **Chronologically:** DEC-001, DEC-002, etc.
-- **By area:** product/DEC-001, tech/DEC-001
-- **By project:** project-x/DEC-001
+- Search by `"ADR-"` to find all ADRs
+- Filter by `Decision` label for all decision-labeled issues
+- Search `"ADR-" [keyword]` to find ADRs by topic
 
 ## Best Practices
 
-1. **Write it down immediately** - Context fades fast
-2. **Include the "why"** - Future you will thank you
-3. **List rejected options** - Shows due diligence
-4. **Set review dates** - Decisions aren't forever
-5. **Link related items** - PRDs, tickets, other decisions
-6. **Name deciders** - Accountability and reference
+1. **Write it down immediately** — Context fades fast
+2. **Include the "why"** — Future you will thank you
+3. **List rejected options** — Shows due diligence
+4. **Link related tickets** — Implementation traces back to rationale
+5. **Use Proposed status** when gathering input, **Accepted** once agreed upon
+6. **Set review dates** for decisions that may need revisiting
