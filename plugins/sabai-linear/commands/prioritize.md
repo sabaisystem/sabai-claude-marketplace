@@ -40,7 +40,18 @@ If no framework is specified, present this table and ask the user to choose.
 | **Confidence** | "How confident are you in these estimates?" | 100% = High, 80% = Medium, 50% = Low |
 | **Effort** | "How many person-weeks to complete?" | Number (e.g., 2) |
 
-3. **Calculate and display:**
+3. **Validate inputs** before calculating:
+
+   | Factor | Valid Range | Error Message |
+   |--------|------------|---------------|
+   | Reach | >= 0 (integer) | "Reach must be a non-negative integer (e.g., 500)" |
+   | Impact | One of: 0.25, 0.5, 1, 2, 3 | "Impact must be one of: 0.25 (Minimal), 0.5 (Low), 1 (Medium), 2 (High), 3 (Massive)" |
+   | Confidence | 0-100 (percentage) | "Confidence must be between 0 and 100 (e.g., 80 for 80%)" |
+   | Effort | > 0 (number) | "Effort must be greater than 0 (person-weeks)" |
+
+   If any value is out of range, show the valid range and ask the user to re-enter that specific factor.
+
+4. **Calculate and display:**
 
 ```
 RICE Score for SCM-123: "Add SSO login"
@@ -54,7 +65,7 @@ RICE Score for SCM-123: "Add SSO login"
 | **RICE Score** | **(1000 * 2 * 0.8) / 2 = 800** |
 ```
 
-4. **Offer to save** score to Linear (see Score Storage below)
+5. **Offer to save** score to Linear (see Score Storage below)
 
 ### Quick Mode
 
@@ -83,7 +94,17 @@ Parse: `R=<reach>, I=<impact>, C=<confidence>, E=<effort>`
 | **Confidence** | "How confident are you in this assessment?" | 1-10 |
 | **Ease** | "How easy is this to implement?" | 1-10 |
 
-3. **Calculate and display:**
+3. **Validate inputs** before calculating:
+
+   | Factor | Valid Range | Error Message |
+   |--------|------------|---------------|
+   | Impact | 1-10 (integer) | "Impact must be between 1 and 10" |
+   | Confidence | 1-10 (integer) | "Confidence must be between 1 and 10" |
+   | Ease | 1-10 (integer) | "Ease must be between 1 and 10" |
+
+   If any value is out of range, show the valid range and ask the user to re-enter that specific factor.
+
+4. **Calculate and display:**
 
 ```
 ICE Score for SCM-456: "Improve onboarding"
@@ -96,7 +117,7 @@ ICE Score for SCM-456: "Improve onboarding"
 | **ICE Score** | **8 * 7 * 5 = 280** |
 ```
 
-4. **Offer to save** score to Linear
+5. **Offer to save** score to Linear
 
 ### Quick Mode
 

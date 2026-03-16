@@ -5,6 +5,21 @@ All notable changes to this plugin will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.5.1] - 2026-03-16
+
+### Fixed
+- `resolveIssueId` now uses exact filter matching (team key + issue number) instead of fuzzy `issueSearch` to prevent mismatches (e.g., SCM-1 matching SCM-10)
+- Date filters (`completedAfter`, `createdAfter`, `updatedAfter`) now have client-side fallback filtering in `linear_search_issues` and `linear_list_issues`
+- Team filter now has client-side fallback filtering to catch cases where the API ignores the `teamId` filter
+
+### Added
+- `withRetry` wrapper for transient API failures (fetch failed, ECONNRESET, ETIMEDOUT, 429, 503) with exponential backoff
+- Cursor-based pagination support (`after` parameter and `pageInfo` in response) for `linear_search_issues` and `linear_list_issues`
+- Input validation for RICE framework scores (Reach >= 0, Impact in [0.25, 0.5, 1, 2, 3], Confidence 0-100, Effort > 0) in `/prioritize`
+- Input validation for ICE framework scores (Impact, Confidence, Ease must be 1-10) in `/prioritize`
+- Flexible date format parsing in `/release-notes` (supports `Mar-1`, `March 1`, `3/1`, ISO format)
+- Error handling for unmatched team/project names in `/roadmap` with available options list
+
 ## [1.5.0] - 2026-03-16
 
 ### Changed

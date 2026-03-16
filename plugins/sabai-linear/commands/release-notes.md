@@ -35,7 +35,25 @@ Generate professional release notes from completed Linear tickets, categorized b
 
 Resolve the cutoff date using this 3-tier priority:
 
-1. **Explicit date provided** (`--since Mar-1`): Parse directly to ISO 8601 (e.g., `2026-03-01T00:00:00Z`) and use as `sinceDate`
+1. **Explicit date provided** (`--since Mar-1`): Parse the date to ISO 8601 and use as `sinceDate`
+
+   #### Date Format Support
+
+   Accept any of these formats (all resolve to the current year unless a year is specified):
+
+   | Input | Parsed As |
+   |-------|-----------|
+   | `Mar-1` or `Mar-01` | March 1 of current year |
+   | `March 1` or `March 01` | March 1 of current year |
+   | `3/1` or `03/01` | March 1 of current year |
+   | `2026-03-01` | ISO format (already complete) |
+
+   **Parsing rules:**
+   - Month names: accept both abbreviated (`Jan`, `Feb`, ...) and full (`January`, `February`, ...), case-insensitive
+   - Separator: `-`, `/`, or space between month and day
+   - If no year is provided, assume the current year
+   - Output: ISO 8601 format (e.g., `2026-03-01T00:00:00Z`)
+   - The `--since` prefix is optional — bare dates like `Mar-1` work without it
 
 2. **Previous version provided** (second positional arg like `v2.0.0`): Run `git log -1 --format=%aI v2.0.0` to get the tag's author date and use as `sinceDate`
 

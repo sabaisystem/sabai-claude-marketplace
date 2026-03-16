@@ -14,6 +14,57 @@ if (!apiKey) {
 
 const linear = new LinearClient({ apiKey });
 
+// Retry wrapper for transient API failures
+async function withRetry<T>(fn: () => Promise<T>, retries = 2, delay = 1000): Promise<T> {
+  for (let attempt = 0; attempt <= retries; attempt++) {
+    try {
+      return await fn();
+    } catch (error: any) {
+      const isTransient = error.message?.includes('fetch failed') ||
+                          error.message?.includes('ECONNRESET') ||
+                          error.message?.includes('ETIMEDOUT') ||
+                          error.status === 429 ||
+                          error.status === 503;
+      if (!isTransient || attempt === retries) throw error;
+      await new Promise(r => setTimeout(r, delay * (attempt + 1)));
+    }
+  }
+  throw new Error('Unreachable');
+}
+
+// Client-side date filtering fallback
+function applyClientSideDateFilters(issues: any[], args: any): any[] {
+  let filtered = issues;
+  if (args.completedAfter) {
+    const cutoff = new Date(args.completedAfter).getTime();
+    filtered = filtered.filter((issue: any) => {
+      if (!issue.completedAt) return false;
+      return new Date(issue.completedAt).getTime() >= cutoff;
+    });
+  }
+  if (args.createdAfter) {
+    const cutoff = new Date(args.createdAfter).getTime();
+    filtered = filtered.filter((issue: any) => {
+      if (!issue.createdAt) return false;
+      return new Date(issue.createdAt).getTime() >= cutoff;
+    });
+  }
+  if (args.updatedAfter) {
+    const cutoff = new Date(args.updatedAfter).getTime();
+    filtered = filtered.filter((issue: any) => {
+      if (!issue.updatedAt) return false;
+      return new Date(issue.updatedAt).getTime() >= cutoff;
+    });
+  }
+  return filtered;
+}
+
+// Client-side team filtering fallback
+function applyClientSideTeamFilter(issues: any[], args: any): any[] {
+  if (!args.teamId) return issues;
+  return issues.filter((issue: any) => issue.team?.id === args.teamId);
+}
+
 // Tool definitions
 const tools = [
   {
@@ -110,6 +161,10 @@ const tools = [
           enum: ["createdAt", "updatedAt", "priority"],
           description: "Sort order (default: updatedAt)",
         },
+        after: {
+          type: "string",
+          description: "Cursor for pagination — pass endCursor from a previous response to get the next page",
+        },
       },
     },
   },
@@ -134,6 +189,10 @@ const tools = [
         limit: {
           type: "number",
           description: "Max results (default 50, max 250)",
+        },
+        after: {
+          type: "string",
+          description: "Cursor for pagination — pass endCursor from a previous response to get the next page",
         },
       },
     },
@@ -268,9 +327,20 @@ const tools = [
 
 // Resolve issue ID — supports both UUID and identifier (e.g. SCM-123)
 async function resolveIssueId(issueId: string): Promise<string> {
-  // If it looks like an identifier (has letters and dash), search for it
-  if (/^[A-Za-z]+-\d+$/.test(issueId)) {
-    const results = await linear.issueSearch(issueId, { first: 1 });
+  // If it looks like an identifier (has letters and dash), use exact filter match
+  const match = issueId.match(/^([A-Za-z]+)-(\d+)$/);
+  if (match) {
+    const teamKey = match[1].toUpperCase();
+    const issueNumber = parseInt(match[2], 10);
+    const results = await withRetry(() =>
+      linear.issues({
+        first: 1,
+        filter: {
+          number: { eq: issueNumber },
+          team: { key: { eq: teamKey } },
+        },
+      })
+    );
     const issue = results.nodes[0];
     if (!issue) throw new Error(`Issue not found: ${issueId}`);
     return issue.id;
@@ -346,7 +416,7 @@ async function handleTool(name: string, args: any) {
       if (args.parentId) input.parentId = args.parentId;
       if (args.cycleId) input.cycleId = args.cycleId;
 
-      const result = await linear.createIssue(input);
+      const result = await withRetry(() => linear.createIssue(input));
       const issue = await result.issue;
       if (!issue) throw new Error("Failed to create issue");
 
@@ -361,7 +431,7 @@ async function handleTool(name: string, args: any) {
 
     case "linear_get_issue": {
       const id = await resolveIssueId(args.issueId);
-      const issue = await linear.issue(id);
+      const issue = await withRetry(() => linear.issue(id));
 
       const formatted = await formatIssue(issue);
 
@@ -416,34 +486,51 @@ async function handleTool(name: string, args: any) {
         filter.archivedAt = { null: true };
       }
 
+      const orderBy = args.orderBy === "createdAt"
+        ? "createdAt" as any
+        : args.orderBy === "priority"
+          ? "priority" as any
+          : "updatedAt" as any;
+
       let results;
       if (args.query) {
-        results = await linear.issueSearch(args.query, {
-          first: limit,
-          filter,
-          orderBy: args.orderBy === "createdAt"
-            ? "createdAt" as any
-            : args.orderBy === "priority"
-              ? "priority" as any
-              : "updatedAt" as any,
-        });
+        results = await withRetry(() =>
+          linear.issueSearch(args.query, {
+            first: limit,
+            ...(args.after ? { after: args.after } : {}),
+            filter,
+            orderBy,
+          })
+        );
       } else {
-        results = await linear.issues({
-          first: limit,
-          filter,
-          orderBy: args.orderBy === "createdAt"
-            ? "createdAt" as any
-            : args.orderBy === "priority"
-              ? "priority" as any
-              : "updatedAt" as any,
-        });
+        results = await withRetry(() =>
+          linear.issues({
+            first: limit,
+            ...(args.after ? { after: args.after } : {}),
+            filter,
+            orderBy,
+          })
+        );
       }
 
-      const issues = await Promise.all(
+      let issues = await Promise.all(
         results.nodes.map((issue: any) => formatIssue(issue))
       );
 
-      return { totalCount: results.nodes.length, issues };
+      // Client-side date filtering fallback
+      issues = applyClientSideDateFilters(issues, args);
+      // Client-side team filtering fallback
+      issues = applyClientSideTeamFilter(issues, args);
+
+      const pageInfo = results.pageInfo;
+      return {
+        totalCount: issues.length,
+        issues,
+        pageInfo: {
+          hasNextPage: pageInfo?.hasNextPage ?? false,
+          endCursor: pageInfo?.endCursor ?? null,
+        },
+      };
     }
 
     case "linear_list_issues": {
@@ -453,12 +540,32 @@ async function handleTool(name: string, args: any) {
         filter.archivedAt = { null: true };
       }
 
-      const results = await linear.issues({ first: limit, filter });
-      const issues = await Promise.all(
+      const results = await withRetry(() =>
+        linear.issues({
+          first: limit,
+          ...(args.after ? { after: args.after } : {}),
+          filter,
+        })
+      );
+
+      let issues = await Promise.all(
         results.nodes.map((issue: any) => formatIssue(issue))
       );
 
-      return { totalCount: results.nodes.length, issues };
+      // Client-side date filtering fallback
+      issues = applyClientSideDateFilters(issues, args);
+      // Client-side team filtering fallback
+      issues = applyClientSideTeamFilter(issues, args);
+
+      const pageInfo = results.pageInfo;
+      return {
+        totalCount: issues.length,
+        issues,
+        pageInfo: {
+          hasNextPage: pageInfo?.hasNextPage ?? false,
+          endCursor: pageInfo?.endCursor ?? null,
+        },
+      };
     }
 
     case "linear_update_issue": {
@@ -475,7 +582,7 @@ async function handleTool(name: string, args: any) {
       if (args.cycleId) input.cycleId = args.cycleId;
       if (args.parentId) input.parentId = args.parentId;
 
-      const result = await linear.updateIssue(id, input);
+      const result = await withRetry(() => linear.updateIssue(id, input));
       const issue = await result.issue;
       if (!issue) throw new Error("Failed to update issue");
 
@@ -489,7 +596,7 @@ async function handleTool(name: string, args: any) {
     }
 
     case "linear_get_teams": {
-      const teams = await linear.teams();
+      const teams = await withRetry(() => linear.teams());
       return teams.nodes.map((t: any) => ({
         id: t.id,
         name: t.name,
@@ -503,11 +610,11 @@ async function handleTool(name: string, args: any) {
       let team;
       // Try by key first (short string like 'SCM'), then by ID
       if (/^[A-Za-z]+$/.test(args.teamId)) {
-        const teams = await linear.teams({ filter: { key: { eq: args.teamId } } });
+        const teams = await withRetry(() => linear.teams({ filter: { key: { eq: args.teamId } } }));
         team = teams.nodes[0];
         if (!team) throw new Error(`Team not found with key: ${args.teamId}`);
       } else {
-        team = await linear.team(args.teamId);
+        team = await withRetry(() => linear.team(args.teamId));
       }
 
       const [members, states, labels] = await Promise.all([
@@ -549,7 +656,7 @@ async function handleTool(name: string, args: any) {
         filter.state = { nin: ["canceled"] };
       }
 
-      const projects = await linear.projects({ filter, first: 100 });
+      const projects = await withRetry(() => linear.projects({ filter, first: 100 }));
 
       return projects.nodes.map((p: any) => ({
         id: p.id,
@@ -563,7 +670,7 @@ async function handleTool(name: string, args: any) {
     }
 
     case "linear_get_project": {
-      const project = await linear.project(args.projectId);
+      const project = await withRetry(() => linear.project(args.projectId));
 
       const [teams, members, lead] = await Promise.all([
         project.teams(),
@@ -602,7 +709,7 @@ async function handleTool(name: string, args: any) {
       if (args.state) input.state = args.state;
       if (args.targetDate) input.targetDate = args.targetDate;
 
-      const result = await linear.updateProject(args.projectId, input);
+      const result = await withRetry(() => linear.updateProject(args.projectId, input));
       const project = await result.project;
       if (!project) throw new Error("Failed to update project");
 
@@ -621,7 +728,7 @@ async function handleTool(name: string, args: any) {
         filter.completedAt = { null: true };
       }
 
-      const cycles = await linear.cycles({ filter, first: 20 });
+      const cycles = await withRetry(() => linear.cycles({ filter, first: 20 }));
 
       return cycles.nodes.map((c: any) => ({
         id: c.id,
@@ -639,7 +746,7 @@ async function handleTool(name: string, args: any) {
     }
 
     case "linear_get_project_milestones": {
-      const project = await linear.project(args.projectId);
+      const project = await withRetry(() => linear.project(args.projectId));
       const milestones = await project.projectMilestones();
       return milestones.nodes.map((m: any) => ({
         id: m.id,
@@ -659,7 +766,7 @@ async function handleTool(name: string, args: any) {
 
 // Create MCP server
 const server = new Server(
-  { name: "sabai-linear", version: "1.5.0" },
+  { name: "sabai-linear", version: "1.5.1" },
   { capabilities: { tools: {} } }
 );
 
