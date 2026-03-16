@@ -16,24 +16,20 @@ Document important decisions using ADR (Architecture Decision Record) format, gu
 
 ## Instructions
 
-### Step 1: Resolve Team & Label Context
+### Step 1: Resolve Project Context
 
 1. Call `mcp__sabai-linear__linear_get_teams` to list available teams
 2. Note the `teamId` for the "Sabai Claude Marketplace" team (or the first team if unambiguous)
-3. Call `mcp__sabai-linear__linear_get_team` with:
+3. Call `mcp__sabai-linear__linear_list_projects` with:
    - `teamId`: from above
-4. From the returned `labels` array, find the label named `Decision` (case-insensitive match)
-   - Note the `labelId` — you will apply it when creating the ADR issue
-   - If no `Decision` label exists, proceed without it and note in output: "Tip: Create a 'Decision' label in Linear to tag ADR issues for easy filtering."
+4. Note the project list — the ADR document will be saved to a project (ask user which project, or use "Sabai Linear" as default)
 
 ### Step 2: Determine Next ADR Number
 
-1. Call `mcp__sabai-linear__linear_search_issues` with:
-   - `teamId`: from Step 1
+1. Call `mcp__sabai-linear__linear_search_documents` with:
    - `query`: `"ADR-"`
-   - `limit`: `250`
 
-2. From the results, extract ADR numbers from issue titles matching the pattern `ADR-NNN:` (e.g., `ADR-001:`, `ADR-012:`)
+2. From the results, extract ADR numbers from document titles matching the pattern `ADR-NNN:` (e.g., `ADR-001:`, `ADR-012:`)
    - Parse the numeric portion of each match
    - Find the highest number
    - Next ADR number = highest + 1, zero-padded to 3 digits (e.g., `001`, `012`, `013`)
@@ -148,64 +144,25 @@ What would you like to do?
 
 ### Step 6: Save to Linear
 
-1. Build the issue description from the ADR content formatted in Step 4
-   - Prepend a metadata block for machine-readability:
-
-```markdown
-<!-- adr-metadata -->
-| Field | Value |
-|-------|-------|
-| ADR | [NNN] |
-| Status | [Proposed/Accepted] |
-| Date | [Today] |
-| Decision | [One-line summary] |
-<!-- /adr-metadata -->
-
-[Full ADR content from Step 4]
-```
-
-2. Call `mcp__sabai-linear__linear_create_issue` with:
+1. Call `mcp__sabai-linear__linear_create_document` with:
    - `title`: `ADR-[NNN]: [Decision Title]`
-   - `description`: the full description built above
-   - `teamId`: from Step 1
-   - `labelIds`: `[labelId]` from Step 1 (only if `Decision` label was found)
+   - `content`: the full ADR content from Step 4 (markdown)
+   - `projectId`: from Step 1 (the user's chosen project)
+   - `icon`: `"📋"`
 
-3. Note the returned `identifier` (e.g., `SCM-150`) and `url`
+2. Note the returned `id` and `url`
 
-### Step 7: Link Related Tickets (Optional)
+### Step 7: Display Confirmation
 
-If the user mentioned related tickets in Step 3:
-
-For each related ticket identifier (e.g., `SCM-123`):
-
-1. Call `mcp__sabai-linear__linear_get_issue` with:
-   - `issueId`: the ticket identifier
-2. Read its current `description`
-3. Append a reference to the new ADR:
-
-```markdown
-
----
-**Related Decision:** ADR-[NNN]: [Title] ([ADR ticket identifier])
-```
-
-4. Call `mcp__sabai-linear__linear_update_issue` with:
-   - `issueId`: the ticket identifier
-   - `description`: updated description with the appended reference
-
-### Step 8: Display Confirmation
-
-Show the saved ADR with links:
+Show the saved ADR with link:
 
 ```
 ADR-[NNN]: [Decision Title]
 Status: [Proposed/Accepted]
-Ticket: [identifier]
-[Open in app](linear://sabaisystem/issue/[identifier]) | [Open in browser]([url])
-
-[If related tickets were linked:]
-Linked to: SCM-123, SCM-456
+[Open in browser]([url])
 ```
+
+If the user mentioned related tickets in Step 3, list them: "Related tickets: SCM-123, SCM-456"
 
 ## When to Document
 
@@ -230,10 +187,12 @@ To update a decision's status later, edit the ADR issue in Linear and update bot
 
 ## Finding Past ADRs
 
-Search existing decisions using `mcp__sabai-linear__linear_search_issues` with:
+Search existing decisions using `mcp__sabai-linear__linear_search_documents` with:
 - `query`: `"ADR-"` — finds all ADRs
 - `query`: `"ADR-" [keyword]` — finds ADRs matching a topic
-- `labelName`: `"Decision"` — finds all decision-labeled issues
+
+Or list all documents in a project using `mcp__sabai-linear__linear_list_documents` with:
+- `projectId`: the project ID
 
 ## Tips
 
@@ -246,9 +205,7 @@ Search existing decisions using `mcp__sabai-linear__linear_search_issues` with:
 
 ## Notes
 
-- ADRs are stored as Linear issues with the `Decision` label and `ADR-NNN:` title prefix
-- Sequential numbering is determined by searching existing ADR issues at creation time
-- The `<!-- adr-metadata -->` block enables machine-readable extraction for reporting
+- ADRs are stored as **Linear documents** (not issues) with `ADR-NNN:` title prefix, attached to a project
+- Sequential numbering is determined by searching existing ADR documents at creation time
 - The conversational flow adapts to how much information the user provides upfront
 - If the user supplies all details in one message, the Q&A is skipped entirely
-- Related ticket linking is bidirectional — the ADR references tickets, and tickets reference the ADR

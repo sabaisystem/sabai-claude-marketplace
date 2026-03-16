@@ -323,6 +323,45 @@ const tools = [
       required: ["projectId"],
     },
   },
+  {
+    name: "linear_create_document",
+    description:
+      "Create a document in Linear with markdown content, optionally linked to a project.",
+    inputSchema: {
+      type: "object" as const,
+      properties: {
+        title: { type: "string", description: "Document title" },
+        content: { type: "string", description: "Document content in markdown format" },
+        projectId: { type: "string", description: "Project ID to attach the document to" },
+        icon: { type: "string", description: "Document icon (emoji)" },
+      },
+      required: ["title"],
+    },
+  },
+  {
+    name: "linear_list_documents",
+    description:
+      "List documents, optionally filtered by project. Returns document titles, content previews, and URLs.",
+    inputSchema: {
+      type: "object" as const,
+      properties: {
+        projectId: { type: "string", description: "Filter by project ID" },
+        limit: { type: "number", description: "Max results (default 50)" },
+      },
+    },
+  },
+  {
+    name: "linear_search_documents",
+    description:
+      "Search documents by text query. Returns matching documents with titles and content previews.",
+    inputSchema: {
+      type: "object" as const,
+      properties: {
+        query: { type: "string", description: "Search query" },
+      },
+      required: ["query"],
+    },
+  },
 ];
 
 // Resolve issue ID — supports both UUID and identifier (e.g. SCM-123)
@@ -764,6 +803,65 @@ async function handleTool(name: string, args: any) {
         progress: m.progress,
         sortOrder: m.sortOrder,
       }));
+    }
+
+    case "linear_create_document": {
+      const input: any = { title: args.title };
+      if (args.content) input.content = args.content;
+      if (args.projectId) input.projectId = args.projectId;
+      if (args.icon) input.icon = args.icon;
+
+      const result = await withRetry(() => linear.createDocument(input));
+      const doc = await result.document;
+      if (!doc) throw new Error("Failed to create document");
+
+      return {
+        success: true,
+        id: doc.id,
+        title: doc.title,
+        url: doc.url,
+      };
+    }
+
+    case "linear_list_documents": {
+      const limit = Math.min(args.limit || 50, 100);
+
+      let results;
+      if (args.projectId) {
+        const project = await withRetry(() => linear.project(args.projectId));
+        results = await project.documents({ first: limit });
+      } else {
+        results = await withRetry(() => linear.documents({ first: limit }));
+      }
+
+      return {
+        totalCount: results.nodes.length,
+        documents: results.nodes.map((d: any) => ({
+          id: d.id,
+          title: d.title,
+          content: d.content?.substring(0, 200),
+          icon: d.icon,
+          url: d.url,
+          createdAt: d.createdAt,
+          updatedAt: d.updatedAt,
+        })),
+      };
+    }
+
+    case "linear_search_documents": {
+      const results = await withRetry(() => linear.searchDocuments(args.query));
+      const nodes = (results as any).nodes || [];
+
+      return {
+        totalCount: nodes.length,
+        documents: nodes.map((d: any) => ({
+          id: d.id,
+          title: d.title,
+          content: d.content?.substring(0, 200),
+          icon: d.icon,
+          url: d.url,
+        })),
+      };
     }
 
     default:
