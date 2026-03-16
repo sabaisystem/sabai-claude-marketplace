@@ -19,6 +19,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Use valid `eq` comparator for `stateName` and `labelName` filters (was `eqCaseInsensitive`)
 
+## [1.1.1] - 2026-03-16
+
+### Changed
+- Rewrote `/release-notes` command with full step-by-step MCP tool instructions
+- Added 3-tier "since" date resolution (explicit date, previous version tag, git tag fallback)
+- Added `--project` flag for project-scoped release notes
+- Added client-side label categorization, feature grouping, and user-friendly description guidance
+
 ## [1.1.0] - 2026-03-06
 
 ### Changed

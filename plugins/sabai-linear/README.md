@@ -5,9 +5,9 @@
 | Field | Value |
 |-------|-------|
 | Type | MCP + Skills + Commands |
-| Version | 1.1.0 |
+| Version | 1.2.0 |
 | Status | Active |
-| Command | `/prd`, `/ticket`, `/standup`, `/status`, `/backlog`, `/sprint` |
+| Command | `/prd`, `/ticket`, `/standup`, `/status`, `/backlog`, `/sprint`, `/prioritize` |
 | Repo | `plugins/sabai-linear` |
 
 ---
@@ -20,7 +20,7 @@ A Product Manager assistant plugin with Linear integration. Create tickets from 
 
 - PRD creation with structured templates
 - Ticket creation from templates (feature, bug, improvement, spike, epic)
-- Backlog management and prioritization
+- Backlog management and prioritization with interactive scoring calculators
 - Sprint planning with capacity tracking
 - Daily standup and weekly status report generation
 - Release notes generation
@@ -51,6 +51,7 @@ A Product Manager assistant plugin with Linear integration. Create tickets from 
 
 ### Planning
 - `/sprint [action] [name]` - Sprint planning/review/capacity
+- `/prioritize [framework] [scope]` - Interactive prioritization (RICE, ICE, MoSCoW, Rank)
 - `/risk [project|ticket]` - Risk assessment (multiple frameworks)
 
 ### Backlog Management

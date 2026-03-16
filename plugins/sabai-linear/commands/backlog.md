@@ -21,8 +21,10 @@ View and manage Linear backlog.
 
 ### Prioritize
 ```
-/backlog prioritize         # Interactive prioritization session
+/backlog prioritize         # Redirects to /prioritize (RICE, ICE, MoSCoW, Rank)
 ```
+
+> **Tip:** Use `/prioritize` directly for full framework selection and scoring. See `/prioritize --help`.
 
 ### Groom
 ```
@@ -40,8 +42,8 @@ When this command is invoked:
    - ID, Title, Priority, Status, Assignee
 
 3. For `prioritize`:
-   - Show unprioritized tickets
-   - Help assign priorities based on impact/effort
+   - Delegate to `/prioritize` command for full interactive scoring
+   - Supports RICE, ICE, MoSCoW frameworks and ranked views
 
 4. For `groom`:
    - Find tickets missing description, acceptance criteria, or estimates

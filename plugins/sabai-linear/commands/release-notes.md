@@ -1,77 +1,152 @@
 # /release-notes - Generate Release Notes
 
-Generate professional release notes from completed Linear tickets.
+Generate professional release notes from completed Linear tickets, categorized by label and formatted for easy distribution.
 
 ## Usage
 
 ```
-/release-notes [version] [since]
+/release-notes [version] [since] [--project name]
 ```
 
-- `version`: Version number (e.g., v1.2.0)
-- `since`: Date or previous version to compare from
+- `version`: Version label for the release header (e.g., `v2.1.0`)
+- `since`: Previous version tag (e.g., `v2.0.0`) or explicit date (e.g., `--since Mar-1`)
+- `--project`: Optional project name filter (e.g., `sabai-calendar`)
 
-## What It Does
+**Examples:**
+- `/release-notes v2.1.0` — Since last git tag
+- `/release-notes v2.1.0 v2.0.0` — Between two versions
+- `/release-notes v2.1.0 --since Mar-1` — Since explicit date
+- `/release-notes v2.1.0 --project sabai-calendar` — Scoped to a project
 
-1. Fetches all completed tickets since last release
-2. Categorizes by type (feature, fix, improvement)
-3. Writes user-friendly descriptions
-4. Formats for different audiences
+## Instructions
+
+### Step 1: Resolve Team & Project Context
+
+1. Call `mcp__sabai-linear__linear_get_teams` to list available teams
+2. Note the `teamId` for the "Sabai Claude Marketplace" team (or the first team if unambiguous)
+3. If `--project` is specified:
+   - Call `mcp__sabai-linear__linear_list_projects` with:
+     - `teamId`: from above
+   - Fuzzy-match the project name (e.g., "calendar" matches "Sabai calendar")
+   - Note the `projectId` for filtering subsequent queries
+4. If no `--project` specified, the release notes cover the whole team
+
+### Step 2: Determine "Since" Date
+
+Resolve the cutoff date using this 3-tier priority:
+
+1. **Explicit date provided** (`--since Mar-1`): Parse directly to ISO 8601 (e.g., `2026-03-01T00:00:00Z`) and use as `sinceDate`
+
+2. **Previous version provided** (second positional arg like `v2.0.0`): Run `git log -1 --format=%aI v2.0.0` to get the tag's author date and use as `sinceDate`
+
+3. **Neither provided** (just `/release-notes v2.1.0`): Git tag fallback —
+   - Run `git describe --tags --abbrev=0` to find the most recent tag
+   - Run `git log -1 --format=%aI [tag]` to get its date
+   - Use that date as `sinceDate`
+   - If no git tags exist at all, default to 14 days ago and inform the user: "No git tags found — showing issues completed in the last 14 days."
+
+Format `sinceDate` as ISO 8601 (e.g., `2026-03-01T00:00:00Z`).
+
+### Step 3: Fetch All Completed Issues
+
+Call `mcp__sabai-linear__linear_search_issues` with:
+- `teamId`: from Step 1
+- `projectId`: from Step 1 (only if `--project` was specified)
+- `stateName`: `"Done"`
+- `completedAfter`: `sinceDate` from Step 2
+- `limit`: `250`
+
+If the result count equals 250, warn the user: "Results may be truncated — 250 issue limit reached. Consider narrowing the date range or using `--project`."
+
+### Step 4: Categorize by Labels (Client-Side)
+
+Inspect each issue's `labels` array. Assign each issue to the **first matching** category in this priority order:
+
+1. **Breaking Changes**: label contains `breaking-change` or `breaking`
+2. **Security**: label contains `security`
+3. **Features**: label contains `feature` or `enhancement`
+4. **Bug Fixes**: label contains `bug`
+5. **Improvements**: label contains `improvement` or `performance`
+6. **Other Changes**: no matching label
+
+Matching is case-insensitive. Use a single broad query + client-side categorization — this is more efficient than multiple per-label API calls (the API only supports one `labelName` filter at a time) and catches unlabeled issues too.
+
+### Step 5: Group Related Features
+
+If 3 or more feature tickets share a common theme (e.g., all relate to "calendar integration" or "export functionality"):
+- Group them under a descriptive subheading (e.g., `### Calendar Integration`)
+- List individual items within the group
+
+If fewer than 3 features share a theme, or features are unrelated:
+- List each feature individually without subheadings
+
+Only apply grouping to the **Features** category — list all other categories as flat lists.
+
+### Step 6: Write User-Friendly Descriptions
+
+Transform each issue's technical title into a user-facing release note:
+
+- Lead with the user benefit, use active voice
+- One line per item
+- Include the Linear ticket identifier in parentheses at the end
+- Bold the feature/change name for Features and Breaking Changes
+
+**Translation examples:**
+| Ticket Title | Release Note |
+|---|---|
+| "Add CSV export to reports" | **Export Reports** - Export any report to CSV format (SCM-45) |
+| "Fix null pointer in auth" | Fixed login issues affecting some users (SCM-46) |
+| "Optimize DB queries for dashboard" | Improved dashboard loading speed (SCM-47) |
+| "Remove legacy v1 API endpoints" | **V1 API Removal** - Legacy v1 endpoints have been removed. Migrate to v2 endpoints before upgrading (SCM-48) |
+
+### Step 7: Generate Highlights Summary
+
+Select the 2-3 most significant changes based on:
+- Priority level (urgent/high first)
+- Scope of impact (features affecting many users over narrow fixes)
+- Breaking changes (always highlight)
+
+Write a brief 2-3 sentence summary paragraph covering these key changes.
+
+### Step 8: Format Output
+
+Present the final output in a single markdown code block so the user can easily copy it. **Omit any sections that have zero items.**
 
 ## Output Format
 
 ```markdown
-# Release Notes - v[X.Y.Z]
-**Release Date:** [Date]
+# Release Notes: v[version]
+**Released:** [today's date]
 
 ## Highlights
-Brief summary of the most important changes.
+[2-3 sentence summary of the most significant changes]
 
 ## New Features
-- **[Feature Name]** - What users can now do
-- **[Feature Name]** - What users can now do
-
-## Improvements
-- **[Area]** - What was improved and why it matters
+### [Group Name] (only if 3+ related features)
+- **Feature Name** - Description (SCM-XX)
 
 ## Bug Fixes
-- Fixed issue where [user-facing description]
+- Description (SCM-XX)
+
+## Improvements
+- Description (SCM-XX)
+
+## Security
+- Description (SCM-XX)
 
 ## Breaking Changes
-- **[Change]** - Migration instructions
+- **Change Name** - Migration instructions (SCM-XX)
 
-## Known Issues
-- [Issue] - Workaround: [workaround]
-
----
-Questions? Contact support@company.com
+## Other Changes
+- Description (SCM-XX)
 ```
 
-## Ticket to Release Note Translation
+## Notes
 
-Transform technical tickets into user-friendly notes:
-
-| Ticket Title | Release Note |
-|--------------|--------------|
-| "Add CSV export to reports" | **Export Reports** - Export any report to CSV format |
-| "Fix null pointer in auth" | Fixed login issues for some users |
-| "Optimize DB queries" | Improved dashboard loading speed |
-
-## Linear Queries
-
-- `linear_search_issues` with `status:completed, completedAfter:[date]`
-- Filter by labels: `feature`, `bug`, `improvement`
-
-## Audience Versions
-
-Generate different versions:
-- **Public**: Focus on user benefits
-- **Technical**: Include API changes
-- **Internal**: Include ticket IDs and contributors
-
-## Tips
-
-- Lead with value, not technical details
-- Group related changes
-- Highlight breaking changes prominently
-- Link to documentation for complex features
+- The "version" argument is a label only — it appears in the header but does not create a git tag
+- The "since" date determines which completed tickets to include, resolved via the 3-tier fallback in Step 2
+- A single `linear_search_issues` call with `stateName: "Done"` + `completedAfter` fetches all relevant issues; categorization happens client-side by inspecting each issue's labels array
+- Feature grouping only applies when 3+ features share a clear theme — avoid over-grouping
+- Empty sections are always omitted from the output
+- Output is wrapped in a code block for easy copy-paste to changelogs, Slack, or email
+- For audience-specific variants (public, technical, internal), see the companion skill at `skills/release-notes.md`
