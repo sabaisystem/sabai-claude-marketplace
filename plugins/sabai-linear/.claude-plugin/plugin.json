@@ -1,7 +1,7 @@
 {
   "name": "sabai-linear",
   "description": "Product Manager assistant with Linear integration. Create tickets, manage backlog, generate PRDs, and more.",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "author": {
     "name": "Sabai Team"
   },
