@@ -381,10 +381,10 @@ async function formatIssue(issue: any) {
 }
 
 // Build issue filter from common params
+// Build issue filter — teamId and projectId are handled via scoped queries, not filter
 function buildIssueFilter(args: any) {
   const filter: any = {};
-  if (args.teamId) filter.team = { id: { eq: args.teamId } };
-  if (args.projectId) filter.project = { id: { eq: args.projectId } };
+  // Note: teamId and projectId are NOT added to filter — they use scoped queries instead
   if (args.assigneeId) filter.assignee = { id: { eq: args.assigneeId } };
   if (args.stateId) filter.state = { id: { eq: args.stateId } };
   if (args.stateName) filter.state = { name: { eq: args.stateName } };
@@ -396,6 +396,21 @@ function buildIssueFilter(args: any) {
     filter.completedAt = { gte: new Date(args.completedAfter) };
 
   return filter;
+}
+
+// Fetch issues using scoped query: team.issues() or project.issues() when possible
+async function fetchIssuesScoped(args: any, filter: any, opts: any = {}): Promise<any> {
+  const queryOpts = { first: opts.limit || 50, filter, ...(opts.after ? { after: opts.after } : {}), ...(opts.orderBy ? { orderBy: opts.orderBy } : {}) };
+
+  if (args.projectId) {
+    const project = await withRetry(() => linear.project(args.projectId));
+    return project.issues(queryOpts);
+  }
+  if (args.teamId) {
+    const team = await withRetry(() => linear.team(args.teamId));
+    return team.issues(queryOpts);
+  }
+  return withRetry(() => linear.issues(queryOpts));
 }
 
 // Tool handler
@@ -494,33 +509,30 @@ async function handleTool(name: string, args: any) {
 
       let results;
       if (args.query) {
+        // issueSearch is a top-level query — add team/project to filter for scoping
+        const searchFilter = { ...filter };
+        if (args.teamId) searchFilter.team = { id: { eq: args.teamId } };
+        if (args.projectId) searchFilter.project = { id: { eq: args.projectId } };
         results = await withRetry(() =>
           linear.issueSearch({
             query: args.query,
             first: limit,
             ...(args.after ? { after: args.after } : {}),
-            filter,
+            filter: searchFilter,
             orderBy,
           })
         );
       } else {
-        results = await withRetry(() =>
-          linear.issues({
-            first: limit,
-            ...(args.after ? { after: args.after } : {}),
-            filter,
-            orderBy,
-          })
-        );
+        // Use scoped queries (team.issues / project.issues) for reliability
+        results = await fetchIssuesScoped(args, filter, { limit, after: args.after, orderBy });
       }
 
       let issues = await Promise.all(
         results.nodes.map((issue: any) => formatIssue(issue))
       );
 
-      // Client-side date filtering fallback
+      // Client-side filtering fallback
       issues = applyClientSideDateFilters(issues, args);
-      // Client-side team filtering fallback
       issues = applyClientSideTeamFilter(issues, args);
 
       const pageInfo = results.pageInfo;
@@ -541,21 +553,15 @@ async function handleTool(name: string, args: any) {
         filter.archivedAt = { null: true };
       }
 
-      const results = await withRetry(() =>
-        linear.issues({
-          first: limit,
-          ...(args.after ? { after: args.after } : {}),
-          filter,
-        })
-      );
+      // Use scoped queries (team.issues / project.issues) for reliability
+      const results = await fetchIssuesScoped(args, filter, { limit, after: args.after });
 
       let issues = await Promise.all(
         results.nodes.map((issue: any) => formatIssue(issue))
       );
 
-      // Client-side date filtering fallback
+      // Client-side filtering fallback
       issues = applyClientSideDateFilters(issues, args);
-      // Client-side team filtering fallback
       issues = applyClientSideTeamFilter(issues, args);
 
       const pageInfo = results.pageInfo;
