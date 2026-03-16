@@ -252,6 +252,18 @@ const tools = [
       required: ["teamId"],
     },
   },
+  {
+    name: "linear_get_project_milestones",
+    description:
+      "Get milestones for a project. Returns milestone details including target dates, status, and progress.",
+    inputSchema: {
+      type: "object" as const,
+      properties: {
+        projectId: { type: "string", description: "Project ID" },
+      },
+      required: ["projectId"],
+    },
+  },
 ];
 
 // Resolve issue ID — supports both UUID and identifier (e.g. SCM-123)
@@ -305,9 +317,9 @@ function buildIssueFilter(args: any) {
   if (args.projectId) filter.project = { id: { eq: args.projectId } };
   if (args.assigneeId) filter.assignee = { id: { eq: args.assigneeId } };
   if (args.stateId) filter.state = { id: { eq: args.stateId } };
-  if (args.stateName) filter.state = { name: { eqCaseInsensitive: args.stateName } };
+  if (args.stateName) filter.state = { name: { eq: args.stateName } };
   if (args.priority !== undefined) filter.priority = { eq: args.priority };
-  if (args.labelName) filter.labels = { name: { eqCaseInsensitive: args.labelName } };
+  if (args.labelName) filter.labels = { name: { eq: args.labelName } };
   if (args.createdAfter) filter.createdAt = { gte: new Date(args.createdAfter) };
   if (args.updatedAfter) filter.updatedAt = { gte: new Date(args.updatedAfter) };
   if (args.completedAfter)
@@ -567,6 +579,8 @@ async function handleTool(name: string, args: any) {
         progress: project.progress,
         targetDate: project.targetDate,
         startDate: project.startDate,
+        startedAt: project.startedAt,
+        completedAt: project.completedAt,
         url: project.url,
         lead: lead ? { id: lead.id, name: lead.name } : null,
         teams: teams.nodes.map((t: any) => ({
@@ -624,6 +638,20 @@ async function handleTool(name: string, args: any) {
       }));
     }
 
+    case "linear_get_project_milestones": {
+      const project = await linear.project(args.projectId);
+      const milestones = await project.projectMilestones();
+      return milestones.nodes.map((m: any) => ({
+        id: m.id,
+        name: m.name,
+        description: m.description,
+        targetDate: m.targetDate,
+        status: m.status,
+        progress: m.progress,
+        sortOrder: m.sortOrder,
+      }));
+    }
+
     default:
       throw new Error(`Unknown tool: ${name}`);
   }
@@ -631,7 +659,7 @@ async function handleTool(name: string, args: any) {
 
 // Create MCP server
 const server = new Server(
-  { name: "sabai-linear", version: "1.1.0" },
+  { name: "sabai-linear", version: "1.2.0" },
   { capabilities: { tools: {} } }
 );
 
