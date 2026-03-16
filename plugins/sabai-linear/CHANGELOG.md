@@ -5,6 +5,17 @@ All notable changes to this plugin will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.5.0] - 2026-03-16
+
+### Changed
+- Rewrote `/dependencies` command with step-by-step MCP tool instructions
+- Dual mode: ticket-level 2-depth graph traversal and project-wide dependency map
+- Detects circular dependencies, critical paths, bottlenecks, and orphaned issues
+- Rewrote `/refine` command with step-by-step MCP tool instructions
+- Dual mode: single-ticket deep analysis and backlog-wide refinement readiness scoring
+- Interactive flow for applying suggested improvements (AC, estimate, labels, priority)
+- Compares against completed tickets for estimation guidance
+
 ## [1.4.0] - 2026-03-16
 
 ### Changed

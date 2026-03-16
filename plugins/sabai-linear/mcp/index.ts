@@ -659,7 +659,7 @@ async function handleTool(name: string, args: any) {
 
 // Create MCP server
 const server = new Server(
-  { name: "sabai-linear", version: "1.4.0" },
+  { name: "sabai-linear", version: "1.5.0" },
   { capabilities: { tools: {} } }
 );
 
