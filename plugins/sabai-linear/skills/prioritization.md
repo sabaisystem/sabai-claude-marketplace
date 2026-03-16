@@ -83,20 +83,6 @@ Categorize features by necessity:
 - Feature H - Descoped
 ```
 
-## Value vs Effort Matrix
-
-Quick 2×2 prioritization:
-
-```
-High Value │ Quick Wins    │ Major Projects
-           │ (Do First)    │ (Plan Carefully)
-───────────┼───────────────┼────────────────
-Low Value  │ Fill-ins      │ Time Sinks
-           │ (Do If Time)  │ (Avoid)
-           └───────────────┴────────────────
-              Low Effort      High Effort
-```
-
 ## How to Use
 
 1. **Gather features** - List all candidates
@@ -105,6 +91,50 @@ Low Value  │ Fill-ins      │ Time Sinks
 4. **Rank by score** - Highest first
 5. **Sanity check** - Does the ranking make sense?
 6. **Create tickets** - Use `/ticket` to create in Linear with priority
+
+## Score Storage in Linear
+
+When using `/prioritize`, scores are persisted in Linear for later retrieval by `/prioritize rank`.
+
+### Numerical Scores (RICE/ICE)
+
+Stored as a metadata block in the issue description using delimiters:
+
+```markdown
+<!-- prioritization-metadata -->
+| Field | Value |
+|-------|-------|
+| Framework | RICE |
+| Reach | 1000 |
+| Impact | 2 |
+| Confidence | 80% |
+| Effort | 2 |
+| Score | 800 |
+| Scored | 2026-03-16 |
+<!-- /prioritization-metadata -->
+```
+
+When writing, replace any existing block between the delimiters, or append if none exists.
+
+### Category Scores (MoSCoW)
+
+Stored as Linear labels: `moscow:must`, `moscow:should`, `moscow:could`, `moscow:wont`. Remove any existing `moscow:*` label before applying a new one.
+
+## Value vs Effort Matrix
+
+> **Note:** This matrix is auto-derived from RICE/ICE scores by `/prioritize rank`. Value is mapped from the score (above/below median), and Effort is mapped from the RICE Effort factor or inverted ICE Ease score.
+
+Quick 2x2 prioritization:
+
+```
+High Value | Quick Wins    | Major Projects
+           | (Do First)    | (Plan Carefully)
+-----------+---------------+----------------
+Low Value  | Fill-ins      | Time Sinks
+           | (Do If Time)  | (Avoid)
+           +--------------+----------------
+             Low Effort      High Effort
+```
 
 ## Integration with Linear
 
