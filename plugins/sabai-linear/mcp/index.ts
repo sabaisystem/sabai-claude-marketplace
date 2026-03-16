@@ -305,9 +305,9 @@ function buildIssueFilter(args: any) {
   if (args.projectId) filter.project = { id: { eq: args.projectId } };
   if (args.assigneeId) filter.assignee = { id: { eq: args.assigneeId } };
   if (args.stateId) filter.state = { id: { eq: args.stateId } };
-  if (args.stateName) filter.state = { name: { eqCaseInsensitive: args.stateName } };
+  if (args.stateName) filter.state = { name: { eq: args.stateName } };
   if (args.priority !== undefined) filter.priority = { eq: args.priority };
-  if (args.labelName) filter.labels = { name: { eqCaseInsensitive: args.labelName } };
+  if (args.labelName) filter.labels = { name: { eq: args.labelName } };
   if (args.createdAfter) filter.createdAt = { gte: new Date(args.createdAfter) };
   if (args.updatedAfter) filter.updatedAt = { gte: new Date(args.updatedAfter) };
   if (args.completedAfter)
