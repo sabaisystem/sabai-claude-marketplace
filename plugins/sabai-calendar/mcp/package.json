@@ -1,0 +1,19 @@
+{
+  "name": "sabai-calendar-mcp",
+  "version": "1.0.0",
+  "description": "Google Calendar MCP server for sabai-calendar plugin",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "auth": "node auth.js"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.0",
+    "googleapis": "^144.0.0",
+    "open": "^10.0.0"
+  },
+  "devDependencies": {
+    "esbuild": "^0.27.3"
+  }
+}

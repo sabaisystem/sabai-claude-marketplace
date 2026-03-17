@@ -1,0 +1,5 @@
+node_modules/
+config/credentials.json
+config/token.json
+.npm-install.lock
+package-lock.json

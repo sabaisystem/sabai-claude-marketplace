@@ -1,214 +1,91 @@
-# Action Items
+# Action Items Tracker
 
-Extract and track action items from your meetings.
+Extract, track, and cross-reference action items across meetings.
 
-## Usage
+## How it works
 
-```
-/sabai-granola:actions [timeframe or filter]
-```
+Action items live inside meeting notes and transcripts as unstructured text. This skill extracts them, figures out who owns each one, and — crucially — cross-references across multiple meetings with the same company or participants to determine which items have been completed and which are still pending.
 
-## Examples
+## Workflow
 
-- `/sabai-granola:actions` (from recent meetings)
-- `/sabai-granola:actions this week`
-- `/sabai-granola:actions last 7 days`
-- `/sabai-granola:actions my items` (only items assigned to me)
-- `/sabai-granola:actions for John` (items assigned to John)
-- `/sabai-granola:actions overdue`
+0. **Login Check (Mandatory — Run First Every Chat).** **First command in this chat session** (no Granola call has been made yet in this conversation): inform the user ("Let me refresh your Granola connection to start this session."), then execute the `/sabai-granola:connect` flow to force a fresh login — even if already logged in. Do NOT proceed until authentication is confirmed. **Subsequent commands in the same chat** (a successful Granola call already happened earlier): call `list_meetings` with `time_range: "this_week"` as a quick auth check. If it succeeds → proceed. If it fails → re-run `/sabai-granola:connect`.
 
----
+1. **Determine scope.** From the user's request, figure out what to look at:
+   - A specific meeting? (e.g., "action items from the Acme call")
+   - A person? (e.g., "what action items does Sarah have?")
+   - A time range? (e.g., "action items from this week")
+   - Everything? (e.g., "what do I need to do?")
 
-## Instructions
+2. **Gather action items.**
 
-You are an action item tracker. Use Granola MCP to extract commitments, tasks, and follow-ups from meetings.
+   **For a specific meeting:** Call `get_meetings` with the meeting ID to pull details and notes that contain action items.
 
-### What Counts as an Action Item
+   **For broader queries:** Call `query_granola_meetings` with a prompt like:
+   > "What action items, to-dos, commitments, or follow-up tasks were assigned in recent meetings? For each item, include who is responsible and any deadline mentioned."
 
-Scan meetings for:
-- Explicit commitments: "I'll send that by Friday"
-- Assigned tasks: "John, can you handle the proposal?"
-- Follow-ups: "Let's circle back on this next week"
-- Promised deliverables: "We'll have the mockups ready"
-- Questions to answer: "I need to check on that and get back to you"
-- Scheduled actions: "I'll set up a meeting with the team"
+   **For a person:** Target the query:
+   > "What action items or tasks were assigned to [name] in recent meetings?"
 
-### Output Format
+3. **Cross-reference for completion status.** This is what makes the skill valuable. For each action item found:
 
-```markdown
-## Action Items: [Timeframe]
-**Meetings analyzed:** [X] | **Total actions:** [X] | **Your actions:** [X]
+   - Identify the company or group of participants involved
+   - Look at subsequent meetings with the same company/participants using `query_granola_meetings`:
+     > "In follow-up meetings with [Acme / these participants], were any of these action items addressed, completed, or discussed as done? Items: [list items]"
+   - Mark items as **completed** if a later meeting confirms they were done
+   - Mark items as **pending** if there's no evidence of completion
+   - Mark items as **overdue** if a deadline was mentioned and has passed
 
----
+4. **Extract due dates (best-effort).** Action items in meeting notes rarely have clean dates. Do your best to parse relative dates ("by end of week", "before the next meeting", "by March 15") and convert them to actual dates based on when the meeting took place. Flag these as approximate.
 
-### Your Action Items
+5. **Format the output.** Present action items with checkboxes:
 
-#### High Priority / Overdue
+   ```
+   ### Acme Corp
 
-| Action | Company/Deal | From Meeting | Due | Status |
-|--------|--------------|--------------|-----|--------|
-| Send pricing proposal | **Acme Corp** | Discovery - Acme | Jan 17 | ⚠️ Overdue |
-| Review Sarah's PR | *Internal* | 1:1 with Sarah | Jan 18 | 🔴 Due today |
+   From: Acme Q1 Review (March 5) [[0]](url)
 
-#### This Week
+   - [x] Send updated pricing proposal — **Sarah** (due March 7) ✅ Addressed in March 8 follow-up [[1]](url)
+   - [ ] Review contract redlines — **You** (due March 10)
+   - [ ] Schedule demo for technical team — **John** (no deadline set) ⚠️ Overdue?
 
-| Action | Company/Deal | From Meeting | Due | Context |
-|--------|--------------|--------------|-----|---------|
-| Schedule follow-up demo | **Acme Corp** | Discovery - Acme | Jan 20 | After they review proposal |
-| Prepare Q1 roadmap draft | *Internal* | Planning meeting | Jan 21 | For steerco review |
-| Send integration specs | **TechStart Inc** | Technical review | Jan 22 | For their dev team |
+   ### Internal — Dev Team
 
-#### Upcoming / No Due Date
+   From: Team Standup (March 6) [[2]](url)
 
-| Action | Company/Deal | From Meeting | Context |
-|--------|--------------|--------------|---------|
-| Look into API rate limits | **BigCo** | Eng sync | Customer reported issues |
-| Connect John with marketing | *Internal* | 1:1 with John | For campaign support |
+   - [x] Fix login bug on staging — **Mike** ✅ Confirmed fixed in March 7 standup [[3]](url)
+   - [ ] Write API documentation for v2 endpoints — **You** (due March 14)
+   ```
 
----
+6. **Preserve citation links.** Every action item should trace back to its source meeting. Include `[[0]](url)` citations from `query_granola_meetings`, and when referencing the meeting where completion was confirmed, cite that too.
 
-### Delegated / Assigned to Others
+7. **Handle edge cases:**
+   - If no action items are found, say so and suggest the user try a specific meeting or broader time range
+   - If completion status is ambiguous (mentioned but not clearly resolved), flag it as "unclear — may want to follow up"
+   - If the user asks to filter by assignee, only show items owned by that person
 
-| Action | Owner | Company/Deal | From Meeting | Due | Status |
-|--------|-------|--------------|--------------|-----|--------|
-| Draft contract | Legal | **Acme Corp** | Discovery - Acme | Jan 22 | Pending |
-| Fix auth bug | Sarah | *Internal* | Standup | Jan 18 | In progress |
-| Send case studies | Marketing | **TechStart Inc** | Sales sync | Jan 19 | Not started |
+## What counts as an action item
 
----
+Look for language patterns like:
+- "[Person] will [do something]"
+- "Action item: ..."
+- "TODO: ..."
+- "Let's make sure to..."
+- "Can you [do something] by [date]?"
+- "I'll take care of..."
+- "Next steps: ..."
 
-### Completed Recently
+Be inclusive rather than exclusive — it's better to surface a potential action item than to miss a real one. The user can ignore false positives.
 
-| Action | Owner | Company/Deal | From Meeting | Completed |
-|--------|-------|--------------|--------------|-----------|
-| Send intro email | You | **NewCo** | Networking event | Jan 15 ✅ |
-| Update dashboard | Mike | *Internal* | Sprint review | Jan 14 ✅ |
+## Follow-up Actions
 
----
+After displaying action items, use `AskUserQuestion` to offer contextual next steps based on what was found. For example:
 
-### By Company/Deal
+If there are pending items with Acme:
+> "What would you like to do next?"
+> Options: "Draft a follow-up email to Acme about pending items", "Summarize the last Acme meeting", "Check upcoming commitments with Acme", "Get coached on follow-through"
 
-#### Acme Corp
-**Deal stage:** Discovery | **Next meeting:** Jan 20
+If overdue items were found:
+> "You have overdue items. What would you like to do?"
+> Options: "Draft a status update email", "Search for related meetings", "See the full summary of the source meeting"
 
-| Action | Owner | Due | Status |
-|--------|-------|-----|--------|
-| Send pricing proposal | You | Jan 17 | ⚠️ Overdue |
-| Schedule follow-up demo | You | Jan 20 | Pending |
-| Draft contract | Legal | Jan 22 | Pending |
-
-#### TechStart Inc
-**Deal stage:** Technical Review | **Next meeting:** Jan 23
-
-| Action | Owner | Due | Status |
-|--------|-------|-----|--------|
-| Send integration specs | You | Jan 22 | Pending |
-| Send case studies | Marketing | Jan 19 | Not started |
-
-#### Internal
-
-| Action | Owner | Due | Status |
-|--------|-------|-----|--------|
-| Review Sarah's PR | You | Jan 18 | 🔴 Due today |
-| Prepare Q1 roadmap draft | You | Jan 21 | Pending |
-| Fix auth bug | Sarah | Jan 18 | In progress |
-
----
-
-### Summary
-
-| Status | Count |
-|--------|-------|
-| ⚠️ Overdue | 1 |
-| 🔴 Due today | 1 |
-| 🟡 Due this week | 3 |
-| 🟢 Upcoming | 4 |
-| ✅ Completed | 2 |
-| 👥 Delegated | 3 |
-
-### By Company
-
-| Company/Deal | Open Items | Overdue | Next Action |
-|--------------|------------|---------|-------------|
-| **Acme Corp** | 3 | 1 | Send pricing proposal |
-| **TechStart Inc** | 2 | 0 | Send case studies |
-| **BigCo** | 1 | 0 | Look into API rate limits |
-| *Internal* | 4 | 0 | Review Sarah's PR |
-```
-
-### Filtering Options
-
-**By owner:**
-- `my items` - Only items assigned to the user
-- `for [name]` - Items assigned to specific person
-- `delegated` - Items assigned to others
-
-**By status:**
-- `overdue` - Past due date
-- `due today` - Due today
-- `due this week` - Due within the week
-- `completed` - Recently completed items
-
-**By meeting:**
-- `from [meeting name]` - Items from specific meeting
-
-**By company:**
-- `for Acme` - Items related to a specific company
-- `external` - Only customer/external items
-- `internal` - Only internal items
-
-### Company/Deal Extraction
-
-For each action item, identify the associated company or deal:
-
-**External meetings:**
-- Extract company name from meeting title (e.g., "Discovery - Acme Corp" → Acme Corp)
-- Extract from participant email domains (e.g., @acme.com → Acme)
-- Extract from meeting content (company mentions)
-
-**Internal meetings:**
-- Mark as *Internal*
-- If discussing a specific customer, still tag with that company
-
-**Deal context:**
-- If you can identify deal stage from meeting type or content, include it
-- Discovery, Demo, Technical Review, Negotiation, Closed, etc.
-
-**Why this matters:**
-Users need to link actions to their CRM or task manager. Always include company context so they can:
-- Create tasks linked to the right deal/account
-- Filter by customer when prioritizing
-- See all open items for a customer before a call
-
-### Due Date Detection
-
-Extract due dates from:
-- Explicit dates: "by Friday", "before the 20th"
-- Relative dates: "by end of week", "next Monday"
-- Implicit urgency: "ASAP", "urgent" → flag as high priority
-- No date mentioned: mark as "No due date"
-
-### Status Detection
-
-Check subsequent meetings to see if items were:
-- Mentioned as done → mark completed
-- Still being discussed → mark in progress
-- Never mentioned again → flag for follow-up
-
-### Completion Detection
-
-An action item is likely complete if:
-- It was explicitly marked done in a later meeting
-- The deliverable was discussed as received
-- A follow-up action superseded it
-
-### Guidelines
-
-- Be thorough - capture all commitments, even small ones
-- Attribute correctly - note who committed to what
-- **Always include company/deal** - users need this to link to CRM/task managers
-- Surface overdue items prominently
-- Group by company in addition to by status/meeting
-- Include context so items are actionable without re-reading meetings
-- Track both your items AND items you're waiting on from others
-- For customer-related items, include deal stage if identifiable
+Always tie options to the specific action items, companies, or people that appeared in the output.

@@ -27,12 +27,14 @@ plugins/
 
 When creating a new plugin:
 
-1. **Create the folder structure** under `plugins/`
-2. **Add plugin.json** with name, description, and configuration
-3. **Add README.md** documenting what the plugin does and how to use it
-4. **Build and test** before committing
-5. **Update the main README.md** to list the new plugin
-6. **Add to marketplace.json** (see below)
+1. **Create a Linear project** using `mcp__linear__create_project` with name "Sabai [Plugin Name]" and team "Sabai Claude Marketplace"
+2. **Create a ticket** in that project for the initial implementation
+3. **Create the folder structure** under `plugins/`
+4. **Add plugin.json** with name, description, and configuration
+5. **Add README.md** documenting what the plugin does and how to use it
+6. **Build and test** before committing
+7. **Update the main README.md** to list the new plugin
+8. **Add to marketplace.json** (see below)
 
 ## Marketplace Configuration
 
@@ -82,6 +84,97 @@ Include a footer link to sabaisystem.com when building MCP Apps.
 - Support both light and dark modes for UIs
 - Test plugins before committing
 - Keep dependencies minimal
+
+## Testing MCP Plugins
+
+### Marketplace Deployment (Production)
+
+When deploying through the marketplace, plugins work normally:
+- `startup.sh` runs `npm install` to install dependencies
+- MCP server starts with `node index.js`
+- No bundling required
+
+### Local Testing with Zip Import (Claude for Work)
+
+When testing plugins by importing a zip file into Claude for Work, **bundling is required** because:
+- Claude for Work's sandboxed environment cannot run `npm install`
+- Dependencies must be pre-bundled into a single file
+
+### How to Bundle for Testing
+
+1. **Add esbuild as devDependency**:
+   ```bash
+   cd plugins/plugin-name/mcp
+   npm install esbuild --save-dev
+   ```
+
+2. **Bundle the server**:
+   ```bash
+   npx esbuild index.js --bundle --platform=node --target=node18 --outfile=dist/server.cjs --format=cjs --minify
+   ```
+
+3. **Update startup.sh for bundled mode**:
+   ```bash
+   # For testing (bundled)
+   exec node dist/server.cjs
+
+   # For production (normal)
+   exec node index.js
+   ```
+
+4. **Create zip with correct structure** (CRITICAL):
+   ```bash
+   # CORRECT: cd INTO the plugin folder first
+   cd plugins/plugin-name
+   zip -r ~/Desktop/plugin-name.zip . -x "mcp/node_modules/*" -x "mcp/package-lock.json"
+
+   # WRONG: Don't zip from the repo root
+   # zip -r plugin.zip plugins/plugin-name  ← This creates wrong structure!
+   ```
+
+### Zip Structure Requirements
+
+Claude for Work expects the `.claude-plugin/` folder at the **root** of the zip:
+
+```
+✅ CORRECT structure:
+plugin-name.zip
+├── .claude-plugin/
+│   └── plugin.json
+├── mcp/
+│   ├── dist/
+│   │   └── server.cjs
+│   └── startup.sh
+├── commands/
+├── skills/
+└── README.md
+
+❌ WRONG structure:
+plugin-name.zip
+└── plugins/
+    └── plugin-name/
+        ├── .claude-plugin/
+        │   └── plugin.json
+        └── ...
+```
+
+**Key:** Always `cd` into the plugin folder before creating the zip.
+
+### When to Bundle
+
+| Scenario | Bundle Required? |
+|----------|------------------|
+| Marketplace deployment | No |
+| Claude Code CLI | No |
+| Claude for Work zip import | **Yes** |
+| Claude Desktop manual config | No |
+
+### Important Notes
+
+- Keep `esbuild` as devDependency for testing support
+- The `dist/` folder with bundled server is only needed for zip testing
+- Don't commit `dist/server.cjs` to git unless specifically needed
+- Include credentials and token in test zips (but never commit them)
 
 ## Automatic Release Management (CRITICAL)
 
@@ -254,26 +347,37 @@ Follow conventional commit format:
 
 When asked to implement, fix, or change anything in a plugin:
 
-### Step 1: Check for Existing Ticket
+### Step 1: Check for Existing Project (New Plugins Only)
+
+If creating a **new plugin**, first check if a Linear project exists:
+1. Search for the project using `mcp__linear__list_projects`
+2. If no project exists, **create one first** using `mcp__linear__create_project`:
+   ```
+   mcp__linear__create_project(name="Sabai [Plugin Name]", team="Sabai Claude Marketplace")
+   ```
+3. Each plugin MUST have its own Linear project for issue tracking
+
+### Step 2: Check for Existing Ticket
 
 1. Search Linear for an existing ticket matching the request
 2. If found, confirm with user: "I found ticket SCM-XX for this. Should I work on it?"
 
-### Step 2: Create Ticket if None Exists
+### Step 3: Create Ticket if None Exists
 
 If no ticket exists:
 1. **Create the ticket first** using `mcp__linear__create_issue`
 2. Include: title, overview, requirements, acceptance criteria
-3. **Show the ticket to the user** with the Linear link
-4. **Ask for confirmation**: "Is this ticket clear? Would you like to edit it or should I start working?"
+3. **Assign to the correct project** (the plugin's project)
+4. **Show the ticket to the user** with the Linear link
+5. **Ask for confirmation**: "Is this ticket clear? Would you like to edit it or should I start working?"
 
-### Step 3: Wait for Approval
+### Step 4: Wait for Approval
 
 - If user wants edits → update the ticket, ask again
 - If user approves → change status to "In Progress" and start working
 - If user says "later" → leave ticket in backlog, don't start
 
-### Step 4: Work on the Ticket
+### Step 5: Work on the Ticket
 
 Only after user approval:
 1. Update ticket status to "In Progress"
@@ -323,6 +427,8 @@ Always show both app and browser links when displaying tickets:
 
 ### Commands
 
+- `/status` - Show current git context and plugin status overview
+- `/status <plugin>` - Show detailed status for a specific plugin
 - `/todo <plugin> <description>` - Create a ticket and optionally start working
 - `/work-on <ticket-id>` - Work on an existing ticket
 - `/work-on <plugin>` - List and work on tickets for a plugin

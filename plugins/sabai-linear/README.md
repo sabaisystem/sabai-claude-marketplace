@@ -5,9 +5,9 @@
 | Field | Value |
 |-------|-------|
 | Type | MCP + Skills + Commands |
-| Version | 1.0.0 |
+| Version | 1.5.1 |
 | Status | Active |
-| Command | `/prd`, `/ticket`, `/standup`, `/status`, `/backlog`, `/sprint` |
+| Command | `/prd`, `/ticket`, `/standup`, `/status`, `/backlog`, `/sprint`, `/prioritize` |
 | Repo | `plugins/sabai-linear` |
 
 ---
@@ -20,7 +20,7 @@ A Product Manager assistant plugin with Linear integration. Create tickets from 
 
 - PRD creation with structured templates
 - Ticket creation from templates (feature, bug, improvement, spike, epic)
-- Backlog management and prioritization
+- Backlog management and prioritization with interactive scoring calculators
 - Sprint planning with capacity tracking
 - Daily standup and weekly status report generation
 - Release notes generation
@@ -51,6 +51,7 @@ A Product Manager assistant plugin with Linear integration. Create tickets from 
 
 ### Planning
 - `/sprint [action] [name]` - Sprint planning/review/capacity
+- `/prioritize [framework] [scope]` - Interactive prioritization (RICE, ICE, MoSCoW, Rank)
 - `/risk [project|ticket]` - Risk assessment (multiple frameworks)
 
 ### Backlog Management
@@ -60,28 +61,34 @@ A Product Manager assistant plugin with Linear integration. Create tickets from 
 - `/dependencies [ticket|project]` - Analyze dependencies
 - `/refine [ticket|backlog]` - Refinement assistant
 
-## Configuration
+## MCP Tools
 
-### MCP Server Setup
-
-```json
-{
-  "mcpServers": {
-    "linear": {
-      "command": "npx",
-      "args": ["-y", "mcp-remote", "https://mcp.linear.app/mcp"]
-    }
-  }
-}
-```
+- `linear_create_issue` - Create a new issue with title, description, team, priority, labels
+- `linear_get_issue` - Get full issue details by ID or identifier (e.g. SCM-123)
+- `linear_search_issues` - Search issues with text query and filters
+- `linear_list_issues` - List issues by team, project, state, or assignee
+- `linear_update_issue` - Update issue fields (status, priority, assignee, etc.)
+- `linear_get_teams` - List all teams in the workspace
+- `linear_get_team` - Get team details including members, states, and labels
+- `linear_list_projects` - List projects, optionally filtered by team
+- `linear_get_project` - Get project details with progress and members
+- `linear_update_project` - Update project name, description, or status
+- `linear_get_cycles` - List cycles (sprints) for a team with progress data
 
 ## Authentication
 
-OAuth via Linear. On first use, you'll be prompted to authorize access to your Linear workspace. No API key needed.
+Token-based auth using a Linear Personal API Key. No browser popup required — works in both Claude Code CLI and CoWork sandboxed environments.
+
+### Setup
+
+1. Go to [Linear Settings > Account > Security & Access](https://linear.app/settings/account/security)
+2. Under "Personal API keys", click **New API key**
+3. Give it a name (e.g. "Claude Plugin") and select permissions
+4. Copy the key and set it as the `LINEAR_API_KEY` environment variable
 
 ## Dependencies
 
-- **Required**: Linear account, Node.js 18+
+- **Required**: Linear account, Node.js 18+, `LINEAR_API_KEY` environment variable
 
 ## Limitations
 
