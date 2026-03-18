@@ -1,11 +1,11 @@
 {
   "name": "sabai-remotion",
-  "description": "Remotion video production assistant for briefs, storyboards, composition plans, and render-ready implementation guidance.",
-  "version": "1.0.0",
+  "description": "Video creation assistant — generates Remotion components and renders MP4 videos with GIF previews.",
+  "version": "3.1.0",
   "author": {
     "name": "Sabai Team"
   },
-  "keywords": ["remotion", "video", "motion-design", "storyboard", "animation"],
+  "keywords": ["remotion", "video", "animation", "mp4", "gif"],
   "skills": "./skills/",
   "commands": "./commands/",
   "preferences": {
