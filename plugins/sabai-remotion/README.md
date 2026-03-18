@@ -1,61 +1,49 @@
 # Sabai Remotion
 
-**Remotion video production assistant for briefs, storyboards, composition plans, and render-ready implementation guidance.**
+**Video creation assistant — generates Remotion components and renders MP4 videos with GIF previews.**
 
 | Field | Value |
 |-------|-------|
-| Type | Skills + Commands |
-| Version | 1.0.0 |
+| Type | Skills + Commands + Scripts |
+| Version | 3.1.0 |
 | Status | Active |
-| Command | `/remotion`, `/storyboard`, `/scene`, `/render-plan` |
+| Command | `/video`, `/video carousel` |
 | Repo | `plugins/sabai-remotion` |
 
 ---
 
 ## Overview
 
-Sabai Remotion helps turn rough ideas into structured Remotion work. It is designed for teams building product videos, explainers, social clips, launch assets, and internal motion content who need clear pre-production and implementation guidance before opening their editor.
-
-The plugin focuses on the parts Claude is good at: tightening the brief, splitting a concept into scenes, defining reusable composition structure, and producing implementation notes that map cleanly to a Remotion codebase.
+Sabai Remotion turns ideas into rendered videos. Describe what you want, and it generates Remotion React components, renders them into MP4 videos, and automatically creates GIF previews so you can review the animation before downloading the final file.
 
 ## Key Features
 
-- Turn a short prompt into a concrete Remotion production brief
-- Build storyboard and shot-by-shot scene plans with durations
-- Define composition hierarchy, props, timing, and transition ideas
-- Generate implementation handoff notes for a developer or motion designer
-- Adapt output for landscape, portrait, or square deliverables
+- Turn a prompt into a Remotion video (MP4 output)
+- Auto-generate GIF preview after every render for quick review
+- LinkedIn Carousel creation (1200×1500 slides → PDF)
+- Platform auto-detection (TikTok, YouTube, Instagram, LinkedIn, etc.)
+- Animation patterns library (text reveals, transitions, data viz)
+- Ready-to-use templates (intro/outro, data viz, product showcase, carousel)
 
 ## Use Cases
 
-- "Turn this launch announcement into a 30 second Remotion video"
-- "Storyboard a 9:16 social teaser for our product update"
-- "Help me break this script into scenes and transitions"
-- "Create a render plan for a Remotion composition with captions and charts"
+- "Create a 30-second intro animation with our logo"
+- "Make a TikTok countdown timer from 10 to 0"
+- "Animated bar chart showing Q1: 45, Q2: 72, Q3: 61, Q4: 89"
 
 ## Commands
 
-- `/remotion [brief]` - Create or refine a complete Remotion video plan
-- `/storyboard [brief]` - Produce a storyboard with scenes, beats, and timing
-- `/scene [brief or scene goal]` - Drill into a single scene's layout, motion, and copy
-- `/render-plan [brief or code context]` - Prepare a render-ready implementation handoff
+- `/video create [description]` - Create a new video from a description
+- `/video carousel [description]` - Create a LinkedIn carousel PDF (1200×1500 per slide)
+- `/video preview` - Preview the current video (renders MP4 + GIF)
+- `/video render [options]` - Render video to downloadable file
+- `/video templates` - Browse starter templates
 
 ## Configuration
 
 ### Settings
 
 Customize defaults in plugin settings:
-
-```json
-{
-  "preferences": {
-    "default_format": "landscape-16:9",
-    "default_fps": 30,
-    "default_duration_seconds": 30,
-    "brand_voice": "clear, modern, product-focused"
-  }
-}
-```
 
 | Preference | Description | Default |
 |------------|-------------|---------|
@@ -70,21 +58,15 @@ None required.
 
 ## Dependencies
 
-- **Required**: None for planning
-- **Optional**: A local Remotion project if you want the output translated directly into component or composition code
+- **Required**: Node.js 18+, npm
+- **Required**: ffmpeg (for GIF conversion from MP4)
+- **Required**: ImageMagick or img2pdf (for carousel PDF stitching)
 
 ## Limitations
 
-- This plugin does not render videos by itself
-- Final code still depends on your project's Remotion setup, assets, and fonts
+- Rendering requires a Cowork VM or environment with headless Chrome
+- All assets must be code-generated (no external image/video imports)
 - Complex motion direction may need iteration after the first pass
-
-## Tips
-
-- Start with audience, format, and duration before discussing animation details
-- Keep one visual idea per scene unless the video is intentionally dense
-- Use `/scene` to refine the hardest moment instead of reworking the entire storyboard
-- Use `/render-plan` when you are ready to hand work to a developer
 
 ## Links
 
