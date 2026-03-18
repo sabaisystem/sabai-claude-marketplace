@@ -7,7 +7,7 @@ Public marketplace for Claude plugins by [Sabai System](https://sabaisystem.com)
 | Plugin | Description | Type | Version | Status | Updated |
 |--------|-------------|------|---------|--------|---------|
 | [sabai-sudoku](plugins/sabai-sudoku) | Interactive Sudoku game with smart hints | MCP App | 1.0.0 | Active | 2026-02-16 |
-| [sabai-linear](plugins/sabai-linear) | Product Manager assistant with Linear integration | MCP + Skills + Commands | 1.5.1 | Active | 2026-03-16 |
+| [sabai-linear](plugins/sabai-linear) | Product Manager assistant with Linear integration | MCP + Skills + Commands | 1.5.2 | Active | 2026-03-18 |
 | [sabai-attio](plugins/sabai-attio) | CRM assistant with Attio integration | Skills + Commands | 1.0.0 | Active | 2026-02-16 |
 | [sabai-conversion](plugins/sabai-conversion) | Smart currency and timezone converter with preferences | Skills | 1.0.0 | Active | 2026-02-16 |
 | [sabai-notion](plugins/sabai-notion) | Documentation workflow with Notion integration | MCP + Skills + Commands | 1.0.0 | Active | 2026-02-16 |
@@ -21,7 +21,7 @@ Public marketplace for Claude plugins by [Sabai System](https://sabaisystem.com)
 | [sabai-discord](plugins/sabai-discord) | Discord assistant for server management and messaging | MCP + Skills + Commands | 1.5.0 | Active | 2026-03-06 |
 | [sabai-slack](plugins/sabai-slack) | Full-featured Slack integration for messaging and search | MCP + Skills + Commands | 1.0.0 | Active | 2026-02-16 |
 | [sabai-recall](plugins/sabai-recall) | Meeting bot automation with Recall.ai for recording and transcription | MCP App + Commands | 1.4.0 | Active | 2026-02-16 |
-| [sabai-remotion](plugins/sabai-remotion) | Remotion video production assistant for briefs, storyboards, composition plans, and implementation guidance | Skills + Commands | 1.0.0 | Active | 2026-03-16 |
+| [sabai-remotion](plugins/sabai-remotion) | Full video creation pipeline with Remotion rendering | Skills + Commands + Scripts | 2.1.0 | Active | 2026-03-17 |
 
 **Status:** Active = Stable and maintained | Beta = In development | Deprecated = No longer maintained
 

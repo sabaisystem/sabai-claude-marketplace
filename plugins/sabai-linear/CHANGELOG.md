@@ -5,6 +5,13 @@ All notable changes to this plugin will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.5.2] - 2026-03-18
+
+### Fixed
+- `linear_search_issues` replaced deprecated `issueSearch` API with `searchIssues`
+- `linear_create_document` now requires `projectId` (Linear API rejects documents without a parent)
+- `formatIssue` handles both `Issue` and `IssueSearchResult` objects (labels callable check)
+
 ## [1.5.1] - 2026-03-16
 
 ### Fixed

@@ -326,7 +326,7 @@ const tools = [
   {
     name: "linear_create_document",
     description:
-      "Create a document in Linear with markdown content, optionally linked to a project.",
+      "Create a document in Linear with markdown content, linked to a project.",
     inputSchema: {
       type: "object" as const,
       properties: {
@@ -335,7 +335,7 @@ const tools = [
         projectId: { type: "string", description: "Project ID to attach the document to" },
         icon: { type: "string", description: "Document icon (emoji)" },
       },
-      required: ["title"],
+      required: ["title", "projectId"],
     },
   },
   {
@@ -393,7 +393,7 @@ async function formatIssue(issue: any) {
     issue.state,
     issue.assignee,
     issue.team,
-    issue.labels(),
+    typeof issue.labels === "function" ? issue.labels() : issue.labels,
     issue.project,
   ]);
 
@@ -548,13 +548,12 @@ async function handleTool(name: string, args: any) {
 
       let results;
       if (args.query) {
-        // issueSearch is a top-level query — add team/project to filter for scoping
+        // searchIssues replaces deprecated issueSearch
         const searchFilter = { ...filter };
         if (args.teamId) searchFilter.team = { id: { eq: args.teamId } };
         if (args.projectId) searchFilter.project = { id: { eq: args.projectId } };
         results = await withRetry(() =>
-          linear.issueSearch({
-            query: args.query,
+          linear.searchIssues(args.query, {
             first: limit,
             ...(args.after ? { after: args.after } : {}),
             filter: searchFilter,
