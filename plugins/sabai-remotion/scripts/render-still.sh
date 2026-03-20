@@ -18,21 +18,30 @@ mkdir -p "$(dirname "${OUTPUT_PATH}")"
 
 echo "Rendering still frame ${FRAME}: ${COMPOSITION_ID} → ${OUTPUT_PATH}" >&2
 
-# Render single frame with Remotion CLI
 cd "$(dirname "${ENTRY_FILE}")/.."
-npx remotion still \
-  "${ENTRY_FILE}" \
-  "${COMPOSITION_ID}" \
-  "${OUTPUT_PATH}" \
-  --frame="${FRAME}" \
-  --gl=angle-egl \
-  --log=error \
-  2>&1 >&2
 
-if [ -f "${OUTPUT_PATH}" ]; then
+# Render with GL fallback: try angle-egl first, then swangle
+render_still_with_gl() {
+  npx remotion still \
+    "${ENTRY_FILE}" \
+    "${COMPOSITION_ID}" \
+    "${OUTPUT_PATH}" \
+    --frame="${FRAME}" \
+    --gl="$1" \
+    --log=error \
+    2>&1 >&2
+}
+
+if ! render_still_with_gl "angle-egl"; then
+  echo "GL angle-egl failed, retrying with swangle..." >&2
+  rm -f "${OUTPUT_PATH}"
+  render_still_with_gl "swangle"
+fi
+
+if [ -f "${OUTPUT_PATH}" ] && [ -s "${OUTPUT_PATH}" ]; then
   echo "Still frame rendered: ${OUTPUT_PATH}" >&2
   echo "${OUTPUT_PATH}"
 else
-  echo "Error: Still render failed, output file not created" >&2
+  echo "Error: Still render failed, output file not created or empty" >&2
   exit 1
 fi

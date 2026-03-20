@@ -12,19 +12,24 @@ You are running in a sandboxed VM with:
 - **Output directory**: `/sessions/.../mnt/outputs/` for downloadable files
 - **Download links**: Use `computer://` protocol for file links
 
-## Session Setup
+## Session Setup (MANDATORY — runs before anything else)
 
-At the start of every session where the user wants to create a video:
+**This MUST execute before any command routing or video generation. Never skip this step.**
 
-1. Tell the user: **"Setting up video tools, one moment..."**
-2. Run the setup script:
-   ```bash
-   bash "${CLAUDE_PLUGIN_ROOT}/scripts/setup-remotion.sh"
-   ```
-3. This creates a Remotion project at `/tmp/remotion-project/` with all dependencies installed (~1-2 min)
-4. Once complete, tell the user: **"Video tools ready! What would you like to create?"**
+```bash
+if [ ! -d "/tmp/remotion-project/node_modules" ]; then
+  bash "${CLAUDE_PLUGIN_ROOT}/scripts/setup-remotion.sh"
+fi
+```
 
-**Important:** The setup only needs to run once per session. Check if `/tmp/remotion-project/node_modules` exists before re-running.
+1. Check if `/tmp/remotion-project/node_modules` exists
+2. If NOT found:
+   - Tell the user: **"Setting up video tools, one moment..."**
+   - Run `setup-remotion.sh` (creates Remotion project + installs dependencies, ~1-2 min)
+   - Wait for it to complete
+   - Tell the user: **"Video tools ready!"**
+3. If already exists: skip setup, proceed immediately
+4. **Do NOT proceed to command routing or any other step until setup is confirmed complete**
 
 ## Command Routing
 
@@ -68,6 +73,29 @@ When the user asks to create a video, determine what they need. Reference `refer
 - Codec: h264
 - Background: dark gradient (#0f0f0f → #1a1a2e)
 
+### Step 1.5: Plan Scenes and Timing
+
+Before writing code, briefly plan the video structure. This ensures animations match the content and timing is intentional.
+
+**For every video, map out:**
+1. **Scenes** — what content units exist (intro, each key point, outro/CTA)?
+2. **Frame allocation** — how many frames per scene?
+   - Text reveal: 60–90 frames
+   - Data point / statistic: 45–60 frames
+   - Transition between scenes: 15–20 frames
+   - Hold/breathing room: 15–30 frames
+3. **Animation type per scene** — match the animation to the content:
+   - Statistics/numbers → counter roll-up or progress ring
+   - Feature list → staggered reveal
+   - Key quote/announcement → scale bounce or word-by-word
+   - Before/after → slide transition
+   - Logo/brand → spring scale with fade
+
+**Briefly state the plan to the user before coding**, e.g.:
+> "Here's the plan: 3 scenes — intro with scale-in title (60f), animated bar chart (90f), CTA fade-out (45f). Total: 195 frames at 30fps = 6.5s. Sound good?"
+
+Only proceed to code generation after the user confirms (or if the request was specific enough to skip confirmation).
+
 ### Step 2: Generate the Remotion Component
 
 Write a complete Remotion composition to `/tmp/remotion-project/src/`. Reference `references/remotion-patterns.md` for animation patterns and `references/templates.md` for starter templates.
@@ -82,15 +110,42 @@ Write a complete Remotion composition to `/tmp/remotion-project/src/`. Reference
 ```
 
 **Component rules:**
-- Always use `AbsoluteFill` as the root wrapper
-- Use `useCurrentFrame()` and `useVideoConfig()` for timing
+- Always use `AbsoluteFill` as the root wrapper with `overflow: "hidden"` to prevent elements escaping the viewport
+- Use `useCurrentFrame()` and `useVideoConfig()` for timing — always destructure `width`, `height` (not just `fps`)
 - Use `interpolate()` for smooth value transitions
-- Use `spring()` for natural physics-based animations
+- Use `spring()` for natural physics-based animations — always include `overshootClamping: true` to prevent elements overshooting bounds
 - Use `<Sequence>` for scene ordering
 - Keep all styles inline or in the component (no external CSS files)
 - Use web-safe fonts only (no custom font loading)
 - Colors as hex values
 - All assets must be generated (SVG paths, CSS shapes) — no external image/video imports
+
+**Safe Layout Rules (CRITICAL — prevents elements going off-screen):**
+
+All sizing must be derived from the viewport. Never hardcode pixel values for layout-critical dimensions.
+
+```tsx
+const { width, height, fps } = useVideoConfig();
+const safeMargin = Math.min(width, height) * 0.1;
+
+// Font sizes — always relative to width
+// Title: width * 0.04, Subtitle: width * 0.03, Body: width * 0.024, Caption: width * 0.016
+
+// Spacing — always relative to min dimension
+// Padding: Math.min(width, height) * 0.08
+// Gaps/margins: proportional to width or height
+
+// Animation distances — bounded to safe zone
+// Element entry translate: Math.min(width, height) * 0.04 (max)
+// Scene transitions may use full width/height
+```
+
+Rules:
+- Root `<AbsoluteFill>` must have `overflow: "hidden"` — always
+- Never use hardcoded px for `fontSize`, `padding`, element `width`/`height`, `gap`, or `margin` — derive from `useVideoConfig()` dimensions
+- Springs must use `overshootClamping: true` by default
+- Element entry animations (slide-up, slide-in) must bound translate to `safeMargin` — never translate by the full `width` or `height` for individual elements
+- See `references/remotion-patterns.md` → "Safe Layout Helpers" for the full responsive sizing reference
 
 **Entry point pattern (`index.ts`):**
 ```tsx
@@ -243,11 +298,13 @@ When the user is satisfied:
 ## Tips for Great Videos
 
 - **Start simple**: A clean gradient background with animated text is often more effective than complexity
-- **Use spring() for organic motion**: It looks more natural than linear interpolation
+- **Use spring() for organic motion**: It looks more natural than linear interpolation — always set `overshootClamping: true`
 - **Stagger elements**: Don't animate everything at once — offset entry times by 5-10 frames
 - **Leave breathing room**: Don't fill every frame with motion — let elements rest
 - **Contrast matters**: Ensure text is readable against the background
 - **Keep text concise**: Fewer words on screen = more impact
+- **Respect the safe zone**: Keep all text and key elements within the 10% safe margin from edges
+- **Test at target resolution**: Layout should adapt — never assume 1920×1080
 
 ## What NOT To Do
 
@@ -255,3 +312,7 @@ When the user is satisfied:
 - Don't create compositions longer than 60s without user confirmation
 - Don't use `require()` for assets — everything must be code-generated
 - Don't render at resolutions higher than 1920×1080 unless specifically asked
+- Don't hardcode pixel values (`fontSize: 64`, `padding: 80`) — always derive from `useVideoConfig()` dimensions
+- Don't use `spring()` without `overshootClamping: true` — elements will overshoot and escape the viewport
+- Don't translate elements by the full `width` or `height` for entry animations — bound to safe margin
+- Don't forget `overflow: "hidden"` on the root `<AbsoluteFill>`

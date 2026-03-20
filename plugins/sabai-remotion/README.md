@@ -5,7 +5,7 @@
 | Field | Value |
 |-------|-------|
 | Type | Skills + Commands + Scripts |
-| Version | 3.1.0 |
+| Version | 3.2.0 |
 | Status | Active |
 | Command | `/video`, `/video carousel` |
 | Repo | `plugins/sabai-remotion` |
@@ -22,6 +22,7 @@ Sabai Remotion turns ideas into rendered videos. Describe what you want, and it 
 - Auto-generate GIF preview after every render for quick review
 - LinkedIn Carousel creation (1200×1500 slides → PDF)
 - Platform auto-detection (TikTok, YouTube, Instagram, LinkedIn, etc.)
+- Safe zone enforcement — responsive sizing prevents elements going off-screen
 - Animation patterns library (text reveals, transitions, data viz)
 - Ready-to-use templates (intro/outro, data viz, product showcase, carousel)
 

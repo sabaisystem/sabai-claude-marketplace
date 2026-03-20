@@ -2,6 +2,23 @@
 
 Create, preview, and render Remotion videos through conversation.
 
+## Prerequisites (MUST run before any subcommand)
+
+Before processing ANY subcommand, check if Remotion is set up:
+
+```bash
+if [ ! -d "/tmp/remotion-project/node_modules" ]; then
+  bash "${CLAUDE_PLUGIN_ROOT}/scripts/setup-remotion.sh"
+fi
+```
+
+1. Check if `/tmp/remotion-project/node_modules` exists
+2. If NOT: tell the user **"Setting up video tools, one moment..."** and run `setup-remotion.sh`
+3. Wait for setup to complete (~1-2 min) before proceeding
+4. If it already exists, skip setup and proceed immediately
+
+**This check is mandatory. Never skip it. Never process a subcommand without confirming setup is complete.**
+
 ## Usage
 
 ```
@@ -168,3 +185,5 @@ If the user runs `/video` followed by something that doesn't match a subcommand 
 - `skills/video-creator/references/remotion-patterns.md` — Animation code snippets
 - `skills/video-creator/references/templates.md` — Complete starter templates
 - `skills/video-creator/references/clarifying-questions.md` — Question framework
+
+**v3.2.0:** Videos now use responsive viewport-relative sizing, safe zone enforcement, and higher quality renders (CRF 18). All animations are bounded to prevent elements going off-screen.

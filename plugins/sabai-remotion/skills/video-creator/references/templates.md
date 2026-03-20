@@ -1,6 +1,6 @@
 # Remotion Templates
 
-Complete, working Remotion compositions. Use these as starting points and customize for the user's request.
+Complete, working Remotion compositions. Use these as starting points and customize for the user's request. All templates use responsive, viewport-relative sizing that adapts to any resolution.
 
 ## Intro / Outro Template
 
@@ -20,22 +20,25 @@ import {
 
 export const Video: React.FC = () => {
   const frame = useCurrentFrame();
-  const { fps, durationInFrames } = useVideoConfig();
+  const { fps, width, height, durationInFrames } = useVideoConfig();
+  const minDim = Math.min(width, height);
 
   // Logo animation
-  const logoScale = spring({ frame, fps, config: { damping: 12, stiffness: 180 } });
+  const logoScale = spring({ frame, fps, config: { damping: 12, stiffness: 180, overshootClamping: true } });
   const logoOpacity = interpolate(frame, [0, 15], [0, 1], { extrapolateRight: "clamp" });
 
   // Tagline animation (delayed)
   const taglineFrame = Math.max(0, frame - 25);
   const taglineOpacity = interpolate(taglineFrame, [0, 20], [0, 1], { extrapolateRight: "clamp" });
-  const taglineY = interpolate(taglineFrame, [0, 20], [20, 0], { extrapolateRight: "clamp" });
+  const taglineY = interpolate(taglineFrame, [0, 20], [minDim * 0.02, 0], { extrapolateRight: "clamp" });
 
   // Fade out at the end
   const fadeOut = interpolate(frame, [durationInFrames - 20, durationInFrames], [1, 0], {
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp",
   });
+
+  const logoSize = minDim * 0.12;
 
   return (
     <AbsoluteFill
@@ -44,6 +47,7 @@ export const Video: React.FC = () => {
         justifyContent: "center",
         alignItems: "center",
         opacity: fadeOut,
+        overflow: "hidden",
       }}
     >
       {/* Logo */}
@@ -51,18 +55,18 @@ export const Video: React.FC = () => {
         style={{
           opacity: logoOpacity,
           transform: `scale(${logoScale})`,
-          width: 120,
-          height: 120,
-          borderRadius: 28,
+          width: logoSize,
+          height: logoSize,
+          borderRadius: logoSize * 0.23,
           backgroundColor: "#f26a2c",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          marginBottom: 32,
-          boxShadow: "0 20px 60px rgba(242, 106, 44, 0.3)",
+          marginBottom: minDim * 0.03,
+          boxShadow: `0 ${minDim * 0.02}px ${minDim * 0.06}px rgba(242, 106, 44, 0.3)`,
         }}
       >
-        <div style={{ fontSize: 56, fontWeight: "bold", color: "white" }}>S</div>
+        <div style={{ fontSize: logoSize * 0.47, fontWeight: "bold", color: "white" }}>S</div>
       </div>
 
       {/* Company Name */}
@@ -70,11 +74,11 @@ export const Video: React.FC = () => {
         style={{
           opacity: logoOpacity,
           transform: `scale(${logoScale})`,
-          fontSize: 56,
+          fontSize: width * 0.035,
           fontWeight: "bold",
           color: "white",
-          letterSpacing: 2,
-          marginBottom: 12,
+          letterSpacing: width * 0.001,
+          marginBottom: minDim * 0.012,
         }}
       >
         Your Brand
@@ -85,9 +89,9 @@ export const Video: React.FC = () => {
         style={{
           opacity: taglineOpacity,
           transform: `translateY(${taglineY}px)`,
-          fontSize: 24,
+          fontSize: width * 0.016,
           color: "rgba(255, 255, 255, 0.7)",
-          letterSpacing: 4,
+          letterSpacing: width * 0.002,
           textTransform: "uppercase",
         }}
       >
@@ -138,25 +142,28 @@ const Bar: React.FC<{ item: BarData; index: number; maxValue: number }> = ({
   maxValue,
 }) => {
   const frame = useCurrentFrame();
-  const { fps } = useVideoConfig();
+  const { fps, width, height } = useVideoConfig();
   const delay = index * 8;
   const progress = spring({
     frame: Math.max(0, frame - delay),
     fps,
-    config: { damping: 15, stiffness: 120 },
+    config: { damping: 15, stiffness: 120, overshootClamping: true },
   });
-  const barWidth = (item.value / maxValue) * 600 * progress;
+  const maxBarWidth = width * 0.4;
+  const barWidth = (item.value / maxValue) * maxBarWidth * progress;
   const valueOpacity = interpolate(progress, [0.5, 1], [0, 1], {
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp",
   });
+  const barHeight = height * 0.04;
+  const labelWidth = width * 0.08;
 
   return (
-    <div style={{ display: "flex", alignItems: "center", gap: 16, marginBottom: 16 }}>
+    <div style={{ display: "flex", alignItems: "center", gap: width * 0.012, marginBottom: height * 0.015 }}>
       <div
         style={{
-          width: 100,
-          fontSize: 18,
+          width: labelWidth,
+          fontSize: width * 0.013,
           color: "rgba(255,255,255,0.8)",
           textAlign: "right",
         }}
@@ -165,14 +172,14 @@ const Bar: React.FC<{ item: BarData; index: number; maxValue: number }> = ({
       </div>
       <div
         style={{
-          height: 40,
+          height: barHeight,
           width: barWidth,
           backgroundColor: item.color,
-          borderRadius: "0 8px 8px 0",
+          borderRadius: `0 ${barHeight * 0.2}px ${barHeight * 0.2}px 0`,
           minWidth: 4,
         }}
       />
-      <div style={{ fontSize: 20, color: "white", fontWeight: "bold", opacity: valueOpacity }}>
+      <div style={{ fontSize: width * 0.014, color: "white", fontWeight: "bold", opacity: valueOpacity }}>
         {Math.floor(item.value * progress)}
       </div>
     </div>
@@ -181,11 +188,14 @@ const Bar: React.FC<{ item: BarData; index: number; maxValue: number }> = ({
 
 export const Video: React.FC = () => {
   const frame = useCurrentFrame();
+  const { width, height } = useVideoConfig();
   const maxValue = Math.max(...data.map((d) => d.value));
+  const padding = Math.min(width, height) * 0.08;
+  const slideDistance = Math.min(width, height) * 0.02;
 
   // Title animation
   const titleOpacity = interpolate(frame, [0, 20], [0, 1], { extrapolateRight: "clamp" });
-  const titleY = interpolate(frame, [0, 20], [20, 0], { extrapolateRight: "clamp" });
+  const titleY = interpolate(frame, [0, 20], [slideDistance, 0], { extrapolateRight: "clamp" });
 
   return (
     <AbsoluteFill
@@ -193,7 +203,8 @@ export const Video: React.FC = () => {
         background: "linear-gradient(180deg, #0f0f0f 0%, #1a1a2e 100%)",
         justifyContent: "center",
         alignItems: "center",
-        padding: 80,
+        padding,
+        overflow: "hidden",
       }}
     >
       {/* Title */}
@@ -201,10 +212,10 @@ export const Video: React.FC = () => {
         style={{
           opacity: titleOpacity,
           transform: `translateY(${titleY}px)`,
-          fontSize: 42,
+          fontSize: width * 0.028,
           fontWeight: "bold",
           color: "white",
-          marginBottom: 48,
+          marginBottom: height * 0.04,
         }}
       >
         Performance Overview
@@ -248,11 +259,13 @@ const Slide: React.FC<{
   icon: string;
 }> = ({ title, subtitle, accentColor, icon }) => {
   const frame = useCurrentFrame();
-  const { fps } = useVideoConfig();
+  const { fps, width, height } = useVideoConfig();
+  const minDim = Math.min(width, height);
 
-  const scale = spring({ frame, fps, config: { damping: 14 } });
+  const scale = spring({ frame, fps, config: { damping: 14, overshootClamping: true } });
   const textOpacity = interpolate(frame, [10, 25], [0, 1], { extrapolateRight: "clamp" });
-  const textY = interpolate(frame, [10, 25], [20, 0], { extrapolateRight: "clamp" });
+  const textY = interpolate(frame, [10, 25], [minDim * 0.02, 0], { extrapolateRight: "clamp" });
+  const iconSize = minDim * 0.09;
 
   return (
     <AbsoluteFill
@@ -260,22 +273,23 @@ const Slide: React.FC<{
         background: `linear-gradient(135deg, #0f0f0f 0%, ${accentColor}22 100%)`,
         justifyContent: "center",
         alignItems: "center",
+        overflow: "hidden",
       }}
     >
       {/* Icon circle */}
       <div
         style={{
           transform: `scale(${scale})`,
-          width: 100,
-          height: 100,
+          width: iconSize,
+          height: iconSize,
           borderRadius: "50%",
           backgroundColor: accentColor,
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          fontSize: 48,
-          marginBottom: 32,
-          boxShadow: `0 16px 48px ${accentColor}44`,
+          fontSize: iconSize * 0.48,
+          marginBottom: minDim * 0.03,
+          boxShadow: `0 ${minDim * 0.015}px ${minDim * 0.045}px ${accentColor}44`,
         }}
       >
         {icon}
@@ -286,10 +300,10 @@ const Slide: React.FC<{
         style={{
           opacity: textOpacity,
           transform: `translateY(${textY}px)`,
-          fontSize: 48,
+          fontSize: width * 0.03,
           fontWeight: "bold",
           color: "white",
-          marginBottom: 12,
+          marginBottom: minDim * 0.012,
         }}
       >
         {title}
@@ -300,9 +314,9 @@ const Slide: React.FC<{
         style={{
           opacity: textOpacity,
           transform: `translateY(${textY}px)`,
-          fontSize: 22,
+          fontSize: width * 0.015,
           color: "rgba(255, 255, 255, 0.6)",
-          maxWidth: 600,
+          maxWidth: width * 0.4,
           textAlign: "center",
           lineHeight: 1.5,
         }}
@@ -315,7 +329,7 @@ const Slide: React.FC<{
 
 export const Video: React.FC = () => {
   return (
-    <AbsoluteFill>
+    <AbsoluteFill style={{ overflow: "hidden" }}>
       <Sequence from={0} durationInFrames={90}>
         <Slide
           icon="⚡"
@@ -378,7 +392,9 @@ import {
 
 export const Video: React.FC = () => {
   const frame = useCurrentFrame();
-  const { fps, durationInFrames } = useVideoConfig();
+  const { fps, width, height, durationInFrames } = useVideoConfig();
+  const minDim = Math.min(width, height);
+  const slideDistance = minDim * 0.04;
 
   const lines = ["We just", "launched", "something new."];
 
@@ -400,6 +416,7 @@ export const Video: React.FC = () => {
         justifyContent: "center",
         alignItems: "center",
         opacity: fadeOut,
+        overflow: "hidden",
       }}
     >
       {lines.map((line, i) => {
@@ -407,9 +424,9 @@ export const Video: React.FC = () => {
         const progress = spring({
           frame: Math.max(0, frame - delay),
           fps,
-          config: { damping: 13, stiffness: 160 },
+          config: { damping: 13, stiffness: 160, overshootClamping: true },
         });
-        const y = interpolate(progress, [0, 1], [40, 0]);
+        const y = interpolate(progress, [0, 1], [slideDistance, 0]);
 
         return (
           <div
@@ -417,7 +434,7 @@ export const Video: React.FC = () => {
             style={{
               opacity: progress,
               transform: `translateY(${y}px)`,
-              fontSize: i === 1 ? 96 : 64,
+              fontSize: i === 1 ? width * 0.06 : width * 0.04,
               fontWeight: i === 1 ? 900 : 600,
               color: i === 1 ? "#f26a2c" : "white",
               lineHeight: 1.2,
@@ -504,119 +521,134 @@ const slides = [
 
 const CoverSlide: React.FC<{ title: string; subtitle: string; bg: string; accent: string }> = ({
   title, subtitle, bg, accent,
-}) => (
-  <AbsoluteFill
-    style={{
-      background: bg,
-      justifyContent: "center",
-      alignItems: "center",
-      padding: 80,
-    }}
-  >
-    <div
+}) => {
+  const { width, height } = useVideoConfig();
+  const minDim = Math.min(width, height);
+  const padding = minDim * 0.06;
+
+  return (
+    <AbsoluteFill
       style={{
-        width: 80,
-        height: 6,
-        backgroundColor: accent,
-        borderRadius: 3,
-        marginBottom: 48,
-      }}
-    />
-    <div
-      style={{
-        fontSize: 72,
-        fontWeight: 900,
-        color: "white",
-        textAlign: "center",
-        lineHeight: 1.15,
-        whiteSpace: "pre-line",
-        marginBottom: 32,
+        background: bg,
+        justifyContent: "center",
+        alignItems: "center",
+        padding,
+        overflow: "hidden",
       }}
     >
-      {title}
-    </div>
-    <div
-      style={{
-        fontSize: 28,
-        color: "rgba(255,255,255,0.5)",
-        letterSpacing: 2,
-      }}
-    >
-      {subtitle}
-    </div>
-  </AbsoluteFill>
-);
+      <div
+        style={{
+          width: width * 0.067,
+          height: height * 0.004,
+          backgroundColor: accent,
+          borderRadius: height * 0.002,
+          marginBottom: minDim * 0.035,
+        }}
+      />
+      <div
+        style={{
+          fontSize: width * 0.06,
+          fontWeight: 900,
+          color: "white",
+          textAlign: "center",
+          lineHeight: 1.15,
+          whiteSpace: "pre-line",
+          marginBottom: minDim * 0.025,
+        }}
+      >
+        {title}
+      </div>
+      <div
+        style={{
+          fontSize: width * 0.023,
+          color: "rgba(255,255,255,0.5)",
+          letterSpacing: width * 0.0015,
+        }}
+      >
+        {subtitle}
+      </div>
+    </AbsoluteFill>
+  );
+};
 
 const TipSlide: React.FC<{
   number: string; title: string; body: string; accent: string;
-}> = ({ number, title, body, accent }) => (
-  <AbsoluteFill
-    style={{
-      background: "linear-gradient(180deg, #0f0f0f 0%, #141422 100%)",
-      padding: 80,
-      justifyContent: "center",
-    }}
-  >
-    <div
+}> = ({ number, title, body, accent }) => {
+  const { width, height } = useVideoConfig();
+  const minDim = Math.min(width, height);
+  const padding = minDim * 0.06;
+  const numberBadgeSize = minDim * 0.045;
+
+  return (
+    <AbsoluteFill
       style={{
-        fontSize: 120,
-        fontWeight: 900,
-        color: accent,
-        opacity: 0.15,
-        position: "absolute",
-        top: 60,
-        right: 80,
-      }}
-    >
-      {number}
-    </div>
-    <div
-      style={{
-        width: 60,
-        height: 60,
-        borderRadius: "50%",
-        backgroundColor: accent,
-        display: "flex",
-        alignItems: "center",
+        background: "linear-gradient(180deg, #0f0f0f 0%, #141422 100%)",
+        padding,
         justifyContent: "center",
-        fontSize: 24,
-        fontWeight: 700,
-        color: "white",
-        marginBottom: 40,
+        overflow: "hidden",
       }}
     >
-      {number}
-    </div>
-    <div
-      style={{
-        fontSize: 52,
-        fontWeight: 800,
-        color: "white",
-        lineHeight: 1.2,
-        whiteSpace: "pre-line",
-        marginBottom: 28,
-      }}
-    >
-      {title}
-    </div>
-    <div
-      style={{
-        fontSize: 26,
-        color: "rgba(255,255,255,0.6)",
-        lineHeight: 1.6,
-        maxWidth: 900,
-      }}
-    >
-      {body}
-    </div>
-  </AbsoluteFill>
-);
+      <div
+        style={{
+          fontSize: width * 0.1,
+          fontWeight: 900,
+          color: accent,
+          opacity: 0.15,
+          position: "absolute",
+          top: height * 0.04,
+          right: width * 0.067,
+        }}
+      >
+        {number}
+      </div>
+      <div
+        style={{
+          width: numberBadgeSize,
+          height: numberBadgeSize,
+          borderRadius: "50%",
+          backgroundColor: accent,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          fontSize: width * 0.02,
+          fontWeight: 700,
+          color: "white",
+          marginBottom: minDim * 0.03,
+        }}
+      >
+        {number}
+      </div>
+      <div
+        style={{
+          fontSize: width * 0.043,
+          fontWeight: 800,
+          color: "white",
+          lineHeight: 1.2,
+          whiteSpace: "pre-line",
+          marginBottom: minDim * 0.02,
+        }}
+      >
+        {title}
+      </div>
+      <div
+        style={{
+          fontSize: width * 0.022,
+          color: "rgba(255,255,255,0.6)",
+          lineHeight: 1.6,
+          maxWidth: width * 0.75,
+        }}
+      >
+        {body}
+      </div>
+    </AbsoluteFill>
+  );
+};
 
 export const Video: React.FC = () => {
   const frame = useCurrentFrame();
   const slide = slides[frame];
 
-  if (!slide) return <AbsoluteFill style={{ background: "#0f0f0f" }} />;
+  if (!slide) return <AbsoluteFill style={{ background: "#0f0f0f", overflow: "hidden" }} />;
 
   if (slide.type === "cover" || slide.type === "cta") {
     return (

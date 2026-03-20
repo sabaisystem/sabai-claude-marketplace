@@ -1,7 +1,7 @@
 {
   "name": "sabai-remotion",
   "description": "Video creation assistant — generates Remotion components and renders MP4 videos with GIF previews.",
-  "version": "3.1.0",
+  "version": "3.2.0",
   "author": {
     "name": "Sabai Team"
   },

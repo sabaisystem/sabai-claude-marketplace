@@ -26,18 +26,29 @@ cd "$(dirname "${ENTRY_FILE}")/.."
 
 echo "Rendering ${NUM_SLIDES} carousel slides..." >&2
 
-# Render each frame as a PNG
-for ((i=0; i<NUM_SLIDES; i++)); do
-  SLIDE_PATH="${SLIDE_DIR}/slide-$(printf '%02d' ${i}).png"
-  echo "  Rendering slide $((i+1))/${NUM_SLIDES}..." >&2
+# Render each frame as a PNG with GL fallback
+render_slide_with_gl() {
+  local slide_path="$1"
+  local frame_num="$2"
+  local gl_flag="$3"
   npx remotion still \
     "${ENTRY_FILE}" \
     "${COMPOSITION_ID}" \
-    "${SLIDE_PATH}" \
-    --frame="${i}" \
-    --gl=angle-egl \
+    "${slide_path}" \
+    --frame="${frame_num}" \
+    --gl="${gl_flag}" \
     --log=error \
     2>&1 >&2
+}
+
+for ((i=0; i<NUM_SLIDES; i++)); do
+  SLIDE_PATH="${SLIDE_DIR}/slide-$(printf '%02d' ${i}).png"
+  echo "  Rendering slide $((i+1))/${NUM_SLIDES}..." >&2
+  if ! render_slide_with_gl "${SLIDE_PATH}" "${i}" "angle-egl"; then
+    echo "  GL angle-egl failed for slide $((i+1)), retrying with swangle..." >&2
+    rm -f "${SLIDE_PATH}"
+    render_slide_with_gl "${SLIDE_PATH}" "${i}" "swangle"
+  fi
 done
 
 echo "Stitching slides into PDF..." >&2
@@ -67,7 +78,7 @@ fi
 # Clean up slide PNGs
 rm -rf "${SLIDE_DIR}"
 
-if [ -f "${OUTPUT_PDF}" ]; then
+if [ -f "${OUTPUT_PDF}" ] && [ -s "${OUTPUT_PDF}" ]; then
   echo "Carousel PDF created: ${OUTPUT_PDF} (${NUM_SLIDES} slides)" >&2
   echo "${OUTPUT_PDF}"
 else

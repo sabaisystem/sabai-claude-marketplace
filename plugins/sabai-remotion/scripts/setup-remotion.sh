@@ -12,10 +12,33 @@ if [ -d "${PROJECT_DIR}/node_modules/@remotion/cli" ]; then
   exit 0
 fi
 
+# Pre-flight checks
+echo "Running pre-flight checks..." >&2
+
+if ! command -v node &>/dev/null; then
+  echo "Error: Node.js is not installed" >&2
+  exit 1
+fi
+
+if ! command -v npm &>/dev/null; then
+  echo "Error: npm is not installed" >&2
+  exit 1
+fi
+
+if ! command -v ffmpeg &>/dev/null; then
+  echo "Warning: ffmpeg not found — GIF previews and carousel PDFs will not work" >&2
+fi
+
+NODE_MAJOR=$(node -v | sed 's/v//' | cut -d. -f1)
+if [ "${NODE_MAJOR}" -lt 18 ]; then
+  echo "Error: Node.js 18+ required (found $(node -v))" >&2
+  exit 1
+fi
+
 echo "Setting up Remotion project..." >&2
 
-# Create project directory
-mkdir -p "${PROJECT_DIR}/src"
+# Create project directories
+mkdir -p "${PROJECT_DIR}/src" "${PROJECT_DIR}/public"
 
 # Create package.json
 cat > "${PROJECT_DIR}/package.json" << 'PKGJSON'
@@ -56,10 +79,11 @@ cat > "${PROJECT_DIR}/tsconfig.json" << 'TSCONFIG'
 }
 TSCONFIG
 
-# Create remotion.config.ts
+# Create remotion.config.ts with optimized settings
 cat > "${PROJECT_DIR}/remotion.config.ts" << 'RMCONFIG'
 import { Config } from "@remotion/cli/config";
 Config.setVideoImageFormat("png");
+Config.setConcurrency(2);
 RMCONFIG
 
 # Create default entry point
@@ -92,10 +116,11 @@ ROOT
 # Create placeholder Video component
 cat > "${PROJECT_DIR}/src/Video.tsx" << 'VIDEO'
 import React from "react";
-import { AbsoluteFill, useCurrentFrame, interpolate } from "remotion";
+import { AbsoluteFill, useCurrentFrame, useVideoConfig, interpolate } from "remotion";
 
 export const Video: React.FC = () => {
   const frame = useCurrentFrame();
+  const { width } = useVideoConfig();
   const opacity = interpolate(frame, [0, 30], [0, 1], {
     extrapolateRight: "clamp",
   });
@@ -106,9 +131,10 @@ export const Video: React.FC = () => {
         background: "linear-gradient(135deg, #0f0f0f 0%, #1a1a2e 100%)",
         justifyContent: "center",
         alignItems: "center",
+        overflow: "hidden",
       }}
     >
-      <div style={{ opacity, fontSize: 64, color: "white", fontWeight: "bold" }}>
+      <div style={{ opacity, fontSize: width * 0.033, color: "white", fontWeight: "bold" }}>
         Hello, Remotion!
       </div>
     </AbsoluteFill>

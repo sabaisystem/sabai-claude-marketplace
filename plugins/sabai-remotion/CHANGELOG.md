@@ -1,5 +1,31 @@
 # Changelog
 
+## [3.2.0] - 2026-03-19
+
+### Added
+- Safe Layout Rules in SKILL.md — viewport-relative sizing prevents elements going off-screen
+- Scene planning step (Step 1.5) — maps content to scenes with frame allocation before coding
+- Pre-flight checks in setup-remotion.sh (node, npm, ffmpeg validation)
+- GL fallback chain in all render scripts (angle-egl → swangle)
+- Non-empty output validation in all render scripts
+- ffmpeg availability check in render-gif.sh
+- Safe Layout Helpers section in remotion-patterns.md with responsive sizing utilities
+
+### Changed
+- All templates now use viewport-relative sizing (no hardcoded pixel values)
+- All templates enforce `overflow: "hidden"` on root AbsoluteFill
+- All spring animations now use `overshootClamping: true` by default
+- Element entry animations bounded to safe margin instead of full viewport
+- render-video.sh now uses `--crf=18` for higher quality output
+- remotion.config.ts now sets concurrency to 2
+- setup-remotion.sh creates `public/` directory
+
+### Fixed
+- Animations going outside the screen on non-1920×1080 resolutions
+- Unbounded translate values causing elements to fly off viewport
+- Springs overshooting and pushing elements past viewport bounds
+- Render scripts failing silently on empty output files
+
 ## [3.1.0] - 2026-03-18
 
 ### Added

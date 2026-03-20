@@ -15,6 +15,12 @@ ENTRY_FILE="${1:?Usage: render-gif.sh <entry-file> <composition-id> <output-path
 COMPOSITION_ID="${2:?Missing composition ID}"
 OUTPUT_PATH="${3:?Missing output path}"
 
+# Pre-flight: require ffmpeg
+if ! command -v ffmpeg &>/dev/null; then
+  echo "Error: ffmpeg is required for GIF generation but was not found" >&2
+  exit 1
+fi
+
 # Ensure output directory exists
 mkdir -p "$(dirname "${OUTPUT_PATH}")"
 
@@ -23,18 +29,27 @@ TEMP_MP4="/tmp/gif-source-$$.mp4"
 
 echo "Rendering GIF preview: ${COMPOSITION_ID}" >&2
 
-# Step 1: Render MP4 with Remotion
+# Step 1: Render MP4 with Remotion (GL fallback)
 cd "$(dirname "${ENTRY_FILE}")/.."
-npx remotion render \
-  "${ENTRY_FILE}" \
-  "${COMPOSITION_ID}" \
-  "${TEMP_MP4}" \
-  --gl=angle-egl \
-  --codec=h264 \
-  --log=error \
-  2>&1 >&2
 
-if [ ! -f "${TEMP_MP4}" ]; then
+render_with_gl() {
+  npx remotion render \
+    "${ENTRY_FILE}" \
+    "${COMPOSITION_ID}" \
+    "${TEMP_MP4}" \
+    --gl="$1" \
+    --codec=h264 \
+    --log=error \
+    2>&1 >&2
+}
+
+if ! render_with_gl "angle-egl"; then
+  echo "GL angle-egl failed, retrying with swangle..." >&2
+  rm -f "${TEMP_MP4}"
+  render_with_gl "swangle"
+fi
+
+if [ ! -f "${TEMP_MP4}" ] || [ ! -s "${TEMP_MP4}" ]; then
   echo "Error: Video render failed" >&2
   exit 1
 fi
@@ -62,7 +77,7 @@ ffmpeg -y -i "${TEMP_MP4}" -i "${PALETTE}" \
 # Cleanup temp files
 rm -f "${TEMP_MP4}" "${PALETTE}"
 
-if [ -f "${OUTPUT_PATH}" ]; then
+if [ -f "${OUTPUT_PATH}" ] && [ -s "${OUTPUT_PATH}" ]; then
   FILE_SIZE=$(du -h "${OUTPUT_PATH}" | cut -f1)
   echo "GIF rendered: ${OUTPUT_PATH} (${FILE_SIZE})" >&2
   echo "${OUTPUT_PATH}"
