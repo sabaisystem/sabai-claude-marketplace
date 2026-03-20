@@ -51,13 +51,14 @@ The `/video` command supports subcommands. Route based on what the user typed:
 
 When the user asks to create a video, determine what they need. Reference `references/clarifying-questions.md` for the question framework.
 
-**Quick-start rule:** If the user gives a clear, specific request, proceed with sensible defaults. Only ask questions when genuinely ambiguous.
+**Always confirm before generating.** Even if the request is clear, briefly confirm key settings with the user. This prevents wasted renders.
 
-**Configuration wizard** (when description is missing or vague):
-1. Ask what the video is about (content/message)
-2. Ask the target platform — or default to YouTube 16:9
-3. Ask about duration preference — or use sensible default
-4. Confirm and proceed to generation
+**Configuration checklist** (ask about any item not already specified by the user):
+1. **Content** — What the video is about (skip if user already described it)
+2. **Platform** — Always ask: "What platform is this for?" (YouTube, TikTok, Instagram, LinkedIn, etc.)
+3. **Duration** — Ask preference or suggest a sensible default
+4. **Output format** — MP4 (default), WebM, or GIF-only
+5. **Confirm** — Summarize choices and get approval before generating
 
 **Auto-detect platform from context clues:**
 - "TikTok", "Reel", "Short" → 1080×1920 (9:16), 30fps
@@ -66,11 +67,16 @@ When the user asks to create a video, determine what they need. Reference `refer
 - "Story" → 1080×1920 (9:16), 30fps
 - "LinkedIn carousel", "carousel" → 1200×1500, 1fps (carousel mode — see Step 3b)
 
+**Auto-detect output format from context clues:**
+- "WebM" → `--codec=vp8`, output `.webm`
+- "GIF" → render MP4 first, then convert to GIF only
+- Default → `--codec=h264`, output `.mp4`
+
 **Sensible defaults when not specified:**
 - Format: 1920×1080 (16:9)
 - FPS: 30
 - Duration: 5-10 seconds for intros, 15-30s for explainers
-- Codec: h264
+- Codec: h264 (MP4) — mention WebM is available if user hasn't specified
 - Background: dark gradient (#0f0f0f → #1a1a2e)
 
 ### Step 1.5: Plan Scenes and Timing
