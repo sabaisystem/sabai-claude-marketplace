@@ -1,16 +1,20 @@
 #!/bin/bash
-# render-video.sh — Render a Remotion composition to MP4
+# render-video.sh — Render a Remotion composition to MP4 or WebM
 #
-# Usage: render-video.sh <entry-file> <composition-id> <output-path>
+# Usage: render-video.sh <entry-file> <composition-id> <output-path> [codec]
+#
+# Codec: h264 (default, .mp4) | vp8 (.webm) | vp9 (.webm)
 #
 # Example:
 #   render-video.sh /tmp/remotion-project/src/index.ts main /tmp/output.mp4
+#   render-video.sh /tmp/remotion-project/src/index.ts main /tmp/output.webm vp8
 
 set -euo pipefail
 
-ENTRY_FILE="${1:?Usage: render-video.sh <entry-file> <composition-id> <output-path>}"
+ENTRY_FILE="${1:?Usage: render-video.sh <entry-file> <composition-id> <output-path> [codec]}"
 COMPOSITION_ID="${2:?Missing composition ID}"
 OUTPUT_PATH="${3:?Missing output path}"
+CODEC="${4:-h264}"
 
 # Ensure output directory exists
 mkdir -p "$(dirname "${OUTPUT_PATH}")"
@@ -26,7 +30,7 @@ render_with_gl() {
     "${COMPOSITION_ID}" \
     "${OUTPUT_PATH}" \
     --gl="$1" \
-    --codec=h264 \
+    --codec="${CODEC}" \
     --crf=18 \
     --log=error \
     2>&1 >&2
