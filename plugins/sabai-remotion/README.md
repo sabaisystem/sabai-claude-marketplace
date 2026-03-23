@@ -5,7 +5,7 @@
 | Field | Value |
 |-------|-------|
 | Type | Skills + Commands + Scripts |
-| Version | 3.2.0 |
+| Version | 3.3.0 |
 | Status | Active |
 | Command | `/video`, `/video carousel` |
 | Repo | `plugins/sabai-remotion` |
@@ -20,11 +20,12 @@ Sabai Remotion turns ideas into rendered videos. Describe what you want, and it 
 
 - Turn a prompt into a Remotion video (MP4 output)
 - Auto-generate GIF preview after every render for quick review
+- External image support — use product photos via HTTPS URLs with Remotion's `<Img>`
 - LinkedIn Carousel creation (1200×1500 slides → PDF)
 - Platform auto-detection (TikTok, YouTube, Instagram, LinkedIn, etc.)
 - Safe zone enforcement — responsive sizing prevents elements going off-screen
 - Animation patterns library (text reveals, transitions, data viz)
-- Ready-to-use templates (intro/outro, data viz, product showcase, carousel)
+- Ready-to-use templates (intro/outro, data viz, product showcase, product showcase with images, carousel)
 
 ## Use Cases
 
@@ -66,7 +67,8 @@ None required.
 ## Limitations
 
 - Rendering requires a Cowork VM or environment with headless Chrome
-- All assets must be code-generated (no external image/video imports)
+- Images supported via HTTPS URLs only (no local files or HTTP)
+- No external video or font imports
 - Complex motion direction may need iteration after the first pass
 
 ## Links

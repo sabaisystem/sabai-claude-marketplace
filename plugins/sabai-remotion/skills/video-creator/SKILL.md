@@ -124,7 +124,8 @@ Write a complete Remotion composition to `/tmp/remotion-project/src/`. Reference
 - Keep all styles inline or in the component (no external CSS files)
 - Use web-safe fonts only (no custom font loading)
 - Colors as hex values
-- All assets must be generated (SVG paths, CSS shapes) — no external image/video imports
+- Images: use Remotion's `<Img>` component with HTTPS URLs (see "Image Guidelines" below). No `require()` or local file imports
+- All non-image assets must be generated (SVG paths, CSS shapes)
 
 **Safe Layout Rules (CRITICAL — prevents elements going off-screen):**
 
@@ -213,7 +214,7 @@ When the user requested a **LinkedIn carousel**, follow this flow instead of Ste
 - Composition: 1200×1500 px, **1 fps**, `durationInFrames` = number of slides
 - Each frame (0, 1, 2, ...) represents one slide
 - Use `useCurrentFrame()` to switch content per slide
-- The component uses the same rules as Step 2 (inline styles, web-safe fonts, no external assets)
+- The component uses the same rules as Step 2 (inline styles, web-safe fonts, images via `<Img>` allowed)
 - See `references/templates.md` → "LinkedIn Carousel Template" for the starter pattern
 
 **Root.tsx pattern for carousel:**
@@ -312,11 +313,46 @@ When the user is satisfied:
 - **Respect the safe zone**: Keep all text and key elements within the 10% safe margin from edges
 - **Test at target resolution**: Layout should adapt — never assume 1920×1080
 
+## Image Guidelines
+
+When the user provides image URLs (product photos, logos, etc.), use Remotion's built-in `<Img>` component:
+
+```tsx
+import { Img } from "remotion";
+
+// Always use HTTPS URLs
+<Img
+  src="https://example.com/photo.jpg"
+  style={{
+    width: width * 0.5,
+    height: height * 0.4,
+    objectFit: "cover",
+    borderRadius: width * 0.01,
+  }}
+/>
+```
+
+**Rules:**
+- Import `Img` from `"remotion"` — do NOT use HTML `<img>` tags (Remotion's `<Img>` waits for the image to load before rendering the frame)
+- Only use HTTPS URLs — no HTTP, no local file paths, no `require()`
+- Always set responsive dimensions using `useVideoConfig()` — never hardcode image width/height in pixels
+- Use `objectFit: "cover"` or `"contain"` to handle varying aspect ratios
+- Recommend max source image dimension of 1920px (larger images waste memory on the 3GB VM)
+- If an image URL fails, the render will fail — always validate URLs are accessible before generating the component
+- For product showcases with many images, keep total image count reasonable (8-10 max) to avoid memory pressure
+
+**When NOT to use images:**
+- For icons, shapes, and decorative elements — use SVG/CSS instead (more reliable, no network dependency)
+- For text content — use styled `<div>` elements
+- When the user hasn't provided URLs — use code-generated placeholders
+
 ## What NOT To Do
 
-- Don't try to import external images, videos, or fonts from URLs
+- Don't use HTML `<img>` tags — always use Remotion's `<Img>` component
+- Don't use HTTP URLs for images — HTTPS only
+- Don't use `require()` or local file paths for assets
+- Don't import external videos or fonts from URLs
 - Don't create compositions longer than 60s without user confirmation
-- Don't use `require()` for assets — everything must be code-generated
 - Don't render at resolutions higher than 1920×1080 unless specifically asked
 - Don't hardcode pixel values (`fontSize: 64`, `padding: 80`) — always derive from `useVideoConfig()` dimensions
 - Don't use `spring()` without `overshootClamping: true` — elements will overshoot and escape the viewport
