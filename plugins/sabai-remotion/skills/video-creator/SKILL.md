@@ -286,7 +286,7 @@ When the user is satisfied:
 | Instagram Reel | 1080 | 1920 | 30 | 90s | 9:16 portrait |
 | Instagram Post | 1080 | 1080 | 30 | 60s | 1:1 square |
 | Instagram Story | 1080 | 1920 | 30 | 15s | 9:16, auto-advance |
-| Twitter/X | 1920 | 1080 | 30 | 140s | 16:9 landscape |
+| Twitter/X | 1080 | 1080 | 30 | 140s | 1:1 square |
 | LinkedIn Video | 1920 | 1080 | 30 | 30s | 16:9 landscape |
 | LinkedIn Carousel | 1200 | 1500 | 1 | N slides | PDF output, 1 frame per slide |
 | Presentation | 1920 | 1080 | 30 | varies | 16:9, clean style |
