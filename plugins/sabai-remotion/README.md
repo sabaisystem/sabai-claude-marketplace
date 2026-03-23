@@ -21,6 +21,7 @@ Sabai Remotion turns ideas into rendered videos. Describe what you want, and it 
 - Turn a prompt into a Remotion video (MP4 output)
 - Visual scene validation — checks key frames for layout issues before full render
 - Auto-generate GIF preview after every render for quick review
+- External image support — use product photos via HTTPS URLs with Remotion's `<Img>`
 - LinkedIn Carousel creation (1200×1500 slides → PDF)
 - Presentation Deck creation (1920×1080 slides → PDF) with Product Showcase design
 - Platform auto-detection (TikTok, YouTube, Instagram, LinkedIn, etc.)
@@ -70,7 +71,8 @@ None required.
 ## Limitations
 
 - Rendering requires a Cowork VM or environment with headless Chrome
-- All assets must be code-generated (no external image/video imports)
+- Images supported via HTTPS URLs only (no local files or HTTP)
+- No external video or font imports
 - Complex motion direction may need iteration after the first pass
 
 ## Links
