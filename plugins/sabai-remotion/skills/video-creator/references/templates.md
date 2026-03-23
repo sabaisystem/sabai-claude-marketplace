@@ -694,3 +694,427 @@ export const Root: React.FC = () => {
 **Rendering:** 7 frames at 1fps. Each frame = one slide. Render with `render-carousel.sh` to get individual PNGs stitched into a PDF.
 
 **Usage:** LinkedIn carousel posts. Upload the PDF directly to LinkedIn. Good for tips, tutorials, case studies, and thought leadership.
+
+---
+
+## Product Showcase with Images Template
+
+Multi-slide product showcase using real images via Remotion's `<Img>` component. Supports full-screen image with overlay, split-screen (image + text), and call-to-action layouts with smooth transitions between slides.
+
+```tsx
+// Video.tsx
+import React from "react";
+import {
+  AbsoluteFill,
+  useCurrentFrame,
+  useVideoConfig,
+  interpolate,
+  spring,
+  Sequence,
+  Img,
+} from "remotion";
+
+// --- Data: customize slides here ---
+interface ProductSlide {
+  type: "hero" | "split" | "cta";
+  imageUrl?: string;
+  title: string;
+  subtitle?: string;
+  body?: string;
+  price?: string;
+  accentColor: string;
+  ctaText?: string;
+}
+
+const slides: ProductSlide[] = [
+  {
+    type: "hero",
+    imageUrl: "https://picsum.photos/id/1/1920/1080",
+    title: "Introducing Product X",
+    subtitle: "Designed for the modern workflow",
+    accentColor: "#f26a2c",
+  },
+  {
+    type: "split",
+    imageUrl: "https://picsum.photos/id/26/800/600",
+    title: "Precision Engineered",
+    body: "Every detail has been refined for peak performance and reliability.",
+    price: "$299",
+    accentColor: "#f26a2c",
+  },
+  {
+    type: "split",
+    imageUrl: "https://picsum.photos/id/96/800/600",
+    title: "Built to Last",
+    body: "Premium materials meet cutting-edge technology for lasting quality.",
+    price: "$399",
+    accentColor: "#013b2d",
+  },
+  {
+    type: "cta",
+    title: "Get Yours Today",
+    subtitle: "Free shipping on all orders",
+    ctaText: "Shop Now →",
+    accentColor: "#f26a2c",
+  },
+];
+
+const SLIDE_DURATION = 90; // frames per slide (3s at 30fps)
+
+// --- Hero Slide: full-screen image with text overlay ---
+const HeroSlide: React.FC<{ slide: ProductSlide }> = ({ slide }) => {
+  const frame = useCurrentFrame();
+  const { fps, width, height } = useVideoConfig();
+  const minDim = Math.min(width, height);
+
+  const scale = interpolate(frame, [0, SLIDE_DURATION], [1, 1.08], {
+    extrapolateRight: "clamp",
+  });
+  const titleProgress = spring({
+    frame,
+    fps,
+    config: { damping: 14, stiffness: 160, overshootClamping: true },
+  });
+  const subtitleOpacity = interpolate(frame, [20, 40], [0, 1], {
+    extrapolateRight: "clamp",
+  });
+  const subtitleY = interpolate(frame, [20, 40], [minDim * 0.02, 0], {
+    extrapolateRight: "clamp",
+  });
+
+  return (
+    <AbsoluteFill style={{ overflow: "hidden" }}>
+      {/* Background image with slow zoom (Ken Burns effect) */}
+      {slide.imageUrl && (
+        <Img
+          src={slide.imageUrl}
+          style={{
+            position: "absolute",
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+            transform: `scale(${scale})`,
+          }}
+        />
+      )}
+
+      {/* Gradient scrim for text readability */}
+      <div
+        style={{
+          position: "absolute",
+          inset: 0,
+          background:
+            "linear-gradient(0deg, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.2) 50%, rgba(0,0,0,0.4) 100%)",
+        }}
+      />
+
+      {/* Text overlay */}
+      <AbsoluteFill
+        style={{
+          justifyContent: "flex-end",
+          padding: minDim * 0.08,
+          overflow: "hidden",
+        }}
+      >
+        <div
+          style={{
+            opacity: titleProgress,
+            transform: `translateY(${interpolate(titleProgress, [0, 1], [minDim * 0.03, 0])}px)`,
+            fontSize: width * 0.045,
+            fontWeight: 900,
+            color: "white",
+            marginBottom: minDim * 0.015,
+            textShadow: `0 ${minDim * 0.003}px ${minDim * 0.015}px rgba(0,0,0,0.5)`,
+          }}
+        >
+          {slide.title}
+        </div>
+        {slide.subtitle && (
+          <div
+            style={{
+              opacity: subtitleOpacity,
+              transform: `translateY(${subtitleY}px)`,
+              fontSize: width * 0.02,
+              color: "rgba(255,255,255,0.85)",
+              letterSpacing: width * 0.001,
+            }}
+          >
+            {slide.subtitle}
+          </div>
+        )}
+      </AbsoluteFill>
+    </AbsoluteFill>
+  );
+};
+
+// --- Split Slide: image left, text + price right ---
+const SplitSlide: React.FC<{ slide: ProductSlide }> = ({ slide }) => {
+  const frame = useCurrentFrame();
+  const { fps, width, height } = useVideoConfig();
+  const minDim = Math.min(width, height);
+
+  const imgProgress = spring({
+    frame,
+    fps,
+    config: { damping: 15, stiffness: 140, overshootClamping: true },
+  });
+  const textDelay = 12;
+  const textOpacity = interpolate(frame, [textDelay, textDelay + 20], [0, 1], {
+    extrapolateRight: "clamp",
+  });
+  const textY = interpolate(
+    frame,
+    [textDelay, textDelay + 20],
+    [minDim * 0.025, 0],
+    { extrapolateRight: "clamp" }
+  );
+  const priceDelay = 25;
+  const priceScale = spring({
+    frame: Math.max(0, frame - priceDelay),
+    fps,
+    config: { damping: 12, stiffness: 180, overshootClamping: true },
+  });
+
+  return (
+    <AbsoluteFill
+      style={{
+        background: "linear-gradient(135deg, #0f0f0f 0%, #1a1a2e 100%)",
+        flexDirection: "row",
+        overflow: "hidden",
+      }}
+    >
+      {/* Image half */}
+      <div
+        style={{
+          width: "50%",
+          height: "100%",
+          overflow: "hidden",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          padding: minDim * 0.04,
+        }}
+      >
+        {slide.imageUrl && (
+          <Img
+            src={slide.imageUrl}
+            style={{
+              width: "100%",
+              height: "100%",
+              objectFit: "cover",
+              borderRadius: width * 0.012,
+              opacity: imgProgress,
+              transform: `scale(${interpolate(imgProgress, [0, 1], [0.9, 1])})`,
+              boxShadow: `0 ${minDim * 0.02}px ${minDim * 0.06}px rgba(0,0,0,0.4)`,
+            }}
+          />
+        )}
+      </div>
+
+      {/* Text half */}
+      <div
+        style={{
+          width: "50%",
+          height: "100%",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          padding: minDim * 0.06,
+        }}
+      >
+        <div
+          style={{
+            opacity: textOpacity,
+            transform: `translateY(${textY}px)`,
+          }}
+        >
+          <div
+            style={{
+              fontSize: width * 0.03,
+              fontWeight: 800,
+              color: "white",
+              marginBottom: minDim * 0.02,
+              lineHeight: 1.2,
+            }}
+          >
+            {slide.title}
+          </div>
+          {slide.body && (
+            <div
+              style={{
+                fontSize: width * 0.015,
+                color: "rgba(255,255,255,0.65)",
+                lineHeight: 1.6,
+                marginBottom: minDim * 0.03,
+                maxWidth: width * 0.35,
+              }}
+            >
+              {slide.body}
+            </div>
+          )}
+        </div>
+
+        {/* Price badge */}
+        {slide.price && (
+          <div
+            style={{
+              transform: `scale(${priceScale})`,
+              display: "inline-flex",
+              alignItems: "center",
+              gap: width * 0.008,
+            }}
+          >
+            <div
+              style={{
+                fontSize: width * 0.028,
+                fontWeight: 900,
+                color: slide.accentColor,
+              }}
+            >
+              {slide.price}
+            </div>
+          </div>
+        )}
+      </div>
+    </AbsoluteFill>
+  );
+};
+
+// --- CTA Slide: call-to-action with brand accent ---
+const CtaSlide: React.FC<{ slide: ProductSlide }> = ({ slide }) => {
+  const frame = useCurrentFrame();
+  const { fps, width, height, durationInFrames } = useVideoConfig();
+  const minDim = Math.min(width, height);
+
+  const titleScale = spring({
+    frame,
+    fps,
+    config: { damping: 12, stiffness: 160, overshootClamping: true },
+  });
+  const subtitleOpacity = interpolate(frame, [15, 30], [0, 1], {
+    extrapolateRight: "clamp",
+  });
+  const ctaDelay = 25;
+  const ctaProgress = spring({
+    frame: Math.max(0, frame - ctaDelay),
+    fps,
+    config: { damping: 14, stiffness: 200, overshootClamping: true },
+  });
+  // Pulse the CTA button gently
+  const ctaPulse =
+    1 + Math.sin((frame - ctaDelay) * 0.08) * 0.015 * ctaProgress;
+
+  // Fade out at end
+  const fadeOut = interpolate(
+    frame,
+    [SLIDE_DURATION - 20, SLIDE_DURATION],
+    [1, 0],
+    { extrapolateLeft: "clamp", extrapolateRight: "clamp" }
+  );
+
+  return (
+    <AbsoluteFill
+      style={{
+        background: `linear-gradient(135deg, #0f0f0f 0%, ${slide.accentColor}15 100%)`,
+        justifyContent: "center",
+        alignItems: "center",
+        opacity: fadeOut,
+        overflow: "hidden",
+      }}
+    >
+      <div
+        style={{
+          transform: `scale(${titleScale})`,
+          fontSize: width * 0.04,
+          fontWeight: 900,
+          color: "white",
+          marginBottom: minDim * 0.015,
+          textAlign: "center",
+        }}
+      >
+        {slide.title}
+      </div>
+      {slide.subtitle && (
+        <div
+          style={{
+            opacity: subtitleOpacity,
+            fontSize: width * 0.018,
+            color: "rgba(255,255,255,0.6)",
+            marginBottom: minDim * 0.04,
+            textAlign: "center",
+          }}
+        >
+          {slide.subtitle}
+        </div>
+      )}
+      {slide.ctaText && (
+        <div
+          style={{
+            transform: `scale(${ctaProgress * ctaPulse})`,
+            backgroundColor: slide.accentColor,
+            color: "white",
+            fontSize: width * 0.018,
+            fontWeight: 700,
+            padding: `${minDim * 0.015}px ${minDim * 0.04}px`,
+            borderRadius: minDim * 0.006,
+            boxShadow: `0 ${minDim * 0.01}px ${minDim * 0.04}px ${slide.accentColor}55`,
+          }}
+        >
+          {slide.ctaText}
+        </div>
+      )}
+    </AbsoluteFill>
+  );
+};
+
+// --- Main composition: sequences each slide ---
+export const Video: React.FC = () => {
+  return (
+    <AbsoluteFill style={{ overflow: "hidden" }}>
+      {slides.map((slide, i) => (
+        <Sequence
+          key={i}
+          from={i * SLIDE_DURATION}
+          durationInFrames={SLIDE_DURATION}
+        >
+          {slide.type === "hero" && <HeroSlide slide={slide} />}
+          {slide.type === "split" && <SplitSlide slide={slide} />}
+          {slide.type === "cta" && <CtaSlide slide={slide} />}
+        </Sequence>
+      ))}
+    </AbsoluteFill>
+  );
+};
+```
+
+**Root.tsx:**
+```tsx
+import { Composition } from "remotion";
+import { Video } from "./Video";
+
+export const Root: React.FC = () => {
+  return (
+    <Composition
+      id="main"
+      component={Video}
+      durationInFrames={360}  // 4 slides × 90 frames
+      fps={30}
+      width={1920}
+      height={1080}
+    />
+  );
+};
+```
+
+**Usage:** 360 frames at 30fps = 12 seconds (4 slides × 3s each). Customize by editing the `slides` array — add/remove slides, change layouts, swap image URLs.
+
+**Layouts available:**
+- `hero` — Full-screen image with gradient scrim and text overlay (great for opening slides)
+- `split` — 50/50 image + text with price badge (great for product features)
+- `cta` — Call-to-action with accent color and animated button (great for closing slides)
+
+**Customization tips:**
+- Change `SLIDE_DURATION` to adjust time per slide (90 frames = 3s at 30fps)
+- Replace `imageUrl` values with real product image URLs (HTTPS only)
+- Adjust `accentColor` per slide for brand consistency
+- Add more slides by appending to the `slides` array and updating `durationInFrames` in Root.tsx

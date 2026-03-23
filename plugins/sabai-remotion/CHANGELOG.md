@@ -1,5 +1,20 @@
 # Changelog
 
+## [3.3.0] - 2026-03-23
+
+### Added
+- External image support via Remotion's `<Img>` component with HTTPS URLs
+- Image Guidelines section in SKILL.md with usage rules and constraints
+- Product Showcase with Images template — hero, split-screen, and CTA slide layouts
+- Ken Burns (slow zoom) effect for hero image slides
+- Split-screen layout with image + text + price badge
+- Animated CTA slide with pulsing button
+
+### Changed
+- Updated component rules to allow `<Img>` imports from `"remotion"`
+- Updated carousel rules to allow images via `<Img>`
+- Replaced blanket "no external assets" prohibition with specific image guidelines
+
 ## [3.2.0] - 2026-03-19
 
 ### Added
