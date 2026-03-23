@@ -1,5 +1,10 @@
 # Changelog
 
+## [3.5.1] - 2026-03-23
+
+### Added
+- Embed cover art (MP4 attached picture) generated from the last composition frame.
+
 ## [3.5.0] - 2026-03-23
 
 ### Added

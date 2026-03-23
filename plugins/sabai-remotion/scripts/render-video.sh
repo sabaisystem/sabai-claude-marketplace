@@ -44,6 +44,17 @@ fi
 
 if [ -f "${OUTPUT_PATH}" ] && [ -s "${OUTPUT_PATH}" ]; then
   FILE_SIZE=$(du -h "${OUTPUT_PATH}" | cut -f1)
+
+  # Embed cover art into MP4 containers using the composition's last frame.
+  # Failure should never break the render pipeline (embed script falls back).
+  if [[ "${OUTPUT_PATH}" == *.mp4 ]] || [[ "${CODEC}" == "h264" ]]; then
+    SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+    EMBED_SCRIPT="${SCRIPT_DIR}/embed-cover-art.sh"
+    if [ -f "${EMBED_SCRIPT}" ]; then
+      bash "${EMBED_SCRIPT}" "${ENTRY_FILE}" "${COMPOSITION_ID}" "${OUTPUT_PATH}" || true
+    fi
+  fi
+
   echo "Video rendered successfully: ${OUTPUT_PATH} (${FILE_SIZE})" >&2
   echo "${OUTPUT_PATH}"
 else

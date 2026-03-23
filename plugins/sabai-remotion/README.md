@@ -5,7 +5,7 @@
 | Field | Value |
 |-------|-------|
 | Type | Skills + Commands + Scripts |
-| Version | 3.5.0 |
+| Version | 3.5.1 |
 | Status | Active |
 | Command | `/video`, `/video carousel`, `/video presentation`, `/video validate` |
 | Repo | `plugins/sabai-remotion` |
