@@ -83,6 +83,11 @@
       "name": "sabai-xero",
       "source": "./plugins/sabai-xero",
       "description": "Xero accounting integration for invoice management, contacts, payments, and financial reports."
+    },
+    {
+      "name": "sabai-diagrams",
+      "source": "./plugins/sabai-diagrams",
+      "description": "Mermaid diagram generator with visual renderer for flowcharts, sequences, state diagrams, and Gantt charts."
     }
   ]
 }
