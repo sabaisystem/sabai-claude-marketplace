@@ -1,7 +1,7 @@
 {
   "name": "sabai-diagrams",
   "description": "Mermaid diagram generator with visual renderer for flowcharts, sequences, state diagrams, and Gantt charts.",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "author": {
     "name": "Sabai Team"
   },

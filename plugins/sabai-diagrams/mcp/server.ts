@@ -136,5 +136,70 @@ export function createServer(): McpServer {
     }
   );
 
+  // --- Tool: export_diagram (visible to Claude + App) ---
+  registerAppTool(
+    server,
+    "export_diagram",
+    {
+      title: "Export Diagram",
+      description:
+        "Export the current Mermaid diagram as SVG or PNG. The export is performed client-side in the MCP App and returned as a downloadable data URL.",
+      inputSchema: {
+        format: z
+          .enum(["svg", "png"])
+          .default("svg")
+          .describe("Export format: svg or png"),
+        scale: z
+          .number()
+          .min(1)
+          .max(4)
+          .default(2)
+          .describe("Scale factor for PNG export (1-4x, default 2x for high-res)"),
+        background: z
+          .enum(["transparent", "white", "dark"])
+          .default("transparent")
+          .describe("Background color for the export"),
+      },
+      _meta: { ui: { resourceUri } },
+    },
+    async (args: {
+      format?: "svg" | "png";
+      scale?: number;
+      background?: "transparent" | "white" | "dark";
+    }): Promise<CallToolResult> => {
+      if (!currentDiagram.code) {
+        return {
+          content: [
+            {
+              type: "text",
+              text: "No diagram to export. Render a diagram first using render_diagram.",
+            },
+          ],
+          isError: true,
+        };
+      }
+
+      return {
+        content: [
+          {
+            type: "text",
+            text: `Exporting diagram as ${args.format || "svg"}...`,
+          },
+          {
+            type: "text",
+            text: JSON.stringify({
+              action: "export",
+              format: args.format || "svg",
+              scale: args.scale || 2,
+              background: args.background || "transparent",
+              code: currentDiagram.code,
+              title: currentDiagram.title,
+            }),
+          },
+        ],
+      };
+    }
+  );
+
   return server;
 }

@@ -12,6 +12,15 @@ interface DiagramState {
   mode: "code" | "diagram" | "both";
 }
 
+interface ExportAction {
+  action: "export";
+  format: "svg" | "png";
+  scale: number;
+  background: "transparent" | "white" | "dark";
+  code: string;
+  title: string;
+}
+
 // --- Helpers ---
 function extractResult<T>(result: CallToolResult): T | null {
   const textContents = result.content?.filter((c) => c.type === "text") || [];
@@ -25,6 +34,100 @@ function extractResult<T>(result: CallToolResult): T | null {
     }
   }
   return null;
+}
+
+// --- Export helpers ---
+function downloadBlob(blob: Blob, filename: string) {
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+function sanitizeFilename(title: string): string {
+  return (title || "diagram").replace(/[^a-zA-Z0-9_-]/g, "_").toLowerCase();
+}
+
+async function exportSvg(svgHtml: string, title: string, background: string) {
+  let svg = svgHtml;
+  if (background !== "transparent") {
+    const bgColor = background === "dark" ? "#111827" : "#ffffff";
+    svg = svg.replace(/<svg /, `<svg style="background:${bgColor}" `);
+  }
+  const blob = new Blob([svg], { type: "image/svg+xml;charset=utf-8" });
+  downloadBlob(blob, `${sanitizeFilename(title)}.svg`);
+}
+
+async function exportPng(
+  svgHtml: string,
+  title: string,
+  scale: number,
+  background: string
+) {
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(svgHtml, "image/svg+xml");
+  const svgEl = doc.querySelector("svg");
+  if (!svgEl) throw new Error("No SVG element found");
+
+  const width = parseFloat(svgEl.getAttribute("width") || svgEl.viewBox?.baseVal?.width?.toString() || "800");
+  const height = parseFloat(svgEl.getAttribute("height") || svgEl.viewBox?.baseVal?.height?.toString() || "600");
+
+  // Ensure width/height attributes are set for canvas rendering
+  svgEl.setAttribute("width", String(width));
+  svgEl.setAttribute("height", String(height));
+
+  if (background !== "transparent") {
+    const bgColor = background === "dark" ? "#111827" : "#ffffff";
+    svgEl.style.background = bgColor;
+  }
+
+  const serializer = new XMLSerializer();
+  const svgString = serializer.serializeToString(svgEl);
+  const svgBlob = new Blob([svgString], { type: "image/svg+xml;charset=utf-8" });
+  const url = URL.createObjectURL(svgBlob);
+
+  const img = new Image();
+  img.crossOrigin = "anonymous";
+
+  return new Promise<void>((resolve, reject) => {
+    img.onload = () => {
+      const canvas = document.createElement("canvas");
+      canvas.width = width * scale;
+      canvas.height = height * scale;
+      const ctx = canvas.getContext("2d")!;
+
+      if (background !== "transparent") {
+        ctx.fillStyle = background === "dark" ? "#111827" : "#ffffff";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+      }
+
+      ctx.scale(scale, scale);
+      ctx.drawImage(img, 0, 0, width, height);
+
+      canvas.toBlob(
+        (blob) => {
+          if (blob) {
+            downloadBlob(blob, `${sanitizeFilename(title)}.png`);
+            resolve();
+          } else {
+            reject(new Error("Failed to create PNG blob"));
+          }
+        },
+        "image/png"
+      );
+
+      URL.revokeObjectURL(url);
+    };
+    img.onerror = () => {
+      URL.revokeObjectURL(url);
+      reject(new Error("Failed to load SVG for PNG conversion"));
+    };
+    img.src = url;
+  });
 }
 
 // --- Mermaid initialization ---
@@ -62,8 +165,10 @@ function DiagramApp() {
   const [renderedSvg, setRenderedSvg] = useState<string>("");
   const [renderError, setRenderError] = useState<string>("");
   const [copied, setCopied] = useState(false);
+  const [exporting, setExporting] = useState(false);
   const [hostContext, setHostContext] = useState<McpUiHostContext | undefined>();
   const renderCounter = useRef(0);
+  const latestSvgRef = useRef<string>("");
 
   const isDark =
     hostContext?.theme === "dark" ||
@@ -74,6 +179,27 @@ function DiagramApp() {
     capabilities: {},
     onAppCreated: (app) => {
       app.ontoolresult = async (result: CallToolResult) => {
+        // Check for export action
+        const exportData = extractResult<ExportAction>(result);
+        if (exportData && exportData.action === "export") {
+          const svg = latestSvgRef.current;
+          if (!svg) return;
+          setExporting(true);
+          try {
+            if (exportData.format === "png") {
+              await exportPng(svg, exportData.title, exportData.scale, exportData.background);
+            } else {
+              await exportSvg(svg, exportData.title, exportData.background);
+            }
+          } catch (e) {
+            console.error("Export failed:", e);
+          } finally {
+            setExporting(false);
+          }
+          return;
+        }
+
+        // Check for diagram state
         const data = extractResult<DiagramState>(result);
         if (data && data.code !== undefined) {
           setDiagram(data);
@@ -119,6 +245,7 @@ function DiagramApp() {
 
         if (currentRender === renderCounter.current) {
           setRenderedSvg(svg);
+          latestSvgRef.current = svg;
           setRenderError("");
         }
       } catch (e) {
@@ -164,6 +291,26 @@ function DiagramApp() {
       setTimeout(() => setCopied(false), 2000);
     }
   }, [diagram?.code]);
+
+  const handleExport = useCallback(
+    async (format: "svg" | "png") => {
+      const svg = latestSvgRef.current;
+      if (!svg || !diagram) return;
+      setExporting(true);
+      try {
+        if (format === "png") {
+          await exportPng(svg, diagram.title, 2, isDark ? "dark" : "white");
+        } else {
+          await exportSvg(svg, diagram.title, isDark ? "dark" : "transparent");
+        }
+      } catch (e) {
+        console.error("Export failed:", e);
+      } finally {
+        setExporting(false);
+      }
+    },
+    [diagram, isDark]
+  );
 
   if (error) {
     return (
@@ -249,6 +396,40 @@ function DiagramApp() {
             }}
           >
             {copied ? "Copied!" : "Copy"}
+          </button>
+          <button
+            onClick={() => handleExport("svg")}
+            disabled={!renderedSvg || exporting}
+            style={{
+              padding: "4px 10px",
+              fontSize: 12,
+              border: `1px solid ${isDark ? "#374151" : "#d1d5db"}`,
+              borderRadius: 4,
+              cursor: renderedSvg && !exporting ? "pointer" : "default",
+              background: "transparent",
+              color: isDark ? "#9ca3af" : "#6b7280",
+              opacity: renderedSvg && !exporting ? 1 : 0.4,
+              transition: "all 0.15s",
+            }}
+          >
+            SVG
+          </button>
+          <button
+            onClick={() => handleExport("png")}
+            disabled={!renderedSvg || exporting}
+            style={{
+              padding: "4px 10px",
+              fontSize: 12,
+              border: `1px solid ${isDark ? "#374151" : "#d1d5db"}`,
+              borderRadius: 4,
+              cursor: renderedSvg && !exporting ? "pointer" : "default",
+              background: "transparent",
+              color: isDark ? "#9ca3af" : "#6b7280",
+              opacity: renderedSvg && !exporting ? 1 : 0.4,
+              transition: "all 0.15s",
+            }}
+          >
+            {exporting ? "..." : "PNG"}
           </button>
         </div>
       </div>

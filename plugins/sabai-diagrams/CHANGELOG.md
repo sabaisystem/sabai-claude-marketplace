@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.1.0] - 2026-03-24
+
+### Added
+- SVG and PNG export via `export_diagram` tool and UI buttons
+- PNG export supports configurable scale (1-4x) and background (transparent, white, dark)
+- SVG export preserves diagram styling with optional background
+- Export buttons in toolbar for direct download from the MCP App
+
 ## [1.0.0] - 2026-03-24
 
 ### Added
