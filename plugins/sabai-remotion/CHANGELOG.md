@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.7.0] - 2026-03-24
+
+### Added
+- Tutorial/Walkthrough template (#8) with numbered steps, screen recording frame, highlight/focus overlays, chapter progress bar, and synced captions
+- Caption Overlay reusable pattern in remotion-patterns.md — timed caption segments with karaoke-style word highlighting, configurable fade transitions, and safe-zone positioning
+- Captions support both simple text mode and per-word timing for karaoke highlighting
+
 ## [3.6.0] - 2026-03-23
 
 ### Added

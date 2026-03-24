@@ -5,7 +5,7 @@
 | Field | Value |
 |-------|-------|
 | Type | Skills + Commands + Scripts |
-| Version | 3.5.1 |
+| Version | 3.7.0 |
 | Status | Active |
 | Command | `/video`, `/video carousel`, `/video presentation`, `/video validate` |
 | Repo | `plugins/sabai-remotion` |
@@ -27,7 +27,8 @@ Sabai Remotion turns ideas into rendered videos. Describe what you want, and it 
 - Platform auto-detection (TikTok, YouTube, Instagram, LinkedIn, etc.)
 - Safe zone enforcement — responsive sizing prevents elements going off-screen
 - Animation patterns library (text reveals, transitions, data viz)
-- Ready-to-use templates (intro/outro, data viz, product showcase, carousel, pixel font)
+- Tutorial/walkthrough template with synced captions, chapter progress, and highlight overlays
+- Ready-to-use templates (intro/outro, data viz, product showcase, carousel, pixel font, tutorial)
 
 ## Use Cases
 
