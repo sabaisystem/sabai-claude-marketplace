@@ -410,3 +410,117 @@ const slideDistance = Math.min(width, height) * 0.03;
   );
 })}
 ```
+
+## Caption Overlay
+
+Reusable timed caption component with optional karaoke-style word highlighting. Render this **outside** all `<Sequence>` blocks so `useCurrentFrame()` returns the composition's absolute frame.
+
+### Caption Data Structure
+```tsx
+// Define in CONFIG alongside other template data
+interface CaptionSegment {
+  startFrame: number;        // Frame when caption appears
+  endFrame: number;          // Frame when caption disappears
+  text: string;              // Full caption text
+  words?: {                  // Optional: per-word timing for karaoke highlight
+    word: string;
+    activeFrame: number;     // Frame when this word becomes highlighted
+  }[];
+}
+```
+
+### Caption Overlay Component
+```tsx
+const CaptionOverlay: React.FC<{
+  segments: { startFrame: number; endFrame: number; text: string; words?: { word: string; activeFrame: number }[] }[];
+  position?: "bottom" | "top";
+  bgColor?: string;
+  textColor?: string;
+  activeWordColor?: string;
+  fadeFrames?: number;
+}> = ({
+  segments,
+  position = "bottom",
+  bgColor = "rgba(0,0,0,0.75)",
+  textColor = "white",
+  activeWordColor = "#f26a2c",
+  fadeFrames = 8,
+}) => {
+  const frame = useCurrentFrame();
+  const { width, height } = useVideoConfig();
+  const safeMargin = Math.min(width, height) * 0.1;
+
+  // Find active caption segment
+  const seg = segments.find(s => frame >= s.startFrame && frame <= s.endFrame);
+  if (!seg) return null;
+
+  // Fade in/out
+  const fadeIn = interpolate(frame, [seg.startFrame, seg.startFrame + fadeFrames], [0, 1], {
+    extrapolateLeft: "clamp", extrapolateRight: "clamp",
+  });
+  const fadeOut = interpolate(frame, [seg.endFrame - fadeFrames, seg.endFrame], [1, 0], {
+    extrapolateLeft: "clamp", extrapolateRight: "clamp",
+  });
+  const opacity = Math.min(fadeIn, fadeOut);
+
+  // Find the currently active word index (last word whose activeFrame <= frame)
+  let activeIdx = -1;
+  if (seg.words) {
+    for (let i = seg.words.length - 1; i >= 0; i--) {
+      if (frame >= seg.words[i].activeFrame) { activeIdx = i; break; }
+    }
+  }
+
+  return (
+    <div style={{
+      position: "absolute",
+      ...(position === "bottom"
+        ? { bottom: safeMargin, left: safeMargin, right: safeMargin }
+        : { top: safeMargin, left: safeMargin, right: safeMargin }),
+      display: "flex",
+      justifyContent: "center",
+      opacity,
+      zIndex: 100,
+    }}>
+      <div style={{
+        backgroundColor: bgColor,
+        padding: `${height * 0.015}px ${width * 0.025}px`,
+        borderRadius: Math.min(width, height) * 0.012,
+        maxWidth: width * 0.8,
+        textAlign: "center" as const,
+      }}>
+        {seg.words ? (
+          <div style={{ display: "flex", flexWrap: "wrap" as const, justifyContent: "center", gap: width * 0.006 }}>
+            {seg.words.map((w, i) => (
+              <span key={i} style={{
+                fontSize: width * 0.024,
+                fontFamily: "Arial, sans-serif",
+                fontWeight: i === activeIdx ? "bold" : "normal",
+                color: i === activeIdx ? activeWordColor : textColor,
+                transform: i === activeIdx ? "scale(1.05)" : "scale(1)",
+                transition: "none",
+              }}>
+                {w.word}
+              </span>
+            ))}
+          </div>
+        ) : (
+          <span style={{
+            fontSize: width * 0.024,
+            fontFamily: "Arial, sans-serif",
+            color: textColor,
+          }}>
+            {seg.text}
+          </span>
+        )}
+      </div>
+    </div>
+  );
+};
+```
+
+**Usage notes:**
+- Place `<CaptionOverlay>` **outside** all `<Sequence>` blocks (directly under the root `<AbsoluteFill>`) so it reads the absolute composition frame
+- Keep captions to ~8-12 words per segment for readability
+- For karaoke timing, distribute words evenly: `activeFrame = startFrame + (i / words.length) * (endFrame - startFrame)`
+- Use `position="top"` when bottom content would overlap (e.g., CTA buttons)

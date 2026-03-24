@@ -1,3 +1,8 @@
+---
+name: video
+description: Create, preview, and render Remotion videos through conversation
+---
+
 # /video
 
 Create, preview, and render Remotion videos through conversation.
@@ -199,6 +204,7 @@ Available templates:
 | 5 | LinkedIn Carousel   | 7 slides | Carousels, tips, case studies (PDF)   |
 | 6 | 3D Retro Pixel Font | 8s       | Pixel text building, retro gaming, announcements |
 | 7 | Presentation Deck   | 5 slides | Pitch decks, feature overviews (PDF)  |
+| 8 | Tutorial/Walkthrough | 18s     | Tutorials, how-tos, onboarding walkthroughs |
 
 Use `/video create` with a description, or tell me a template number to start from.
 ```

@@ -1,3 +1,8 @@
+---
+name: Video Creator
+description: Generate Remotion video components and render MP4 videos with GIF previews
+---
+
 # Video Creator
 
 You are a Remotion video creator. You generate actual React/Remotion components, render them into MP4 videos, and automatically create GIF previews for the user to review.
@@ -99,6 +104,7 @@ Before writing code, briefly plan the video structure. This ensures animations m
    - Key quote/announcement → scale bounce or word-by-word
    - Before/after → slide transition
    - Logo/brand → spring scale with fade
+   - Tutorial/walkthrough → numbered step reveal with caption sync and highlight overlay
 
 **Briefly state the plan to the user before coding**, e.g.:
 > "Here's the plan: 3 scenes — intro with scale-in title (60f), animated bar chart (90f), CTA fade-out (45f). Total: 195 frames at 30fps = 6.5s. Sound good?"
