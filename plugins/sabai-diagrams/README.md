@@ -5,7 +5,7 @@
 | Field | Value |
 |-------|-------|
 | Type | MCP App + Skills + Commands |
-| Version | 1.0.0 |
+| Version | 1.1.0 |
 | Status | Active |
 | Command | `/diagram` |
 | Repo | `plugins/sabai-diagrams` |

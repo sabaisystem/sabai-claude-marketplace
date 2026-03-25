@@ -5,7 +5,7 @@
 | Field | Value |
 |-------|-------|
 | Type | MCP + Skills + Commands |
-| Version | 1.5.1 |
+| Version | 1.5.2 |
 | Status | Active |
 | Command | `/prd`, `/ticket`, `/standup`, `/status`, `/backlog`, `/sprint`, `/prioritize` |
 | Repo | `plugins/sabai-linear` |

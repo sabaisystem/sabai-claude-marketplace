@@ -6,8 +6,6 @@
     "name": "Sabai Team"
   },
   "keywords": ["sudoku", "game", "puzzle", "mcp-app", "interactive"],
-  "skills": "./skills/",
-  "commands": "./commands/",
   "mcpServers": {
     "sabai-sudoku": {
       "command": "bash",
