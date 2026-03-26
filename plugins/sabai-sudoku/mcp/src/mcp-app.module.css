@@ -1,0 +1,496 @@
+/* Sabai System Brand Colors */
+:root {
+  --sabai-orange: #f26a2c;
+  --sabai-orange-dark: #e55310;
+  --sabai-teal: #013b2d;
+  --sabai-cream: #fef2ec;
+}
+
+.main {
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 1rem;
+  padding-bottom: 2.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  font-family: var(--font-sans, system-ui, -apple-system, sans-serif);
+  color: var(--color-text-primary, #111827);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.title {
+  margin: 0;
+  font-size: var(--font-heading-lg-size, 1.5rem);
+  font-weight: var(--font-weight-semibold, 600);
+  color: var(--sabai-teal);
+}
+
+.loading {
+  padding: 2rem;
+  text-align: center;
+}
+
+.info {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 420px;
+  font-size: var(--font-text-sm-size, 0.875rem);
+  color: #4b5563;
+  padding: 0 0.25rem;
+}
+
+.timer {
+  font-family: var(--font-mono, monospace);
+  font-weight: 600;
+  color: var(--sabai-teal);
+}
+
+.newGamePanel {
+  text-align: center;
+  padding: 2rem;
+}
+
+.difficultyButtons {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+.diffButton {
+  padding: 0.75rem 1.25rem;
+  border: none;
+  border-radius: 8px;
+  background: var(--sabai-cream);
+  color: var(--sabai-teal);
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.1s;
+}
+
+.diffButton:hover {
+  background: var(--sabai-orange);
+  color: white;
+  transform: translateY(-1px);
+}
+
+/* ============ GAME AREA LAYOUT ============ */
+.gameArea {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+}
+
+.sidePanel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+/* ============ LIGHT MODE (default) ============ */
+.board {
+  display: flex;
+  flex-direction: column;
+  border: 2px solid var(--sabai-teal);
+  border-radius: 4px;
+  overflow: hidden;
+  background: white;
+}
+
+.row {
+  display: flex;
+}
+
+.cell {
+  width: 36px;
+  height: 36px;
+  border: 1px solid #d1d5db;
+  background: #ffffff;
+  color: #111827;
+  font-size: 1.125rem;
+  font-weight: 500;
+  font-family: var(--font-mono, monospace);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.1s, transform 0.05s;
+  padding: 0;
+  margin: 0;
+  position: relative;
+}
+
+.cell:focus {
+  outline: none;
+}
+
+/* Hover effect */
+.cell:hover:not(.original):not(.selected) {
+  background: #fef3c7;
+}
+
+/* Original puzzle numbers - dark teal, bold */
+.cell.original {
+  font-weight: 700;
+  cursor: default;
+  color: var(--sabai-teal);
+  background: #ffffff;
+}
+
+.cell.original:hover {
+  background: #f3f4f6;
+}
+
+/* User-entered numbers - dark orange for contrast */
+.cell.editable {
+  color: #c2410c;
+  font-weight: 600;
+}
+
+/* Selected cell */
+.cell.selected {
+  background: #fed7aa !important;
+  box-shadow: inset 0 0 0 2px var(--sabai-orange);
+}
+
+/* Error cell */
+.cell.error {
+  background: #fee2e2 !important;
+  color: #b91c1c !important;
+}
+
+/* Hint cell */
+.cell.hint {
+  background: #fef08a !important;
+  animation: pulse 1s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+/* Alternating 3x3 boxes - light cream */
+.cell.evenBox {
+  background: #fef7f3;
+}
+
+.cell.original.evenBox {
+  background: #fef7f3;
+}
+
+/* 3x3 box borders */
+.cell.rightBorder {
+  border-right: 2px solid var(--sabai-teal);
+}
+
+.cell.bottomBorder {
+  border-bottom: 2px solid var(--sabai-teal);
+}
+
+/* ============ NOTES ============ */
+.notes {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  width: 100%;
+  height: 100%;
+  font-size: 0.5rem;
+  line-height: 1;
+  padding: 1px;
+}
+
+.notes span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.noteVisible {
+  color: #6b7280;
+}
+
+.noteHidden {
+  visibility: hidden;
+}
+
+/* ============ NUMBER PAD (3x3) ============ */
+.numberPad {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.numRow {
+  display: flex;
+  gap: 0.35rem;
+}
+
+.numButton {
+  width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: 8px;
+  background: linear-gradient(180deg, var(--sabai-orange) 0%, var(--sabai-orange-dark) 100%);
+  color: white;
+  font-size: 1.125rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.1s, box-shadow 0.15s, opacity 0.15s;
+  box-shadow: 0 2px 4px rgba(242, 106, 44, 0.3);
+}
+
+.numButton:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(242, 106, 44, 0.4);
+}
+
+.numButton:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.numButton:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.numComplete {
+  background: #9ca3af;
+  box-shadow: none;
+}
+
+/* Side panel buttons */
+.notesButton {
+  width: 100%;
+  font-size: 0.75rem;
+  padding: 0.5rem;
+}
+
+.notesActive {
+  background: var(--sabai-orange) !important;
+  color: white !important;
+  border-color: var(--sabai-orange) !important;
+}
+
+.clearCellButton {
+  width: 100%;
+  font-size: 0.75rem;
+  padding: 0.5rem;
+}
+
+.sidePanelButton {
+  width: 100%;
+  font-size: 0.75rem;
+  padding: 0.5rem;
+}
+
+/* Action buttons */
+.actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.actionButton {
+  padding: 0.5rem 1rem;
+  border: 2px solid var(--sabai-teal);
+  border-radius: 8px;
+  background: white;
+  color: var(--sabai-teal);
+  font-size: var(--font-text-sm-size, 0.875rem);
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.actionButton:hover {
+  background: var(--sabai-teal);
+  color: white;
+}
+
+.actionButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.revealButton {
+  background: var(--sabai-orange);
+  color: white;
+  border-color: var(--sabai-orange);
+}
+
+.revealButton:hover {
+  background: var(--sabai-orange-dark);
+  border-color: var(--sabai-orange-dark);
+}
+
+/* Message */
+.message {
+  text-align: center;
+  padding: 0.75rem 1rem;
+  background: var(--sabai-cream);
+  border-radius: 8px;
+  color: var(--sabai-teal);
+  font-size: var(--font-text-sm-size, 0.875rem);
+  font-weight: 500;
+}
+
+/* Footer */
+.footer {
+  position: fixed;
+  bottom: 0.5rem;
+  right: 0.5rem;
+}
+
+.footerLink {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  text-decoration: none;
+  color: #9ca3af;
+  font-size: 0.7rem;
+  opacity: 0.7;
+  transition: opacity 0.15s;
+}
+
+.footerLink:hover {
+  opacity: 1;
+}
+
+.footerLogo {
+  width: 14px;
+  height: 14px;
+}
+
+/* ============ DARK MODE ============ */
+@media (prefers-color-scheme: dark) {
+  .main {
+    color: #f3f4f6;
+  }
+
+  .title {
+    color: var(--sabai-orange);
+  }
+
+  .info {
+    color: #9ca3af;
+  }
+
+  .timer {
+    color: var(--sabai-orange);
+  }
+
+  .board {
+    border-color: var(--sabai-orange);
+    background: #1f2937;
+  }
+
+  .cell {
+    background: #1f2937;
+    border-color: #4b5563;
+    color: #f3f4f6;
+  }
+
+  /* Hover effect in dark mode */
+  .cell:hover:not(.original):not(.selected) {
+    background: #374151;
+  }
+
+  .cell.original:hover {
+    background: #283548;
+  }
+
+  /* Original puzzle numbers in dark mode - cream/white for contrast */
+  .cell.original {
+    color: #fef2ec;
+    background: #1f2937;
+  }
+
+  /* User-entered numbers in dark mode - bright orange */
+  .cell.editable {
+    color: #fb923c;
+  }
+
+  /* Alternating boxes in dark mode */
+  .cell.evenBox {
+    background: #111827;
+  }
+
+  .cell.original.evenBox {
+    background: #111827;
+  }
+
+  /* Selected cell in dark mode */
+  .cell.selected {
+    background: #7c2d12 !important;
+    box-shadow: inset 0 0 0 2px var(--sabai-orange);
+  }
+
+  /* Error cell in dark mode */
+  .cell.error {
+    background: #7f1d1d !important;
+    color: #fca5a5 !important;
+  }
+
+  /* Hint cell in dark mode */
+  .cell.hint {
+    background: #713f12 !important;
+  }
+
+  /* 3x3 box borders in dark mode */
+  .cell.rightBorder {
+    border-right-color: var(--sabai-orange);
+  }
+
+  .cell.bottomBorder {
+    border-bottom-color: var(--sabai-orange);
+  }
+
+  /* Notes in dark mode */
+  .noteVisible {
+    color: #9ca3af;
+  }
+
+  /* Difficulty buttons in dark mode */
+  .diffButton {
+    background: #374151;
+    color: #f3f4f6;
+  }
+
+  .diffButton:hover {
+    background: var(--sabai-orange);
+    color: white;
+  }
+
+  /* Number pad in dark mode */
+  .numComplete {
+    background: #4b5563;
+  }
+
+  /* Action buttons in dark mode */
+  .actionButton {
+    background: transparent;
+    border-color: var(--sabai-orange);
+    color: var(--sabai-orange);
+  }
+
+  .actionButton:hover {
+    background: var(--sabai-orange);
+    color: white;
+  }
+
+  /* Message in dark mode */
+  .message {
+    background: #374151;
+    color: #f3f4f6;
+  }
+}

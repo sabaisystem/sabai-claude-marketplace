@@ -1,0 +1,33 @@
+{
+  "name": "sabai-remotion",
+  "description": "Video creation assistant — generates Remotion components and renders MP4 videos with GIF previews.",
+  "version": "3.7.0",
+  "author": {
+    "name": "Sabai Team"
+  },
+  "keywords": ["remotion", "video", "animation", "mp4", "gif"],
+  "skills": "./skills/",
+  "commands": "./commands/",
+  "preferences": {
+    "default_format": {
+      "type": "string",
+      "description": "Preferred video format (for example landscape-16:9, portrait-9:16, or square-1:1)",
+      "default": "landscape-16:9"
+    },
+    "default_fps": {
+      "type": "number",
+      "description": "Preferred frames per second for new compositions",
+      "default": 30
+    },
+    "default_duration_seconds": {
+      "type": "number",
+      "description": "Default target duration for new videos in seconds",
+      "default": 30
+    },
+    "brand_voice": {
+      "type": "string",
+      "description": "Preferred tone for scripts and on-screen copy",
+      "default": "clear, modern, product-focused"
+    }
+  }
+}

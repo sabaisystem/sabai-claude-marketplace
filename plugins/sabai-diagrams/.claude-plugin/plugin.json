@@ -1,0 +1,17 @@
+{
+  "name": "sabai-diagrams",
+  "description": "Mermaid diagram generator with visual renderer for flowcharts, sequences, state diagrams, and Gantt charts.",
+  "version": "1.1.0",
+  "author": {
+    "name": "Sabai Team"
+  },
+  "keywords": ["mermaid", "diagram", "flowchart", "sequence", "state", "gantt", "visualization"],
+  "skills": "./skills/",
+  "commands": "./commands/",
+  "mcpServers": {
+    "sabai-diagrams": {
+      "command": "bash",
+      "args": ["${CLAUDE_PLUGIN_ROOT}/mcp/startup.sh"]
+    }
+  }
+}

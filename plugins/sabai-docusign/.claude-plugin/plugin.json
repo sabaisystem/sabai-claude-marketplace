@@ -1,0 +1,20 @@
+{
+  "name": "sabai-docusign",
+  "description": "DocuSign e-signature assistant for agreement management, status tracking, and contract summaries with multi-account support.",
+  "version": "1.0.0",
+  "author": {
+    "name": "Sabai Team"
+  },
+  "keywords": ["docusign", "e-signature", "agreements", "contracts", "envelopes"],
+  "skills": "./skills/",
+  "commands": "./commands/",
+  "mcpServers": {
+    "docusign": {
+      "command": "bash",
+      "args": ["${CLAUDE_PLUGIN_ROOT}/mcp/startup.sh"],
+      "env": {
+        "CLAUDE_PLUGIN_DATA": "${CLAUDE_PLUGIN_DATA}"
+      }
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "name": "sabai-sabai",
+  "description": "Relax with some Thai vibes - plays a chill video when you need a break",
+  "version": "1.0.0",
+  "author": {
+    "name": "Sabai Team"
+  },
+  "keywords": ["relax", "thai", "video", "break", "chill"],
+  "commands": "./commands/",
+  "mcpServers": {
+    "sabai-sabai": {
+      "command": "bash",
+      "args": ["${CLAUDE_PLUGIN_ROOT}/mcp/startup.sh"]
+    }
+  }
+}

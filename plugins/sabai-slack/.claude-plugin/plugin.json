@@ -1,0 +1,21 @@
+{
+  "name": "sabai-slack",
+  "description": "Full-featured Slack integration for messaging, channels, and search",
+  "version": "1.0.0",
+  "author": {
+    "name": "Sabai Team"
+  },
+  "keywords": ["slack", "messaging", "communication", "channels", "teams"],
+  "skills": "./skills/",
+  "commands": "./commands/",
+  "mcpServers": {
+    "slack": {
+      "command": "npx",
+      "args": ["-y", "slack-mcp-server@latest", "--transport", "stdio"],
+      "env": {
+        "SLACK_MCP_XOXP_TOKEN": "${SLACK_TOKEN}",
+        "SLACK_MCP_ADD_MESSAGE_TOOL": "true"
+      }
+    }
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "name": "sabai-recall",
+  "version": "1.4.0",
+  "type": "module",
+  "description": "MCP server for Recall.ai meeting bot automation with embedded video playback",
+  "license": "MIT",
+  "main": "dist/server.js",
+  "scripts": {
+    "build": "vite build && tsc -p tsconfig.server.json",
+    "build:ui": "vite build",
+    "build:server": "tsc -p tsconfig.server.json",
+    "serve": "tsx server.ts",
+    "start": "npm run build && npm run serve",
+    "dev": "tsx server.ts"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/ext-apps": "^1.0.0",
+    "@modelcontextprotocol/sdk": "^1.24.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "zod": "^3.24.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "@types/react": "^19.2.2",
+    "@types/react-dom": "^19.2.2",
+    "@vitejs/plugin-react": "^4.3.4",
+    "tsx": "^4.19.0",
+    "typescript": "^5.9.3",
+    "vite": "^6.0.0",
+    "vite-plugin-singlefile": "^2.3.0"
+  }
+}

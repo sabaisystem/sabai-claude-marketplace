@@ -1,0 +1,18 @@
+{
+  "name": "sabai-linear",
+  "description": "Product Manager assistant with Linear integration. Create tickets, manage backlog, generate PRDs, and more.",
+  "version": "1.5.2",
+  "author": {
+    "name": "Sabai Team"
+  },
+  "keywords": ["linear", "project-management", "tickets", "backlog", "prd"],
+  "mcpServers": {
+    "linear": {
+      "command": "bash",
+      "args": ["${CLAUDE_PLUGIN_ROOT}/mcp/startup.sh"],
+      "env": {
+        "LINEAR_API_KEY": "${LINEAR_API_KEY}"
+      }
+    }
+  }
+}

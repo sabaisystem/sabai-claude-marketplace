@@ -1,0 +1,15 @@
+{
+  "name": "sabai-sudoku",
+  "description": "Play Sudoku in Claude with an interactive visual game board. Generate puzzles of varying difficulty, get hints, and track your progress.",
+  "version": "1.0.0",
+  "author": {
+    "name": "Sabai Team"
+  },
+  "keywords": ["sudoku", "game", "puzzle", "mcp-app", "interactive"],
+  "mcpServers": {
+    "sabai-sudoku": {
+      "command": "bash",
+      "args": ["${CLAUDE_PLUGIN_ROOT}/mcp/startup.sh"]
+    }
+  }
+}

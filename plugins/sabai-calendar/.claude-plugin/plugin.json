@@ -1,0 +1,19 @@
+{
+  "name": "sabai-calendar",
+  "description": "Calendar assistant with Google Calendar integration. Manage events, schedule meetings, get daily briefings, and optimize your time.",
+  "version": "1.2.0",
+  "author": {
+    "name": "Sabai Team"
+  },
+  "keywords": ["calendar", "google", "meetings", "events", "scheduling"],
+  "mcpServers": {
+    "sabai-calendar": {
+      "command": "bash",
+      "args": ["${CLAUDE_PLUGIN_ROOT}/mcp/startup.sh"],
+      "env": {
+        "GOOGLE_CREDENTIALS": "${CLAUDE_PLUGIN_ROOT}/mcp/config/credentials.json",
+        "GOOGLE_TOKEN": "${CLAUDE_PLUGIN_ROOT}/mcp/config/token.json"
+      }
+    }
+  }
+}

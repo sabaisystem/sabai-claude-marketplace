@@ -1,0 +1,101 @@
+{
+  "name": "sabai-claude-marketplace",
+  "metadata": {
+    "description": "Claude plugins by Sabai System — productivity tools, integrations, and utilities"
+  },
+  "owner": {
+    "name": "Sabai System"
+  },
+  "plugins": [
+    {
+      "name": "sabai-calendar",
+      "source": "./plugins/sabai-calendar",
+      "description": "Calendar assistant with Google Calendar integration. Manage events, schedule meetings, get daily briefings, and optimize your time."
+    },
+    {
+      "name": "sabai-conversion",
+      "source": "./plugins/sabai-conversion",
+      "description": "Smart currency and timezone converter that learns your preferences."
+    },
+    {
+      "name": "sabai-attio",
+      "source": "./plugins/sabai-attio",
+      "description": "CRM assistant with Attio integration. Manage leads, prepare for meetings, track deals, and log activities."
+    },
+    {
+      "name": "sabai-discord",
+      "source": "./plugins/sabai-discord",
+      "description": "Discord assistant for server management, messaging, channel organization, and community engagement."
+    },
+    {
+      "name": "sabai-notion",
+      "source": "./plugins/sabai-notion",
+      "description": "Documentation workflow with Notion integration. Create, update, and sync documentation between your codebase and Notion pages."
+    },
+    {
+      "name": "sabai-gmail",
+      "source": "./plugins/sabai-gmail",
+      "description": "Gmail assistant for email composition, inbox management, templates, and follow-up tracking."
+    },
+    {
+      "name": "sabai-granola",
+      "source": "./plugins/sabai-granola",
+      "description": "Meeting intelligence plugin powered by Granola. Search meetings, get summaries, smart analysis by meeting type, and holistic coaching on work patterns and communication."
+    },
+    {
+      "name": "sabai-linear",
+      "source": "./plugins/sabai-linear",
+      "description": "Product Manager assistant with Linear integration. Create tickets, manage backlog, generate PRDs, and more."
+    },
+    {
+      "name": "sabai-sabai",
+      "source": "./plugins/sabai-sabai",
+      "description": "Relax with some Thai vibes - plays a chill video when you need a break."
+    },
+    {
+      "name": "sabai-slack",
+      "source": "./plugins/sabai-slack",
+      "description": "Full-featured Slack integration for messaging, channels, and search."
+    },
+    {
+      "name": "sabai-sudoku",
+      "source": "./plugins/sabai-sudoku",
+      "description": "Play Sudoku in Claude with an interactive visual game board. Generate puzzles of varying difficulty, get hints, and track your progress."
+    },
+    {
+      "name": "sabai-harvest",
+      "source": "./plugins/sabai-harvest",
+      "description": "Efficient Harvest time tracking for employees and contractors using hrvst-cli."
+    },
+    {
+      "name": "sabai-tella",
+      "source": "./plugins/sabai-tella",
+      "description": "Tella video workflow assistant with MCP integration for managing videos, playlists, and creating async video content."
+    },
+    {
+      "name": "sabai-recall",
+      "source": "./plugins/sabai-recall",
+      "description": "Meeting bot automation with Recall.ai. Create bots to join and record meetings, access recordings, transcripts, and participant data."
+    },
+    {
+      "name": "sabai-remotion",
+      "source": "./plugins/sabai-remotion",
+      "description": "Video creation assistant — generates Remotion components and renders MP4 videos with GIF previews."
+    },
+    {
+      "name": "sabai-xero",
+      "source": "./plugins/sabai-xero",
+      "description": "Xero accounting integration: manage invoices, contacts, payments, and generate financial reports"
+    },
+    {
+      "name": "sabai-diagrams",
+      "source": "./plugins/sabai-diagrams",
+      "description": "Mermaid diagram generator with visual renderer for flowcharts, sequences, state diagrams, and Gantt charts."
+    },
+    {
+      "name": "sabai-docusign",
+      "source": "./plugins/sabai-docusign",
+      "description": "DocuSign e-signature assistant for agreement management, status tracking, and contract summaries with multi-account support."
+    }
+  ]
+}
