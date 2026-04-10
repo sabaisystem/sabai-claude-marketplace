@@ -12,5 +12,5 @@ if [ -f "$SCRIPT_DIR/config/.env" ]; then
   set +a
 fi
 
-# Run the MCP server
-exec node index.js
+# Use bundled server (CoWork compatible, no npm install needed)
+exec node dist/server.cjs

@@ -1,3 +1,8 @@
+---
+name: roadmap
+description: Generate a timeline-based roadmap view from Linear projects and milestones
+---
+
 # /roadmap - Roadmap Summary
 
 Generate a timeline-based roadmap view from Linear projects and milestones, organized by month with status indicators.

@@ -1,3 +1,8 @@
+---
+name: prioritize
+description: Score and rank Linear tickets using RICE, ICE, or MoSCoW frameworks
+---
+
 # /prioritize - Interactive Prioritization Calculator
 
 Score and rank Linear tickets using RICE, ICE, or MoSCoW frameworks. Saves scores to Linear and maps results to priorities.

@@ -1,3 +1,8 @@
+---
+name: ask
+description: Ask natural language questions about your meetings and get answers with context
+---
+
 # Ask Questions About Meetings
 
 Ask natural language questions about your meetings and get answers with context.

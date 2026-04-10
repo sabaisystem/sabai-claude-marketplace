@@ -25,7 +25,9 @@ plugins/
       package.json      # Dependencies
       ui/               # UI source (for MCP Apps)
       dist/             # Built UI (commit this)
-    skills/             # Optional: Skill files (.md)
+    skills/             # Optional: Skills (directory format)
+      skill-name/
+        SKILL.md        # Skill with YAML frontmatter
     commands/           # Optional: Slash commands (.md)
     README.md           # Required: Plugin documentation
 ```
@@ -216,10 +218,24 @@ Support both light and dark modes:
 
 ## Skill File Structure
 
-Skills are markdown files that provide context and instructions:
+Skills use the directory format `skills/<name>/SKILL.md` with YAML frontmatter:
+
+```
+skills/
+  my-skill/
+    SKILL.md            # Required: skill definition with frontmatter
+    references/         # Optional: supporting reference files
+```
+
+SKILL.md format:
 
 ```markdown
-# Skill Name
+---
+name: My Skill
+description: One-line description of what the skill does
+---
+
+# My Skill
 
 Description of what the skill does.
 
@@ -236,6 +252,8 @@ Step-by-step instructions for Claude to follow.
 
 Show example inputs and outputs.
 ```
+
+**Important:** Skills MUST use the `skills/<name>/SKILL.md` directory format, not flat `skills/name.md` files. Flat files are not discovered by Claude Code's marketplace plugin system.
 
 ## Command File Structure
 

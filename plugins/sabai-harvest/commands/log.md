@@ -1,3 +1,8 @@
+---
+name: log
+description: Log hours to Harvest quickly
+---
+
 # /log - Quick Time Entry
 
 Log hours to Harvest quickly.

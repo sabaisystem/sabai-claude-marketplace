@@ -1,3 +1,8 @@
+---
+name: refine
+description: Analyze tickets for refinement readiness and interactively apply improvements
+---
+
 # /refine - Backlog Refinement Assistant
 
 Analyze tickets for refinement readiness, score completeness, and interactively apply suggested improvements — acceptance criteria, estimates, labels, and priority.

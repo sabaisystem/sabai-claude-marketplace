@@ -1,3 +1,8 @@
+---
+name: template
+description: Use an email template for quick composition
+---
+
 # /template Command
 
 Use an email template for quick composition.

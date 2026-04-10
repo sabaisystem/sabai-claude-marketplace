@@ -1,3 +1,8 @@
+---
+name: convert
+description: Smart currency and timezone converter
+---
+
 # /convert
 
 Smart currency and timezone converter.

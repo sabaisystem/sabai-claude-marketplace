@@ -1,3 +1,8 @@
+---
+name: availability
+description: Check your availability or find common free time with others
+---
+
 # /availability - Check Availability
 
 Check your availability or find common free time with others.

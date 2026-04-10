@@ -1,3 +1,8 @@
+---
+name: event
+description: Quickly create a new calendar event
+---
+
 # /event - Create Calendar Event
 
 Quickly create a new calendar event.

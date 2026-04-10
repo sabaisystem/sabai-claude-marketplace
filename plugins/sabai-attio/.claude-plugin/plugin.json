@@ -1,11 +1,13 @@
 {
   "name": "sabai-attio",
   "description": "CRM assistant with Attio integration. Manage leads, prepare for meetings, track deals, and log activities in your Attio workspace.",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "author": {
     "name": "Sabai Team"
   },
   "keywords": ["crm", "attio", "leads", "deals", "sales"],
+  "skills": "./skills/",
+  "commands": "./commands/",
   "mcpServers": {
     "attio": {
       "command": "npx",

@@ -8,6 +8,10 @@ import { dirname, join } from "path";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
+// Works from source (mcp/server.ts) and bundled (mcp/dist/server.cjs)
+const DIST_DIR = __filename.endsWith(".ts")
+  ? join(__dirname, "dist")
+  : __dirname;
 
 const server = new McpServer({
   name: "sabai-sabai",
@@ -43,7 +47,7 @@ registerAppResource(server,
   resourceUri,
   { mimeType: RESOURCE_MIME_TYPE },
   async (): Promise<ReadResourceResult> => {
-    const html = readFileSync(join(__dirname, "dist", "index.html"), "utf-8");
+    const html = readFileSync(join(DIST_DIR, "index.html"), "utf-8");
     return {
       contents: [{ uri: resourceUri, mimeType: RESOURCE_MIME_TYPE, text: html }],
     };

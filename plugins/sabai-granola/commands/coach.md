@@ -1,3 +1,8 @@
+---
+name: coach
+description: Analyze communication patterns across meetings and provide actionable coaching
+---
+
 # Communication Coach
 
 Analyze the user's communication patterns across meetings and provide actionable coaching.

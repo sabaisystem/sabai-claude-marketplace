@@ -1,3 +1,8 @@
+---
+name: duplicate
+description: Find potential duplicate or related tickets in Linear
+---
+
 # /duplicate - Check for Duplicate Tickets
 
 Find potential duplicate or related tickets in Linear.

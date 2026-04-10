@@ -1,3 +1,8 @@
+---
+name: standup
+description: Generate a daily standup summary from Linear activity
+---
+
 # /standup - Daily Standup Summary
 
 Generate a daily standup summary from Linear activity.

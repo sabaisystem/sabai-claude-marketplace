@@ -1,3 +1,8 @@
+---
+name: search
+description: Search across meeting history by keywords, participants, or topics
+---
+
 # Meeting Search
 
 Search across meeting history by keywords, participants, or topics.

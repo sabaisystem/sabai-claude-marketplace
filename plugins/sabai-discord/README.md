@@ -5,7 +5,7 @@
 | Field | Value |
 |-------|-------|
 | Type | MCP + Skills + Commands |
-| Version | 1.5.0 |
+| Version | 1.6.0 |
 | Status | Active |
 | Command | `/discord-send`, `/discord-read`, `/discord-dm` |
 | Repo | `plugins/sabai-discord` |

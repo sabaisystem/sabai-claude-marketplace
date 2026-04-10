@@ -1,3 +1,8 @@
+---
+name: today
+description: Show today's calendar events and schedule summary
+---
+
 # /today - Today's Schedule
 
 Show today's calendar events and schedule summary.

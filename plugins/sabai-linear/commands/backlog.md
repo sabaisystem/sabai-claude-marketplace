@@ -1,3 +1,8 @@
+---
+name: backlog
+description: View and manage Linear backlog
+---
+
 # /backlog Command
 
 View and manage Linear backlog.

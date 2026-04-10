@@ -1,3 +1,8 @@
+---
+name: slack-search
+description: Search Slack messages with powerful filters
+---
+
 # /slack-search
 
 Search Slack messages with powerful filters.

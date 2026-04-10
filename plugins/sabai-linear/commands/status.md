@@ -1,3 +1,8 @@
+---
+name: status
+description: Generate a comprehensive weekly status report from Linear data
+---
+
 # /status - Weekly Status Report
 
 Generate a comprehensive weekly status report from Linear data.

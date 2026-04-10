@@ -2,28 +2,62 @@
 
 Public marketplace for Claude plugins by [Sabai System](https://sabaisystem.com).
 
+## What This Demonstrates
+
+This marketplace showcases production-grade Claude plugin development across every surface of the platform:
+
+- **10 custom MCP servers** with 70+ tools for external service integration
+- **5 MCP App interactive UIs** — React applications embedded directly in Claude (email editor, game, diagram renderer, video player)
+- **37 skills** with domain-specific frameworks (RICE/ICE scoring, BANT/CHAMP qualification, ADR logging)
+- **76 slash commands** for instant access to workflows
+- **Multiple auth patterns** — Google OAuth, DocuSign JWT, Xero PKCE, API keys, external MCP delegation
+
+### Business Domains Covered
+
+CRM (Attio) | Email (Gmail) | Calendar (Google) | Project Management (Linear) | Accounting (Xero) | E-Signatures (DocuSign) | Communications (Slack, Discord) | Video Creation (Remotion) | Meeting Intelligence (Granola, Recall, Tella) | Documentation (Notion) | Diagrams (Mermaid)
+
+---
+
 ## Available Plugins
 
-| Plugin | Description | Type | Version | Status | Updated |
-|--------|-------------|------|---------|--------|---------|
-| [sabai-sudoku](plugins/sabai-sudoku) | Interactive Sudoku game with smart hints | MCP App | 1.0.0 | Active | 2026-02-16 |
-| [sabai-linear](plugins/sabai-linear) | Product Manager assistant with Linear integration | MCP + Skills + Commands | 1.5.2 | Active | 2026-03-25 |
-| [sabai-attio](plugins/sabai-attio) | CRM assistant with Attio integration | Skills + Commands | 1.0.0 | Active | 2026-02-16 |
-| [sabai-conversion](plugins/sabai-conversion) | Smart currency and timezone converter with preferences | Skills | 1.0.0 | Active | 2026-02-16 |
-| [sabai-notion](plugins/sabai-notion) | Documentation workflow with Notion integration | MCP + Skills + Commands | 1.0.0 | Active | 2026-02-16 |
-| [sabai-gmail](plugins/sabai-gmail) | Gmail assistant with embedded email editor and inbox management | MCP App + Skills + Commands | 1.3.0 | Active | 2026-02-21 |
-| [sabai-calendar](plugins/sabai-calendar) | Calendar assistant with Google Calendar integration | MCP + Skills + Commands | 1.2.0 | Active | 2026-02-21 |
-| [sabai-granola](plugins/sabai-granola) | Meeting intelligence with Granola for summaries and coaching | MCP + Commands | 1.2.0 | Active | 2026-02-17 |
-| [sabai-sabai](plugins/sabai-sabai) | Relax with chill Thai vibes when you need a break | MCP App + Command | 1.0.0 | Active | 2026-02-16 |
-| [sabai-tella](plugins/sabai-tella) | Tella video management and content planning | MCP + Commands | 1.1.0 | Active | 2026-02-16 |
-| [sabai-xero](plugins/sabai-xero) | Xero accounting: invoices, contacts, payments, reports | MCP + Skills + Commands | 1.0.0 | Active | 2026-02-20 |
-| [sabai-harvest](plugins/sabai-harvest) | Efficient Harvest time tracking for employees/contractors | Skills + Commands | 1.0.0 | Active | 2026-02-16 |
-| [sabai-discord](plugins/sabai-discord) | Discord assistant for server management and messaging | MCP + Skills + Commands | 1.5.0 | Active | 2026-03-06 |
-| [sabai-slack](plugins/sabai-slack) | Full-featured Slack integration for messaging and search | MCP + Skills + Commands | 1.0.0 | Active | 2026-02-16 |
-| [sabai-recall](plugins/sabai-recall) | Meeting bot automation with Recall.ai for recording and transcription | MCP App + Commands | 1.4.0 | Active | 2026-02-16 |
-| [sabai-remotion](plugins/sabai-remotion) | Video creation, LinkedIn carousel, and presentation deck assistant with MP4, GIF, and PDF output | Skills + Commands + Scripts | 3.7.0 | Active | 2026-03-24 |
-| [sabai-diagrams](plugins/sabai-diagrams) | Mermaid diagram generator with visual renderer | MCP App + Skills + Commands | 1.1.0 | Active | 2026-03-24 |
-| [sabai-docusign](plugins/sabai-docusign) | DocuSign e-signature assistant with multi-account support | MCP + Skills + Commands | 1.0.0 | Beta | 2026-03-24 |
+### Flagship
+
+These plugins demonstrate the full depth of Claude platform capabilities — custom MCP servers, interactive UIs, comprehensive skills, and rich command sets.
+
+| Plugin | Description | Type | Version | Updated |
+|--------|-------------|------|---------|---------|
+| [sabai-gmail](plugins/sabai-gmail) | Gmail assistant with embedded email editor and inbox management | MCP App + Skills + Commands | 1.4.0 | 2026-04-02 |
+| [sabai-linear](plugins/sabai-linear) | Product Manager assistant with Linear integration | MCP + Skills + Commands | 1.6.0 | 2026-04-02 |
+| [sabai-sudoku](plugins/sabai-sudoku) | Interactive Sudoku game with smart hints | MCP App | 1.0.0 | 2026-02-16 |
+| [sabai-remotion](plugins/sabai-remotion) | Video creation, LinkedIn carousel, and presentation deck assistant | Skills + Commands + Scripts | 3.7.0 | 2026-03-24 |
+
+### Full Integrations
+
+Custom MCP servers with skills and commands for specific business tools.
+
+| Plugin | Description | Type | Version | Updated |
+|--------|-------------|------|---------|---------|
+| [sabai-calendar](plugins/sabai-calendar) | Calendar assistant with Google Calendar integration | MCP + Skills + Commands | 1.3.0 | 2026-04-02 |
+| [sabai-discord](plugins/sabai-discord) | Discord assistant for server management and messaging | MCP + Skills + Commands | 1.6.0 | 2026-04-02 |
+| [sabai-xero](plugins/sabai-xero) | Xero accounting: invoices, contacts, payments, reports | MCP + Skills + Commands | 1.1.0 | 2026-04-02 |
+| [sabai-docusign](plugins/sabai-docusign) | DocuSign e-signature assistant with multi-account support | MCP + Skills + Commands | 1.0.0 | 2026-03-24 |
+| [sabai-recall](plugins/sabai-recall) | Meeting bot automation with Recall.ai for recording and transcription | MCP App + Commands | 1.4.0 | 2026-02-16 |
+| [sabai-diagrams](plugins/sabai-diagrams) | Mermaid diagram generator with visual renderer | MCP App + Skills + Commands | 1.1.0 | 2026-03-24 |
+| [sabai-notion](plugins/sabai-notion) | Documentation workflow with Notion integration | MCP + Skills + Commands | 1.1.0 | 2026-04-02 |
+
+### Utilities & Integrations
+
+Lightweight plugins using external MCP servers, skills, or CLI wrappers.
+
+| Plugin | Description | Type | Version | Updated |
+|--------|-------------|------|---------|---------|
+| [sabai-attio](plugins/sabai-attio) | CRM assistant with Attio integration | MCP + Skills + Commands | 1.1.0 | 2026-04-02 |
+| [sabai-slack](plugins/sabai-slack) | Full-featured Slack integration for messaging and search | MCP + Skills + Commands | 1.1.0 | 2026-04-02 |
+| [sabai-granola](plugins/sabai-granola) | Meeting intelligence with Granola for summaries and coaching | MCP + Commands | 1.2.0 | 2026-02-17 |
+| [sabai-tella](plugins/sabai-tella) | Tella video management and content planning | MCP + Commands | 1.1.0 | 2026-02-16 |
+| [sabai-harvest](plugins/sabai-harvest) | Efficient Harvest time tracking for employees/contractors | Skills + Commands | 1.1.0 | 2026-04-02 |
+| [sabai-conversion](plugins/sabai-conversion) | Smart currency and timezone converter with preferences | Skills | 1.1.0 | 2026-04-02 |
+| [sabai-sabai](plugins/sabai-sabai) | Relax with chill Thai vibes when you need a break | MCP App + Command | 1.0.0 | 2026-02-16 |
 
 **Status:** Active = Stable and maintained | Beta = In development | Deprecated = No longer maintained
 
@@ -36,7 +70,7 @@ The easiest way to install plugins is through [Claude for Work](https://claude.a
 #### Adding the Marketplace
 
 1. Open [Claude for Work](https://claude.ai/work) and sign in as an Admin
-2. Navigate to **Settings** → **Plugins**
+2. Navigate to **Settings** > **Plugins**
 3. Under "Plugin Marketplaces", click **Add marketplace**
 4. Select **GitHub** as the source
 5. Enter the repository: `sabaisystem/sabai-claude-marketplace`
@@ -46,7 +80,7 @@ The easiest way to install plugins is through [Claude for Work](https://claude.a
 
 Once the marketplace is added:
 
-1. Go to **Settings** → **Plugins**
+1. Go to **Settings** > **Plugins**
 2. Browse available plugins from the Sabai System marketplace
 3. Click **Install** on any plugin you want to enable
 4. Configure plugin settings if required (API keys, preferences, etc.)
@@ -106,6 +140,8 @@ plugins/
       startup.sh        # Startup script
       package.json      # Dependencies
     skills/             # Skills (optional)
+      skill-name/
+        SKILL.md        # Skill with YAML frontmatter
     commands/           # Slash commands (optional)
     README.md           # Plugin documentation
 ```
@@ -116,7 +152,7 @@ This repository is tracked in [Linear](https://linear.app/sabaisystem) under the
 
 - **Report bugs or request features**: Create an issue in the appropriate plugin project
 - **General issues**: Use the "Sabai Plugins" project for cross-plugin concerns
-- **Workflow**: Triage → Backlog → Todo → In Progress → In Review → Done
+- **Workflow**: Triage > Backlog > Todo > In Progress > In Review > Done
 
 ### Developer Commands
 

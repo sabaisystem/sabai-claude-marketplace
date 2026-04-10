@@ -1,3 +1,8 @@
+---
+name: discord-send
+description: Send a message to a Discord channel
+---
+
 # /discord-send Command
 
 Send a message to a Discord channel.

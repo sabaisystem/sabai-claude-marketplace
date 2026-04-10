@@ -1,3 +1,8 @@
+---
+name: discord-channels
+description: List all channels in the Discord server
+---
+
 # /discord-channels Command
 
 List all channels in the Discord server.

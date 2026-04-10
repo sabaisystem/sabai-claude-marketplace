@@ -1,7 +1,7 @@
 {
   "name": "sabai-xero",
   "description": "Xero accounting integration: manage invoices, contacts, payments, and generate financial reports",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "author": {
     "name": "Sabai Team"
   },
@@ -10,8 +10,8 @@
   "commands": "./commands/",
   "mcpServers": {
     "xero": {
-      "command": "node",
-      "args": ["${CLAUDE_PLUGIN_ROOT}/mcp/index.js"],
+      "command": "bash",
+      "args": ["${CLAUDE_PLUGIN_ROOT}/mcp/startup.sh"],
       "env": {
         "XERO_CLIENT_ID": "${XERO_CLIENT_ID}"
       }

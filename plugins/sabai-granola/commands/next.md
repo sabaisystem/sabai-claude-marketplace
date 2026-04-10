@@ -1,3 +1,8 @@
+---
+name: next
+description: Extract future commitments and scheduled follow-ups from past meetings
+---
+
 # Next — Future Commitments from Past Meetings
 
 Extract mentions of upcoming meetings, follow-ups, and scheduled commitments from past meeting transcripts.

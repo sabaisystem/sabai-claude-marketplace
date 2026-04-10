@@ -18,5 +18,5 @@ if [ -z "$LINEAR_API_KEY" ]; then
   exit 1
 fi
 
-# Run the bundled MCP server
-exec node dist/server.cjs
+# Use bundled server (CoWork compatible, no npm install needed)
+exec node dist/server.mjs

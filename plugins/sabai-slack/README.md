@@ -5,7 +5,7 @@
 | Field | Value |
 |-------|-------|
 | Type | MCP + Skills + Commands |
-| Version | 1.0.0 |
+| Version | 1.1.0 |
 | Status | Active |
 | Command | `/slack send`, `/slack read`, `/slack-search` |
 | Repo | `plugins/sabai-slack` |

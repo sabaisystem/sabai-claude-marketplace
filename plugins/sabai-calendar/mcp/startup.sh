@@ -10,5 +10,5 @@ if [ ! -f "$SCRIPT_DIR/config/token.json" ]; then
   echo "WARNING: Not authenticated. Run 'cd $SCRIPT_DIR && npm run auth' to set up Calendar access." >&2
 fi
 
-# Run the bundled MCP server
+# Use bundled server (CoWork compatible, no npm install needed)
 exec node dist/server.cjs

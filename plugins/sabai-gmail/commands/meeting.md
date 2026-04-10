@@ -1,3 +1,8 @@
+---
+name: meeting
+description: Schedule a meeting via email with calendar integration
+---
+
 # /meeting Command
 
 Schedule a meeting via email with calendar integration.

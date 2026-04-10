@@ -2,4 +2,5 @@ node_modules/
 config/.env
 config/accounts/
 *.pem
-dist/
+# Keep bundled server for CoWork compatibility
+!dist/server.cjs

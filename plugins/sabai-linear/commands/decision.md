@@ -1,3 +1,8 @@
+---
+name: decision
+description: Document important decisions using ADR format and save to Linear
+---
+
 # /decision - Log a Decision
 
 Document important decisions using ADR (Architecture Decision Record) format, guided through a conversational flow, and saved to Linear.

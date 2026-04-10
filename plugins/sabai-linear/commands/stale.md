@@ -1,3 +1,8 @@
+---
+name: stale
+description: Identify tickets that haven't been updated recently
+---
+
 # /stale - Find Stale Tickets
 
 Identify tickets that haven't been updated recently.

@@ -1,7 +1,7 @@
 {
   "name": "sabai-conversion",
   "description": "Smart currency and timezone converter that learns your preferences",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "author": {
     "name": "Sabai Team"
   },

@@ -1,3 +1,8 @@
+---
+name: publish
+description: Publish documentation to Notion
+---
+
 # /publish Command
 
 Publish documentation to Notion.

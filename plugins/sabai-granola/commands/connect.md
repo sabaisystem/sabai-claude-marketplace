@@ -1,3 +1,8 @@
+---
+name: connect
+description: Connect and authenticate with Granola for meeting intelligence
+---
+
 # Connect to Granola
 
 Connect and authenticate with Granola to enable all Sabai meeting intelligence features.

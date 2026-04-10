@@ -1,3 +1,8 @@
+---
+name: focus
+description: Block protected focus time on your calendar
+---
+
 # /focus - Block Focus Time
 
 Block protected focus time on your calendar.

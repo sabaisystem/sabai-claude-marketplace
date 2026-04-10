@@ -1,3 +1,8 @@
+---
+name: docs
+description: Generate documentation from source code
+---
+
 # /docs Command
 
 Generate documentation from source code.

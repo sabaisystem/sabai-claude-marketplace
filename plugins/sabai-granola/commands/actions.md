@@ -1,3 +1,8 @@
+---
+name: actions
+description: Extract, track, and cross-reference action items across meetings
+---
+
 # Action Items Tracker
 
 Extract, track, and cross-reference action items across meetings.

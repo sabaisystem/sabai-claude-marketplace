@@ -1,3 +1,8 @@
+---
+name: timesheet
+description: View and review your Harvest timesheet
+---
+
 # /timesheet - View Timesheet
 
 View and review your Harvest timesheet.

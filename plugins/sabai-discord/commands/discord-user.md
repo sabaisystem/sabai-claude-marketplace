@@ -1,3 +1,8 @@
+---
+name: discord-user
+description: Look up a Discord user's information
+---
+
 # /discord-user Command
 
 Look up a Discord user's information.

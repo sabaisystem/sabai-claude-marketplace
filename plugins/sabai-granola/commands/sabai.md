@@ -1,3 +1,8 @@
+---
+name: sabai
+description: Smart meeting assistant that routes requests to the right capability automatically
+---
+
 # Sabai — Smart Meeting Assistant
 
 Your single entry point for all meeting intelligence. Just say what you need — Sabai figures out the rest.

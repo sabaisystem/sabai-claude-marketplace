@@ -1,3 +1,8 @@
+---
+name: sabai
+description: Take a break and relax with some chill Thai vibes
+---
+
 # /sabai
 
 Take a break and relax with some chill Thai vibes.

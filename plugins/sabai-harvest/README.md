@@ -5,7 +5,7 @@
 | Field | Value |
 |-------|-------|
 | Type | Skills + Commands |
-| Version | 1.0.0 |
+| Version | 1.1.0 |
 | Status | Active |
 | Command | `/setup-harvest`, `/duplicate-week`, `/log`, `/timesheet` |
 | Repo | `plugins/sabai-harvest` |

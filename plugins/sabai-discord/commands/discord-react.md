@@ -1,3 +1,8 @@
+---
+name: discord-react
+description: Add a reaction to a Discord message
+---
+
 # /discord-react Command
 
 Add a reaction to a Discord message.

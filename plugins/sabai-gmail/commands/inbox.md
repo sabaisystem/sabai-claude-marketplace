@@ -1,3 +1,8 @@
+---
+name: inbox
+description: View and triage your inbox with assistance
+---
+
 # /inbox Command
 
 View and triage your inbox with assistance.

@@ -1,3 +1,8 @@
+---
+name: search
+description: Search emails with advanced filters
+---
+
 # /search Command
 
 Search emails with advanced filters.

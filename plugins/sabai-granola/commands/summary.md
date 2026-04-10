@@ -1,3 +1,8 @@
+---
+name: summary
+description: Get a concise summary of one or multiple meetings
+---
+
 # Summarize Meetings
 
 Get a concise summary of one or multiple meetings.

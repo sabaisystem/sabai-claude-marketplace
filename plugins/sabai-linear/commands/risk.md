@@ -1,3 +1,8 @@
+---
+name: risk
+description: Analyze project risks and ticket-level concerns using Impact x Likelihood scoring
+---
+
 # /risk - Risk Assessment
 
 Analyze real Linear data to identify project risks and ticket-level concerns using Impact x Likelihood scoring.

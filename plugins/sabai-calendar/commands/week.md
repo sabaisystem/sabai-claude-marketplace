@@ -1,3 +1,8 @@
+---
+name: week
+description: Show the week's calendar at a glance
+---
+
 # /week - Weekly Schedule Overview
 
 Show the week's calendar at a glance.

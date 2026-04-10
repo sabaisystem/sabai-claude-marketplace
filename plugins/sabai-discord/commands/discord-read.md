@@ -1,3 +1,8 @@
+---
+name: discord-read
+description: Read recent messages from a Discord channel
+---
+
 # /discord-read Command
 
 Read recent messages from a Discord channel.

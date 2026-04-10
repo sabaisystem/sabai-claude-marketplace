@@ -1,3 +1,8 @@
+---
+name: email
+description: Compose a new email with assistance
+---
+
 # /email Command
 
 Compose a new email with assistance.

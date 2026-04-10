@@ -1,3 +1,8 @@
+---
+name: reply
+description: Draft a reply to an email or conversation
+---
+
 # /reply Command
 
 Draft a reply to an email or conversation.

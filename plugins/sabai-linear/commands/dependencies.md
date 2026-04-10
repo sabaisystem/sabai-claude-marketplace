@@ -1,3 +1,8 @@
+---
+name: dependencies
+description: Analyze and visualize ticket dependencies in Linear
+---
+
 # /dependencies - Dependency Analysis
 
 Analyze and visualize ticket dependencies in Linear, detecting circular dependencies, critical paths, bottlenecks, and orphaned issues.

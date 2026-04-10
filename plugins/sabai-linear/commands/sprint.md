@@ -1,3 +1,8 @@
+---
+name: sprint
+description: Help plan and analyze sprints using Linear data
+---
+
 # /sprint - Sprint Planning Assistant
 
 Help plan and analyze sprints using Linear data.

@@ -1,3 +1,8 @@
+---
+name: release-notes
+description: Generate professional release notes from completed Linear tickets
+---
+
 # /release-notes - Generate Release Notes
 
 Generate professional release notes from completed Linear tickets, categorized by label and formatted for easy distribution.

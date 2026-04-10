@@ -1,7 +1,7 @@
 {
   "name": "sabai-notion",
   "description": "Documentation workflow with Notion integration. Create, update, and sync documentation between your codebase and Notion pages.",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "author": {
     "name": "Sabai Team"
   },

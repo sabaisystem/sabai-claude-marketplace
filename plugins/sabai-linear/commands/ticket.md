@@ -1,3 +1,8 @@
+---
+name: ticket
+description: Create a Linear ticket using templates
+---
+
 # /ticket Command
 
 Create a Linear ticket using templates.

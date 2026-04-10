@@ -1,5 +1,15 @@
 #!/bin/sh
 
+# Validate version consistency across all plugins
+node scripts/validate-versions.js
+if [ $? -ne 0 ]; then
+  echo ""
+  echo "Fix version mismatches before committing."
+  echo "Update README.md Version field to match plugin.json version."
+  echo ""
+  exit 1
+fi
+
 # Check if any plugin README.md files are being committed
 README_CHANGES=$(git diff --cached --name-only | grep -E '^plugins/[^/]+/README\.md$' || true)
 

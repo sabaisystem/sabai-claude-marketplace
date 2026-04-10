@@ -1,3 +1,8 @@
+---
+name: analyze
+description: Analyze meetings using specialized frameworks tailored to the meeting type
+---
+
 # Meeting Analyzer
 
 Analyze meetings using specialized frameworks tailored to the meeting type.

@@ -1,3 +1,8 @@
+---
+name: discord-dm
+description: Send a direct message to a Discord user
+---
+
 # /discord-dm Command
 
 Send a direct message to a Discord user.

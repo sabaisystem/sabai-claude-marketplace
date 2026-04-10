@@ -1,2 +1,3 @@
 node_modules/
-dist/
+# Keep bundled server for CoWork compatibility
+!dist/server.mjs

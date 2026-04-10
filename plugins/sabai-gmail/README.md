@@ -5,7 +5,7 @@
 | Field | Value |
 |-------|-------|
 | Type | MCP App + Skills + Commands |
-| Version | 1.3.0 |
+| Version | 1.4.0 |
 | Status | Active |
 | Command | `/email`, `/reply`, `/inbox`, `/template`, `/followup` |
 | Repo | `plugins/sabai-gmail` |

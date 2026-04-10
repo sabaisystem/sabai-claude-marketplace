@@ -1,3 +1,8 @@
+---
+name: briefing
+description: Get a comprehensive briefing of your day
+---
+
 # /briefing - Daily Calendar Briefing
 
 Get a comprehensive briefing of your day.

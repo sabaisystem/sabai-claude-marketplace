@@ -1,3 +1,8 @@
+---
+name: followup
+description: Find emails needing follow-up and create responses
+---
+
 # /followup Command
 
 Find emails needing follow-up and create responses.

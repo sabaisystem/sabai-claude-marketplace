@@ -1,3 +1,8 @@
+---
+name: duplicate-week
+description: Copy last week's time entries to this week with review and adjustment
+---
+
 # /duplicate-week - Duplicate Last Week's Timesheet
 
 Copy last week's time entries to this week with review and adjustment before submitting.

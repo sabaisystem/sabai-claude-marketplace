@@ -1,3 +1,8 @@
+---
+name: labels
+description: Manage email labels and organization
+---
+
 # /labels Command
 
 Manage email labels and organization.

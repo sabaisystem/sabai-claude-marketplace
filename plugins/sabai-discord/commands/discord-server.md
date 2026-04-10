@@ -1,3 +1,8 @@
+---
+name: discord-server
+description: Get information about the Discord server
+---
+
 # /discord-server Command
 
 Get information about the Discord server.

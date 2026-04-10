@@ -1,3 +1,8 @@
+---
+name: summarize
+description: Summarize an email thread or conversation
+---
+
 # /summarize Command
 
 Summarize an email thread or conversation.

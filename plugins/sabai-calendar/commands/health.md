@@ -1,3 +1,8 @@
+---
+name: health
+description: Analyze your calendar patterns and get recommendations
+---
+
 # /health - Calendar Health Check
 
 Analyze your calendar patterns and get recommendations.

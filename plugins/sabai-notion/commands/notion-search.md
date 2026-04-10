@@ -1,3 +1,8 @@
+---
+name: notion-search
+description: Search your Notion workspace
+---
+
 # /notion-search Command
 
 Search your Notion workspace.

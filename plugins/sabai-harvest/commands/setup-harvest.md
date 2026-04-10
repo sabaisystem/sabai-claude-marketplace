@@ -1,3 +1,8 @@
+---
+name: setup-harvest
+description: Set up the Harvest CLI for time tracking
+---
+
 # /setup-harvest - Set Up Harvest CLI
 
 Set up the Harvest CLI for time tracking.

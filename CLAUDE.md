@@ -18,7 +18,10 @@ plugins/
     .claude-plugin/
       plugin.json       # Required: Plugin manifest
     mcp/                # Optional: MCP server
-    skills/             # Optional: Skill files (.md)
+    skills/             # Optional: Skills (directory format)
+      skill-name/
+        SKILL.md        # Required: YAML frontmatter + skill instructions
+        references/     # Optional: Supporting reference files
     commands/           # Optional: Slash commands (.md)
     README.md           # Required: Plugin documentation
 ```

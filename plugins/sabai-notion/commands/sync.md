@@ -1,3 +1,8 @@
+---
+name: sync
+description: Synchronize documentation between local files and Notion
+---
+
 # /sync Command
 
 Synchronize documentation between local files and Notion.

@@ -1,3 +1,8 @@
+---
+name: import
+description: Import documentation from Notion to local files
+---
+
 # /import Command
 
 Import documentation from Notion to local files.

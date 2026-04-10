@@ -1,3 +1,8 @@
+---
+name: recent
+description: Display recent Granola meetings in a clean, scannable format
+---
+
 # Recent Meetings
 
 Display the user's recent Granola meetings in a clean, scannable format.

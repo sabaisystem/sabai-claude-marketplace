@@ -1,3 +1,8 @@
+---
+name: sync-linear
+description: Sync a plugin's README to its Linear project description
+---
+
 # /sync-linear
 
 Sync a plugin's README to its Linear project description.

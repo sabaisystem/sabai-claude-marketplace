@@ -5,7 +5,7 @@
 | Field | Value |
 |-------|-------|
 | Type | MCP Server + Skills + Commands |
-| Version | 1.2.0 |
+| Version | 1.3.0 |
 | Status | Active |
 | Command | `/today`, `/event`, `/schedule`, `/briefing` |
 | Repo | `plugins/sabai-calendar` |

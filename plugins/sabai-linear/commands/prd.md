@@ -1,3 +1,8 @@
+---
+name: prd
+description: Create a Product Requirement Document (PRD)
+---
+
 # /prd Command
 
 Create a Product Requirement Document (PRD).

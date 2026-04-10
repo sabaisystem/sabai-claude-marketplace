@@ -1,3 +1,8 @@
+---
+name: followup
+description: Generate a professional follow-up email based on meeting content
+---
+
 # Follow-up Email Generator
 
 Generate a professional follow-up email based on meeting content, powered by the analyze command for structured meeting intelligence.

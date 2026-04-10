@@ -1,3 +1,8 @@
+---
+name: discord-channel-create
+description: Create a new Discord channel
+---
+
 # /discord-channel-create Command
 
 Create a new Discord channel.

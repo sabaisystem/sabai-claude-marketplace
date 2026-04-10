@@ -1,3 +1,8 @@
+---
+name: slack
+description: Send messages, read conversations, and manage Slack channels
+---
+
 # /slack
 
 Send messages, read conversations, and manage Slack channels.

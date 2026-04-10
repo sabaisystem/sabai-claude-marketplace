@@ -1,3 +1,8 @@
+---
+name: schedule
+description: Find available times and schedule a meeting with attendees
+---
+
 # /schedule - Schedule a Meeting
 
 Find available times and schedule a meeting with attendees.
